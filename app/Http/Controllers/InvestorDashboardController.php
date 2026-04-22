@@ -12,6 +12,11 @@ class InvestorDashboardController extends Controller
         $user = auth()->user();
         $investor = $user->investor;
 
+        // If user is admin and doesn't have an investor profile, pick the first one to simulate "Investor Mode"
+        if (!$investor && $user->isAdmin()) {
+            $investor = \App\Models\Investor::first();
+        }
+
         if (!$investor) {
             return redirect()->route('dashboard')->with('error', 'Investor profile not found.');
         }
@@ -19,6 +24,11 @@ class InvestorDashboardController extends Controller
         $investments = Investment::with('project')
             ->where('investor_id', $investor->id)
             ->latest('investment_date')
+            ->get();
+
+        $availableProjects = \App\Models\Project::where('need_funding', true)
+            ->whereNotIn('id', $investments->pluck('project_id'))
+            ->latest()
             ->get();
 
         $projectIds = $investments->pluck('project_id')->unique();
@@ -30,7 +40,7 @@ class InvestorDashboardController extends Controller
             'total_payouts' => $investor->payouts()->where('status', 'approved')->sum('amount_paid'),
         ];
 
-        return view('investor.dashboard', compact('investor', 'investments', 'stats'));
+        return view('investor.dashboard', compact('investor', 'investments', 'stats', 'availableProjects'));
     }
 
     public function projectDetails($id)
@@ -38,13 +48,28 @@ class InvestorDashboardController extends Controller
         $user = auth()->user();
         $investor = $user->investor;
 
+        // If user is admin and doesn't have an investor profile, pick the first one to simulate "Investor Mode"
+        if (!$investor && $user->isAdmin()) {
+            $investor = \App\Models\Investor::first();
+        }
+
+        if (!$investor) {
+            return redirect()->route('dashboard')->with('error', 'Investor profile not found.');
+        }
+
         $investment = Investment::where('investor_id', $investor->id)
             ->where('project_id', $id)
-            ->firstOrFail();
+            ->first();
 
-        $project = $investment->project()->with(['expenses', 'projectUpdates' => function($q) {
+        if (!$investment) {
+            $project = \App\Models\Project::where('id', $id)->where('need_funding', true)->firstOrFail();
+        } else {
+            $project = $investment->project;
+        }
+
+        $project->load(['expenses', 'projectUpdates' => function($q) {
             $q->latest('date');
-        }])->first();
+        }]);
 
         $totalExpenses = $project->expenses->sum('amount');
         $totalInvestedInProject = $project->investments()->where('status', 'approved')->sum('investment_amount');
@@ -53,5 +78,10 @@ class InvestorDashboardController extends Controller
         $totalReceived = $payouts->where('status', 'approved')->sum('amount_paid');
 
         return view('investor.project-details', compact('project', 'investment', 'totalExpenses', 'totalInvestedInProject', 'payouts', 'totalReceived'));
+    }
+
+    public function history()
+    {
+        return $this->index();
     }
 }

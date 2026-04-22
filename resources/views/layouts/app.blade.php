@@ -14,7 +14,7 @@
 
         <!-- Scripts -->
         @viteReactRefresh
-        @vite(['resources/css/app.css', 'resources/js/app.jsx'])
+        @vite(['resources/js/app.jsx'])
         
         <style>
             body { font-family: 'Inter', sans-serif; letter-spacing: -0.01em; }

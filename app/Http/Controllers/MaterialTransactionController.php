@@ -48,8 +48,9 @@ class MaterialTransactionController extends Controller
         $vendors = Vendor::all();
         $selectedProjectId = $request->project_id;
         $selectedMaterialId = $request->material_id;
+        $transaction = new MaterialTransaction();
 
-        return view('material_transactions.create', compact('projects', 'materials', 'vendors', 'selectedProjectId', 'selectedMaterialId'));
+        return view('material_transactions.create', compact('projects', 'materials', 'vendors', 'selectedProjectId', 'selectedMaterialId', 'transaction'));
     }
 
     /**

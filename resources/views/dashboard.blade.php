@@ -44,7 +44,9 @@
                 </div>
                 <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
                     @if(auth()->user()->isInvestor())
-                        <a href="{{ route('investor-portal') }}" class="w-full sm:w-auto text-center px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-indigo-600/20">Investor Desk</a>
+                        <a href="{{ route('investor.dashboard') }}" class="w-full sm:w-auto text-center px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-indigo-600/20">Investor Desk</a>
+                    @else
+                        <a href="{{ route('investor.register.create') }}" class="w-full sm:w-auto text-center px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-emerald-600/20">Become an Investor</a>
                     @endif
                     <a href="{{ route('profile.edit') }}" class="w-full sm:w-auto text-center px-6 py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold rounded-xl transition-all text-sm">Account Settings</a>
                     <form method="POST" action="{{ route('logout') }}" class="w-full sm:w-auto">
@@ -57,6 +59,7 @@
             </div>
         </div>
 
+        @if(auth()->user()->isAdmin())
         <!-- Quick Actions -->
         <div>
             <div class="flex items-center gap-3 mb-6">
@@ -92,7 +95,7 @@
 
         <!-- Secondary Modules -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm {{ auth()->user()->isAdmin() ? '' : 'lg:col-span-2' }}">
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
                 <h4 class="text-lg font-bold text-slate-900 mb-6 border-b border-slate-100 pb-4">{{ __('Asset Management') }}</h4>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     @foreach([
@@ -114,7 +117,6 @@
                 </div>
             </div>
 
-            @if(auth()->user()->isAdmin())
             <div class="bg-slate-900 p-8 rounded-2xl shadow-xl shadow-slate-900/20 text-white flex flex-col justify-between relative overflow-hidden">
                 <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
                 <div class="relative z-10">
@@ -129,7 +131,25 @@
                     <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                 </a>
             </div>
-            @endif
+        </div>
+        @endif
+    </div>
+    @if(auth()->user()->isInvestor())
+    <div class="space-y-8 mt-8">
+        <!-- Investor Welcome/CTA -->
+        <div class="bg-indigo-50 border border-indigo-100 rounded-[2rem] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="max-w-xl">
+                <h3 class="text-2xl font-black text-slate-900 mb-4 tracking-tight">Access Your Investor Dashboard</h3>
+                <p class="text-slate-600 font-medium leading-relaxed mb-6">Track your active investments, view project milestones, and monitor your payout schedules in one centralized portal.</p>
+                <a href="{{ route('investor.dashboard') }}" class="inline-flex items-center px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-sm uppercase tracking-widest rounded-2xl transition-all shadow-lg shadow-indigo-600/20 group">
+                    Go to Investor Portal
+                    <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </a>
+            </div>
+            <div class="w-full md:w-64 h-64 bg-white rounded-[2rem] shadow-xl shadow-slate-200 flex items-center justify-center border border-slate-100">
+                <svg class="w-24 h-24 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
         </div>
     </div>
+    @endif
 </x-app-layout>

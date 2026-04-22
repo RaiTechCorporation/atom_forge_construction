@@ -19,7 +19,8 @@ class PayoutController extends Controller
     {
         $investors = Investor::all();
         $projects = Project::all();
-        return view('payouts.create', compact('investors', 'projects'));
+        $payout = new Payout();
+        return view('payouts.create', compact('investors', 'projects', 'payout'));
     }
 
     public function store(Request $request)

@@ -31,7 +31,8 @@ class MaterialController extends Controller
      */
     public function create()
     {
-        return view('materials.create');
+        $material = new Material();
+        return view('materials.create', compact('material'));
     }
 
     /**

@@ -15,7 +15,8 @@ class ConstructionPlanController extends Controller
 
     public function create()
     {
-        return view('construction_plans.create');
+        $constructionPlan = new ConstructionPlan();
+        return view('construction_plans.create', compact('constructionPlan'));
     }
 
     public function store(Request $request)

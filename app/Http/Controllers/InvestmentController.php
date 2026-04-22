@@ -20,7 +20,8 @@ class InvestmentController extends Controller
     {
         $investors = Investor::all();
         $projects = Project::all();
-        return view('investments.create', compact('investors', 'projects'));
+        $investment = new Investment();
+        return view('investments.create', compact('investors', 'projects', 'investment'));
     }
 
     public function store(Request $request)

@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+use Illuminate\Support\Facades\View;
+use App\Models\Project;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -19,6 +22,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('layouts.sidebar', function ($view) {
+            $view->with('sidebarProjects', Project::latest()->take(10)->get());
+        });
     }
 }

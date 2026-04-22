@@ -18,9 +18,9 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('auth.register');
+        return view('auth.register', ['type' => $request->query('type')]);
     }
 
     /**
@@ -36,10 +36,13 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        $role = $request->input('type') === 'investor' ? 'investor' : 'client';
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $role,
         ]);
 
         event(new Registered($user));
@@ -47,9 +50,13 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         if ($user->isAdmin()) {
-            return redirect('/admin-panel');
+            return redirect()->route('dashboard');
         } elseif ($user->isInvestor()) {
-            return redirect('/investor-portal');
+            // Check if investor profile exists, if not send to complete it
+            if (!$user->investor) {
+                return redirect()->route('investor.register.create');
+            }
+            return redirect()->route('investor.dashboard');
         } elseif ($user->isClient()) {
             return redirect('/client-portal');
         }

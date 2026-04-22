@@ -23,7 +23,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('projects.create');
+        $project = new Project();
+        return view('projects.create', compact('project'));
     }
 
     /**
@@ -31,7 +32,31 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        Project::create($request->validated());
+        $validated = $request->validated();
+
+        $fileFields = [
+            'design_documents', 
+            'contracts_agreements', 
+            'permits_licenses', 
+            'safety_documents', 
+            'blueprints_layouts',
+            'site_media',
+            'progress_photos',
+            'inspection_reports'
+        ];
+
+        foreach ($fileFields as $field) {
+            if ($request->hasFile($field)) {
+                $paths = [];
+                foreach ($request->file($field) as $file) {
+                    $path = $file->store('projects/documents', 'public');
+                    $paths[] = $path;
+                }
+                $validated[$field] = $paths;
+            }
+        }
+
+        Project::create($validated);
 
         return redirect()->route('projects.index')
             ->with('success', 'Project created successfully.');
@@ -65,7 +90,31 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        $project->update($request->validated());
+        $validated = $request->validated();
+
+        $fileFields = [
+            'design_documents', 
+            'contracts_agreements', 
+            'permits_licenses', 
+            'safety_documents', 
+            'blueprints_layouts',
+            'site_media',
+            'progress_photos',
+            'inspection_reports'
+        ];
+
+        foreach ($fileFields as $field) {
+            if ($request->hasFile($field)) {
+                $paths = $project->$field ?? [];
+                foreach ($request->file($field) as $file) {
+                    $path = $file->store('projects/documents', 'public');
+                    $paths[] = $path;
+                }
+                $validated[$field] = $paths;
+            }
+        }
+
+        $project->update($validated);
 
         return redirect()->route('projects.index')
             ->with('success', 'Project updated successfully.');

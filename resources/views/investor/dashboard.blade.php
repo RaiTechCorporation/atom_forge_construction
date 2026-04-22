@@ -5,6 +5,12 @@
                 {{ __('Investor Dashboard') }}
             </h2>
             <div class="flex items-center gap-2">
+                @if(auth()->user()->isAdmin())
+                    <a href="{{ route('dashboard') }}" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition-colors border border-slate-200 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z"></path></svg>
+                        Back to Admin
+                    </a>
+                @endif
                 <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-full uppercase tracking-wider border border-emerald-100">
                     {{ $investor->status }} Profile
                 </span>
@@ -12,7 +18,7 @@
         </div>
     </x-slot>
 
-    <div class="py-12 space-y-8">
+    <div class="space-y-8">
         <!-- Stats Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
@@ -37,6 +43,52 @@
                 </div>
                 <p class="text-slate-500 font-bold text-xs uppercase tracking-widest mb-1">Total Payouts Received</p>
                 <h3 class="text-3xl font-black text-slate-900">₹{{ number_format($stats['total_payouts'], 2) }}</h3>
+            </div>
+        </div>
+
+        <!-- Available for Funding -->
+        <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
+            <div class="p-8 border-b border-slate-50 flex items-center justify-between">
+                <h3 class="text-xl font-bold text-slate-900 tracking-tight">Available Projects for Funding</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50/50">
+                            <th class="px-8 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Project Name</th>
+                            <th class="px-8 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest text-right">Budget</th>
+                            <th class="px-8 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Status</th>
+                            <th class="px-8 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50">
+                        @forelse($availableProjects as $project)
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-8 py-5">
+                                <div class="font-bold text-slate-900">{{ $project->name }}</div>
+                                <div class="text-xs text-slate-500 font-medium">{{ $project->location }}</div>
+                            </td>
+                            <td class="px-8 py-5 text-right">
+                                <div class="text-sm font-black text-slate-900">₹{{ number_format($project->total_budget, 2) }}</div>
+                            </td>
+                            <td class="px-8 py-5">
+                                <span class="px-2.5 py-1 bg-indigo-50 text-indigo-600 text-[10px] font-black rounded-lg uppercase tracking-wider">
+                                    Seeking Funding
+                                </span>
+                            </td>
+                            <td class="px-8 py-5">
+                                <a href="{{ route('investor.projects.details', $project->id) }}" class="text-indigo-600 hover:text-indigo-800 font-bold text-xs uppercase tracking-wider">Invest Now</a>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="4" class="px-8 py-12 text-center text-slate-500 font-medium">
+                                No new projects currently seeking funding.
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
 

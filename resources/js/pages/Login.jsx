@@ -11,14 +11,14 @@ const Login = () => {
 
     useEffect(() => {
         if (user) {
-            if (user.role === 'super_admin') {
-                navigate('/admin-panel');
+            if (user.role === 'super_admin' || user.role === 'admin_staff') {
+                window.location.replace('/dashboard');
             } else if (user.role === 'investor') {
-                navigate('/investor-portal');
+                window.location.replace('/investor/dashboard');
             } else if (user.role === 'client') {
                 navigate('/client-portal');
             } else {
-                navigate('/dashboard');
+                window.location.replace('/dashboard');
             }
         }
     }, [user, navigate]);

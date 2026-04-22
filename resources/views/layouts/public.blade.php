@@ -14,7 +14,7 @@
 
         <!-- Scripts -->
         @viteReactRefresh
-        @vite(['resources/css/app.css', 'resources/js/app.jsx'])
+        @vite(['resources/js/app.jsx'])
         
         <style>
             [x-cloak] { display: none !important; }
@@ -103,6 +103,7 @@
                                         ['name' => 'Home', 'route' => 'home'],
                                         ['name' => 'Services', 'route' => 'services'],
                                         ['name' => 'Projects', 'route' => 'projects'],
+                                        ['name' => 'Invest', 'route' => 'public.invest'],
                                         ['name' => 'About', 'route' => 'about'],
                                         ['name' => 'Contact', 'route' => 'contact'],
                                     ];

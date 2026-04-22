@@ -54,51 +54,63 @@ const Sidebar = () => {
             return (
                 <a
                     href={item.path}
-                    className={`flex flex-row items-center h-11 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-white px-4 ${
-                        isActive ? 'text-white bg-gray-800' : ''
+                    className={`group flex items-center gap-3 px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                        isActive ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30' : 'text-slate-400 hover:bg-white/5 hover:text-white'
                     }`}
                 >
-                    <span className="inline-flex items-center justify-center h-12 w-12 text-lg">
-                        <item.icon className="w-5 h-5" />
+                    <span className={`${isActive ? 'text-white' : 'text-slate-600 group-hover:text-slate-200'}`}>
+                        <item.icon className="w-4 h-4" />
                     </span>
-                    <span className="text-sm font-medium">{item.name}</span>
+                    <span className="text-sm font-black tracking-tight">{item.name}</span>
                 </a>
             );
         }
         return (
             <Link
                 to={item.path}
-                className={`flex flex-row items-center h-11 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-400 hover:text-white px-4 ${
-                    isActive ? 'text-white bg-gray-800' : ''
+                className={`group flex items-center gap-3 px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                    isActive ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30' : 'text-slate-400 hover:bg-white/5 hover:text-white'
                 }`}
             >
-                <span className="inline-flex items-center justify-center h-12 w-12 text-lg">
-                    <item.icon className="w-5 h-5" />
+                <span className={`${isActive ? 'text-white' : 'text-slate-600 group-hover:text-slate-200'}`}>
+                    <item.icon className="w-4 h-4" />
                 </span>
-                <span className="text-sm font-medium">{item.name}</span>
+                <span className="text-[10px] font-black uppercase tracking-widest">{item.name}</span>
             </Link>
         );
     };
 
     return (
-        <div className="flex flex-col w-64 h-screen bg-gray-900 text-white flex-shrink-0">
-            <div className="flex items-center px-6 h-20 border-b border-gray-800">
-                <h1 className="text-xl font-bold tracking-tight text-white">Atom<span className="text-blue-500">Forge</span></h1>
+        <div className="flex flex-col w-[280px] h-screen bg-[#0f172a] text-slate-400 flex-shrink-0 border-r border-slate-800/40 shadow-2xl">
+            <div className="h-[60px] flex items-center px-8 border-b border-slate-800/50">
+                <Link to="/dashboard" className="flex items-center gap-3.5 group">
+                    <div className="w-8 h-8 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/20 group-hover:scale-105 transition-transform duration-300">
+                        <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                        </svg>
+                    </div>
+                    <span className="font-black text-lg text-white tracking-tighter uppercase italic">
+                        Atom<span className="text-indigo-500">Forge</span>
+                    </span>
+                </Link>
             </div>
             
-            <div className="flex-grow overflow-y-auto py-4 custom-scrollbar">
-                <ul className="flex flex-col space-y-1">
-                    {filteredItems.map((item) => (
-                        <li key={item.path}>
-                            <NavLink item={item} />
-                        </li>
-                    ))}
-
-                    {user?.role === 'super_admin' && (
-                        <>
-                            <li className="px-5 pt-6 pb-2">
-                                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Management</span>
+            <div className="flex-grow overflow-y-auto p-4 custom-scrollbar space-y-8">
+                <div>
+                    <span className="px-4 text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 block">Core Operations</span>
+                    <ul className="space-y-1">
+                        {filteredItems.map((item) => (
+                            <li key={item.path}>
+                                <NavLink item={item} />
                             </li>
+                        ))}
+                    </ul>
+                </div>
+
+                {user?.role && ['super_admin', 'admin_staff'].includes(user.role) && (
+                    <div>
+                        <span className="px-4 text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 block">Asset Management</span>
+                        <ul className="space-y-1">
                             {filteredManagement.map((item) => (
                                 <li key={item.path}>
                                     <NavLink item={item} />
@@ -109,24 +121,26 @@ const Sidebar = () => {
                             <li>
                                 <button 
                                     onClick={() => setCmsOpen(!cmsOpen)}
-                                    className="flex flex-row items-center justify-between w-full h-11 text-gray-400 hover:text-white px-4 hover:bg-gray-800 transition-colors"
+                                    className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                                        cmsOpen ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30' : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                                    }`}
                                 >
-                                    <div className="flex items-center">
-                                        <span className="inline-flex items-center justify-center h-12 w-12 text-lg">
-                                            <Globe className="w-5 h-5" />
+                                    <div className="flex items-center gap-3">
+                                        <span className={`${cmsOpen ? 'text-white' : 'text-slate-600'}`}>
+                                            <Globe className="w-4 h-4" />
                                         </span>
-                                        <span className="text-sm font-medium">CMS</span>
+                                        <span>CMS</span>
                                     </div>
-                                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${cmsOpen ? 'rotate-180' : ''}`} />
+                                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${cmsOpen ? 'rotate-180' : ''}`} />
                                 </button>
                                 
                                 {cmsOpen && (
-                                    <ul className="bg-gray-800/50 mt-1 mx-2 rounded-lg py-1">
+                                    <ul className="mt-2 ml-4 space-y-1 border-l border-slate-800/50 pl-4">
                                         {cmsItems.map((cms) => (
                                             <li key={cms.name}>
                                                 <a 
                                                     href={`/website-content${cms.group ? '?group=' + cms.group : ''}`}
-                                                    className="block px-12 py-2 text-xs font-medium text-gray-400 hover:text-white transition-colors"
+                                                    className="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl text-slate-500 hover:text-white hover:bg-white/5 transition-all"
                                                 >
                                                     {cms.name}
                                                 </a>
@@ -135,26 +149,26 @@ const Sidebar = () => {
                                     </ul>
                                 )}
                             </li>
-                        </>
-                    )}
-                </ul>
+                        </ul>
+                    </div>
+                )}
             </div>
 
-            <div className="p-4 border-t border-gray-800 bg-gray-900/50">
-                <div className="flex items-center gap-3 px-4 py-3 mb-2 rounded-lg bg-gray-800/30">
-                    <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold">
+            <div className="p-4 border-t border-slate-800/50 bg-[#0c1221]">
+                <div className="px-4 py-3 bg-slate-900/50 border border-slate-800/50 rounded-2xl flex items-center gap-4 mb-2">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-black text-xs shadow-lg shadow-indigo-600/20 uppercase">
                         {user?.name?.charAt(0).toUpperCase()}
                     </div>
                     <div className="flex flex-col min-w-0">
-                        <span className="text-xs font-bold truncate">{user?.name}</span>
-                        <span className="text-[10px] text-gray-500 truncate uppercase">{user?.role?.replace('_', ' ')}</span>
+                        <span className="text-xs font-black text-white leading-none truncate uppercase tracking-tighter">{user?.name}</span>
+                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-1">{user?.role?.replace('_', ' ')}</span>
                     </div>
                 </div>
                 <button 
                     onClick={logout}
-                    className="flex items-center w-full px-4 py-2 text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-900/20 rounded-lg transition-colors"
+                    className="flex items-center w-full px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all"
                 >
-                    <LogOut className="w-5 h-5 mr-3" />
+                    <LogOut className="w-4 h-4 mr-3" />
                     Logout
                 </button>
             </div>

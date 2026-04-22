@@ -18,7 +18,8 @@ class ProjectUpdateController extends Controller
     public function create()
     {
         $projects = Project::active()->get();
-        return view('project_updates.create', compact('projects'));
+        $update = new ProjectUpdate();
+        return view('project_updates.create', compact('projects', 'update'));
     }
 
     public function store(Request $request)

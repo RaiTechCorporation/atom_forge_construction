@@ -23,7 +23,8 @@ class VendorController extends Controller
      */
     public function create()
     {
-        return view('vendors.create');
+        $vendor = new Vendor();
+        return view('vendors.create', compact('vendor'));
     }
 
     /**

@@ -34,7 +34,7 @@
     <div class="py-12 bg-white min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-transparent overflow-hidden">
-                <form action="{{ route('projects.store') }}" method="POST">
+                <form action="{{ route('projects.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @include('projects.partials.form', ['submitText' => __('Create Project')])
                 </form>

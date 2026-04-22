@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         await axios.get('/sanctum/csrf-cookie');
         await axios.post('/login', { email, password });
-        window.location.href = '/dashboard';
+        await checkAuth();
     };
 
     const logout = async () => {

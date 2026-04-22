@@ -60,4 +60,10 @@ class PublicController extends Controller
         $content = $this->getContent();
         return view('public.faq', compact('content'));
     }
+
+    public function invest()
+    {
+        $content = $this->getContent();
+        return view('public.invest', compact('content'));
+    }
 }

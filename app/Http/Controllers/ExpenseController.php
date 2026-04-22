@@ -40,8 +40,9 @@ class ExpenseController extends Controller
         }
         $vendors = Vendor::all();
         $selectedProjectId = $request->project_id;
+        $expense = new Expense();
 
-        return view('expenses.create', compact('projects', 'vendors', 'selectedProjectId'));
+        return view('expenses.create', compact('projects', 'vendors', 'selectedProjectId', 'expense'));
     }
 
     /**

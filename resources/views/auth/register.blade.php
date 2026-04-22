@@ -1,15 +1,27 @@
 <x-guest-layout>
     <div class="mb-12 text-center">
         <h2 class="text-4xl font-black text-black tracking-tighter uppercase">
-            {{ __('ACCOUNT') }} <span class="text-indigo-800">{{ __('REGISTRATION') }}</span>
+            @if(isset($type) && $type === 'investor')
+                {{ __('INVESTOR') }} <span class="text-indigo-800">{{ __('PORTAL') }}</span>
+            @else
+                {{ __('ACCOUNT') }} <span class="text-indigo-800">{{ __('REGISTRATION') }}</span>
+            @endif
         </h2>
         <p class="text-slate-800 text-sm mt-3 uppercase tracking-[0.3em] font-black italic opacity-60">
-            {{ __('New System Personnel Onboarding') }}
+            @if(isset($type) && $type === 'investor')
+                {{ __('Begin Your Investment Journey') }}
+            @else
+                {{ __('New System Personnel Onboarding') }}
+            @endif
         </p>
     </div>
 
     <form method="POST" action="{{ route('register') }}" class="space-y-6">
         @csrf
+
+        @if(isset($type))
+            <input type="hidden" name="type" value="{{ $type }}">
+        @endif
 
         <!-- Name -->
         <div class="space-y-3">

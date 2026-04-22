@@ -23,7 +23,8 @@ class LabourController extends Controller
      */
     public function create()
     {
-        return view('labour.create');
+        $labour = new Labour();
+        return view('labour.create', compact('labour'));
     }
 
     /**

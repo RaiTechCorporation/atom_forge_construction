@@ -4,9 +4,17 @@
             <h2 class="font-bold text-2xl text-slate-900 leading-tight">
                 {{ $project->name }} - Details
             </h2>
-            <a href="{{ route('investor.dashboard') }}" class="text-sm font-bold text-slate-500 hover:text-slate-700 transition-colors uppercase tracking-wider">
-                &larr; Back to Dashboard
-            </a>
+            <div class="flex items-center gap-4">
+                @if(auth()->user()->isAdmin())
+                    <a href="{{ route('dashboard') }}" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition-colors border border-slate-200 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z"></path></svg>
+                        Back to Admin
+                    </a>
+                @endif
+                <a href="{{ route('investor.dashboard') }}" class="text-sm font-bold text-slate-500 hover:text-slate-700 transition-colors uppercase tracking-wider">
+                    &larr; Back to Dashboard
+                </a>
+            </div>
         </div>
     </x-slot>
 
@@ -19,11 +27,11 @@
             </div>
             <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
                 <p class="text-slate-500 font-bold text-[10px] uppercase tracking-widest mb-1">Your Investment</p>
-                <h3 class="text-xl font-black text-slate-900">₹{{ number_format($investment->investment_amount, 2) }}</h3>
+                <h3 class="text-xl font-black text-slate-900">₹{{ $investment ? number_format($investment->investment_amount, 2) : '0.00' }}</h3>
             </div>
             <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
                 <p class="text-slate-500 font-bold text-[10px] uppercase tracking-widest mb-1">Expected Return</p>
-                <h3 class="text-xl font-black text-emerald-600">{{ $investment->expected_return }}%</h3>
+                <h3 class="text-xl font-black text-emerald-600">{{ $investment ? $investment->expected_return . '%' : 'N/A' }}</h3>
             </div>
             <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
                 <p class="text-slate-500 font-bold text-[10px] uppercase tracking-widest mb-1">Total Payouts Received</p>
@@ -112,7 +120,7 @@
                 <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8">
                     <h3 class="text-xl font-bold text-slate-900 mb-6">Project Documents</h3>
                     <div class="space-y-4">
-                        @if($investment->agreement_file)
+                        @if($investment && $investment->agreement_file)
                         <a href="{{ asset('storage/' . $investment->agreement_file) }}" target="_blank" class="flex items-center gap-4 p-4 border border-slate-100 rounded-2xl hover:bg-slate-50 transition-colors group">
                             <div class="w-10 h-10 bg-red-50 text-red-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>

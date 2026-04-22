@@ -34,17 +34,17 @@ class AuthenticatedSessionController extends Controller
 
         if ($user->isAdmin()) {
             \Log::debug('Redirecting to dashboard');
-            return redirect()->to('/dashboard');
+            return redirect()->intended(route('dashboard'));
         } elseif ($user->isInvestor()) {
-            \Log::debug('Redirecting to investor-portal');
-            return redirect()->to('/investor-portal');
+            \Log::debug('Redirecting to investor dashboard');
+            return redirect()->intended(route('investor.dashboard'));
         } elseif ($user->isClient()) {
             \Log::debug('Redirecting to client-portal');
-            return redirect()->to('/client-portal');
+            return redirect()->intended('/client-portal');
         }
 
         \Log::debug('Redirecting to dashboard');
-        return redirect()->to('/dashboard');
+        return redirect()->intended(route('dashboard'));
     }
 
     /**
