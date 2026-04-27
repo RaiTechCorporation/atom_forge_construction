@@ -38,6 +38,7 @@
                     <thead class="bg-slate-50/50">
                         <tr>
                             <th class="px-6 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-widest whitespace-nowrap">Material Identifier</th>
+                            <th class="px-6 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-widest whitespace-nowrap">Project Site</th>
                             <th class="px-6 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-widest whitespace-nowrap">Unit Type</th>
                             <th class="px-6 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-widest whitespace-nowrap">Current Stock</th>
                             <th class="px-6 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-widest whitespace-nowrap">Alert Threshold</th>
@@ -54,6 +55,9 @@
                                         </div>
                                         <span class="text-sm font-bold text-slate-900 tracking-tight">{{ $material->name }}</span>
                                     </div>
+                                </td>
+                                <td class="px-6 py-6 text-[11px] font-bold text-slate-600 uppercase tracking-widest whitespace-nowrap">
+                                    {{ $material->project->name ?? 'N/A' }}
                                 </td>
                                 <td class="px-6 py-6 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                     {{ $material->unit }}

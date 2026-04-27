@@ -68,9 +68,10 @@
                                 <td class="px-6 py-6">
                                     <div class="flex flex-col gap-1.5">
                                         <span class="inline-flex w-fit px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full border
-                                            {{ $project->status === 'active' ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : '' }}
-                                            {{ $project->status === 'completed' ? 'bg-indigo-50 border-indigo-200 text-indigo-700' : '' }}
-                                            {{ $project->status === 'on_hold' ? 'bg-amber-50 border-amber-200 text-amber-700' : '' }}">
+                                            {{ $project->status === 'Ongoing' ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : '' }}
+                                            {{ $project->status === 'Planned' ? 'bg-sky-50 border-sky-200 text-sky-700' : '' }}
+                                            {{ $project->status === 'Completed' ? 'bg-indigo-50 border-indigo-200 text-indigo-700' : '' }}
+                                            {{ $project->status === 'On Hold' ? 'bg-amber-50 border-amber-200 text-amber-700' : '' }}">
                                             {{ $project->status }}
                                         </span>
                                         @if($project->need_funding)

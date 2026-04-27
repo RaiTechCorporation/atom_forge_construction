@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Investment;
 use App\Models\Investor;
 use App\Models\Project;
-use App\Models\Investment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

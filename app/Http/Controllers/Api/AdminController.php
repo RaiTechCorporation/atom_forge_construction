@@ -3,17 +3,26 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Expense;
+use App\Models\Investment;
+use App\Models\Material;
 use App\Models\Project;
 use App\Models\User;
-use App\Models\Investment;
-use App\Models\Expense;
-use App\Models\Material;
-use App\Models\Labour;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class AdminController extends Controller
+class AdminController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view-dashboard', only: ['dashboardStats']),
+            new Middleware('permission:view-users', only: ['getUsers']),
+            new Middleware('permission:edit-users', only: ['updateUserRole']),
+        ];
+    }
+
     public function dashboardStats()
     {
         $stats = [

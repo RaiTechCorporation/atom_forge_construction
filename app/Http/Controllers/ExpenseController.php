@@ -2,16 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreExpenseRequest;
+use App\Http\Requests\UpdateExpenseRequest;
 use App\Models\Expense;
 use App\Models\Project;
 use App\Models\Vendor;
-use App\Http\Requests\StoreExpenseRequest;
-use App\Http\Requests\UpdateExpenseRequest;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Storage;
 
-class ExpenseController extends Controller
+class ExpenseController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view-projects', only: ['index', 'show']),
+            new Middleware('permission:edit-projects', only: ['create', 'store', 'edit', 'update', 'destroy']),
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -40,7 +50,7 @@ class ExpenseController extends Controller
         }
         $vendors = Vendor::all();
         $selectedProjectId = $request->project_id;
-        $expense = new Expense();
+        $expense = new Expense;
 
         return view('expenses.create', compact('projects', 'vendors', 'selectedProjectId', 'expense'));
     }
@@ -79,6 +89,7 @@ class ExpenseController extends Controller
     {
         $projects = Project::all();
         $vendors = Vendor::all();
+
         return view('expenses.edit', compact('expense', 'projects', 'vendors'));
     }
 

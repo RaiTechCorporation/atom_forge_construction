@@ -13,6 +13,7 @@ class InvestmentController extends Controller
     public function index()
     {
         $investments = Investment::with(['investor', 'project', 'creator'])->latest()->paginate(15);
+
         return view('investments.index', compact('investments'));
     }
 
@@ -20,7 +21,8 @@ class InvestmentController extends Controller
     {
         $investors = Investor::all();
         $projects = Project::all();
-        $investment = new Investment();
+        $investment = new Investment;
+
         return view('investments.create', compact('investors', 'projects', 'investment'));
     }
 
@@ -54,6 +56,7 @@ class InvestmentController extends Controller
     public function approve(Investment $investment)
     {
         $investment->update(['status' => 'approved']);
+
         return back()->with('success', 'Investment approved.');
     }
 
@@ -63,6 +66,7 @@ class InvestmentController extends Controller
             Storage::disk('public')->delete($investment->agreement_file);
         }
         $investment->delete();
+
         return redirect()->route('investments.index')->with('success', 'Investment deleted.');
     }
 }

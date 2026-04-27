@@ -11,7 +11,7 @@
                 {{ $content['services_hero_title'] ?? 'Our Services' }}
             </h1>
             <p class="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto font-medium">
-                {{ $content['services_hero_subtitle'] ?? 'Delivering end-to-end solutions for all your construction and design needs with absolute precision.' }}
+                {{ $content['services_hero_subtitle'] ?? 'Atom Forge Construction delivers end-to-end building solutions with unmatched quality, speed, and precision from concept to completion.' }}
             </p>
         </div>
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none -z-10">
@@ -79,7 +79,7 @@
                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
                     </div>
                     <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">End-to-End Turnkey Projects</h2>
-                    <p class="text-slate-500 text-lg mb-8 leading-relaxed font-medium">Let us handle everything for you. From project design and regulatory approvals to procurement and construction, our turnkey solutions offer a stress-free experience.</p>
+                    <p class="text-slate-500 text-lg mb-8 leading-relaxed font-medium">Leveraging cutting-edge technology and smart planning, we deliver construction solutions that are scalable, sustainable, and built to last. Our team ensures precision and perfection in every turnkey project.</p>
                     <ul class="space-y-4">
                         @foreach(['Design and Planning', 'Project Management', 'Material Procurement', 'Final Handover'] as $item)
                         <li class="flex items-center gap-3 text-slate-700 font-semibold">

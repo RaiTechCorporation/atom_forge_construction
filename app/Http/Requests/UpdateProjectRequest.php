@@ -23,7 +23,7 @@ class UpdateProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'project_code' => 'nullable|string|max:50|unique:projects,project_code,' . $this->project->id,
+            'project_code' => 'nullable|string|max:50|unique:projects,project_code,'.$this->project->id,
             'name' => 'required|string|max:255',
             'client_name' => 'required|string|max:255',
             'client_phone' => 'nullable|string|max:20',
@@ -95,6 +95,11 @@ class UpdateProjectRequest extends FormRequest
             'billing_cycle' => 'nullable|in:Milestone-based,Monthly',
             'status' => 'required|in:Planned,Ongoing,Completed,On Hold',
             'priority' => 'required|in:Low,Medium,High,Urgent',
+            'payment_phases' => 'nullable|array',
+            'payment_phases.*.phase_name' => 'required|string|max:255',
+            'payment_phases.*.amount' => 'required|numeric|min:0',
+            'payment_phases.*.due_date' => 'nullable|date',
+            'payment_phases.*.status' => 'required|string|in:Pending,Paid,Partially Paid,Overdue',
         ];
     }
 }

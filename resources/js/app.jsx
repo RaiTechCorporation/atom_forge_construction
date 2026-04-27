@@ -9,6 +9,9 @@ import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import Plans from './pages/Plans';
 import Users from './pages/Users';
+import Roles from './pages/Roles';
+import Leads from './pages/Leads';
+import Contracts from './pages/Contracts';
 import Projects from './pages/Projects';
 import InvestorDashboard from './pages/InvestorDashboard';
 import ClientDashboard from './pages/ClientDashboard';
@@ -55,6 +58,30 @@ const App = () => {
                         element={
                             <PrivateRoute>
                                 <Users />
+                            </PrivateRoute>
+                        } 
+                    />
+                    <Route 
+                        path="/admin-panel/roles" 
+                        element={
+                            <PrivateRoute>
+                                <Roles />
+                            </PrivateRoute>
+                        } 
+                    />
+                    <Route 
+                        path="/admin-panel/leads" 
+                        element={
+                            <PrivateRoute>
+                                <Leads />
+                            </PrivateRoute>
+                        } 
+                    />
+                    <Route 
+                        path="/admin-panel/contracts" 
+                        element={
+                            <PrivateRoute>
+                                <Contracts />
                             </PrivateRoute>
                         } 
                     />

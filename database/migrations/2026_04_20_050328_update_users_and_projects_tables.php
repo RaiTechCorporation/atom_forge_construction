@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -41,7 +41,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-             $table->enum('role', ['admin', 'site_manager', 'accountant', 'investor'])->default('site_manager')->change();
+            $table->enum('role', ['admin', 'site_manager', 'accountant', 'investor'])->default('site_manager')->change();
         });
 
         Schema::table('projects', function (Blueprint $table) {

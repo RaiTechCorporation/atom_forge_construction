@@ -149,7 +149,13 @@
                                 </div>
                                 <div class="flex flex-col">
                                     <span class="text-xs font-bold text-slate-900 tracking-tight">{{ $l['name'] }}</span>
-                                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ $l['days_present'] }} Shifts Logged</span>
+                                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                                        {{ $l['days_present'] }} Shifts
+                                        @if($l['overtime_hours'] > 0)
+                                            + {{ $l['overtime_hours'] }}h OT
+                                        @endif
+                                        Logged
+                                    </span>
                                 </div>
                             </div>
                             <div class="flex flex-col items-end">

@@ -6,8 +6,8 @@
     <!-- Sidebar Logo Section -->
     <div class="h-[60px] flex items-center px-8 border-b border-slate-800/50">
         <a href="{{ route('dashboard') }}" class="flex items-center gap-3.5 group">
-            <div class="w-8 h-8 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/20 group-hover:scale-105 transition-transform duration-300">
-                <x-application-logo class="w-5 h-5 fill-white" />
+            <div class="w-8 h-8 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+                <img src="{{ asset('images/Atom Forge Logo.png For White Background.png') }}" alt="Logo" class="w-full h-full object-contain">
             </div>
             <span class="font-black text-lg text-white tracking-tighter uppercase italic">
                 Atom<span class="text-indigo-500">Forge</span>
@@ -21,14 +21,16 @@
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
 
+        @php
+            $isInvestorMode = request()->routeIs('investor.*');
+        @endphp
+
         <!-- Main Navigation Group -->
         <div>
-            <span class="px-4 text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 block">Core Operations</span>
+            @if(!$isInvestorMode)
+                <span class="px-4 text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 block">Core Operations</span>
+            @endif
             <nav class="space-y-1">
-                @php
-                    $isInvestorMode = request()->routeIs('investor.*');
-                @endphp
-
                 @if(!$isInvestorMode)
                     @php
                         $links = [
@@ -37,13 +39,15 @@
                     @endphp
 
                     @foreach($links as $link)
-                        <a href="{{ route($link['route']) }}" 
-                           class="group flex items-center gap-3 px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all {{ request()->routeIs($link['route']) ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
-                            <span class="{{ request()->routeIs($link['route']) ? 'text-white' : 'text-slate-600 group-hover:text-slate-200' }}">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                            </span>
-                            {{ __($link['name']) }}
-                        </a>
+                        @if(auth()->user()->hasPermission('view-dashboard'))
+                            <a href="{{ route($link['route']) }}" 
+                            class="group flex items-center gap-3 px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all {{ request()->routeIs($link['route']) ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
+                                <span class="{{ request()->routeIs($link['route']) ? 'text-white' : 'text-slate-600 group-hover:text-slate-200' }}">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                                </span>
+                                {{ __($link['name']) }}
+                            </a>
+                        @endif
                     @endforeach
                 @else
                     <!-- Investor Dashboard Link -->
@@ -185,28 +189,17 @@
                             <a href="{{ route('investor.profile.security') }}" class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('investor.profile.security') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">Security Settings</a>
                         </div>
                     </div>
-
-                    <!-- Logout -->
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="w-full group flex items-center gap-3 px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:bg-red-500/10 hover:text-red-500 transition-all">
-                            <span class="text-slate-600 group-hover:text-red-500">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                            </span>
-                            {{ __('Logout') }}
-                        </button>
-                    </form>
                 @endif
             </nav>
         </div>
 
         <!-- Management Modules Group -->
-        @if(auth()->user()->isAdmin())
+        @if(auth()->user()->isAdmin() && !$isInvestorMode)
         <div>
             <span class="px-4 text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 block">Asset Management</span>
             <nav class="space-y-1">
-                @if(!$isInvestorMode)
-                    <!-- Investors Dropdown -->
+                @if(auth()->user()->hasPermission('view-payroll'))
+                <!-- Investors Dropdown -->
                     <div x-data="{ investorsDropdownOpen: {{ request()->routeIs('investors.*') || request()->routeIs('investments.*') || request()->routeIs('payouts.*') ? 'true' : 'false' }} }">
                         <button @click="investorsDropdownOpen = !investorsDropdownOpen" 
                                 class="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all {{ request()->routeIs('investors.*') || request()->routeIs('investments.*') || request()->routeIs('payouts.*') ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
@@ -224,6 +217,7 @@
                                class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('investors.*') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
                                 {{ __('Registry') }}
                             </a>
+                            @if(auth()->user()->hasPermission('view-payroll'))
                             <a href="{{ route('investments.index') }}" 
                                class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('investments.index') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
                                 {{ __('Ledger') }}
@@ -232,9 +226,12 @@
                                class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('payouts.index') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
                                 {{ __('Payouts') }}
                             </a>
+                            @endif
                         </div>
                     </div>
+                @endif
 
+                    @if(auth()->user()->hasPermission('view-projects'))
                     <!-- Projects Dropdown -->
                     <div x-data="{ 
                         projectsOpen: {{ request()->routeIs('projects.*') || request()->routeIs('construction-plans.*') ? 'true' : 'false' }},
@@ -256,10 +253,12 @@
                                class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('projects.index') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
                                 {{ __('Registry') }}
                             </a>
+                            @if(auth()->user()->hasPermission('create-projects'))
                             <a href="{{ route('projects.create') }}" 
                                class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('projects.create') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
                                 {{ __('Launch New') }}
                             </a>
+                            @endif
 
                             <!-- Nested Active Projects Dropdown -->
                             @if(isset($sidebarProjects) && $sidebarProjects->count() > 0)
@@ -286,9 +285,50 @@
                                class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('construction-plans.*') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
                                 {{ __('Design Packages') }}
                             </a>
+
+                            @if(auth()->user()->hasPermission('view-media'))
+                            <a href="{{ route('project-updates.index') }}" 
+                               class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('project-updates.*') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
+                                {{ __('Site Feed Updates') }}
+                            </a>
+                            @endif
+
+                            <!-- Project Payments Dropdown -->
+                            <div x-data="{ paymentsOpen: {{ request()->routeIs('project-payments.*') ? 'true' : 'false' }} }" class="mt-2">
+                                <button @click="paymentsOpen = !paymentsOpen" 
+                                        class="w-full flex items-center justify-between gap-2 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-white transition-all">
+                                    <span>{{ __('Project Payments') }}</span>
+                                    <svg :class="paymentsOpen ? 'rotate-180' : ''" class="w-2.5 h-2.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                
+                                <div x-show="paymentsOpen" x-cloak x-transition class="mt-2 space-y-1">
+                                    <a href="{{ route('project-payments.create') }}" 
+                                       class="block px-4 py-2 text-[9px] font-black uppercase tracking-widest rounded-lg transition-all {{ request()->routeIs('project-payments.create') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-600 hover:text-slate-300 hover:bg-white/5' }}">
+                                        {{ __('1. Add Payment') }}
+                                    </a>
+                                    <a href="{{ route('project-payments.history') }}" 
+                                       class="block px-4 py-2 text-[9px] font-black uppercase tracking-widest rounded-lg transition-all {{ request()->routeIs('project-payments.history') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-600 hover:text-slate-300 hover:bg-white/5' }}">
+                                        {{ __('2. View Payment History') }}
+                                    </a>
+                                    <a href="{{ route('project-payments.index') }}" 
+                                       class="block px-4 py-2 text-[9px] font-black uppercase tracking-widest rounded-lg transition-all {{ request()->routeIs('project-payments.index') && !request()->routeIs('project-payments.create') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-600 hover:text-slate-300 hover:bg-white/5' }}">
+                                        {{ __('3. Download Receipt') }}
+                                    </a>
+                                    <a href="{{ route('project-payments.index') }}" 
+                                       class="block px-4 py-2 text-[9px] font-black uppercase tracking-widest rounded-lg transition-all {{ request()->routeIs('project-payments.index') ? 'text-slate-600 hover:text-slate-300 hover:bg-white/5' : 'text-slate-600 hover:text-slate-300 hover:bg-white/5' }}">
+                                        {{ __('4. Print Invoice') }}
+                                    </a>
+                                    <a href="{{ route('project-payments.balances') }}" 
+                                       class="block px-4 py-2 text-[9px] font-black uppercase tracking-widest rounded-lg transition-all {{ request()->routeIs('project-payments.balances') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-600 hover:text-slate-300 hover:bg-white/5' }}">
+                                        {{ __('5. Balance Auto Calculate') }}
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    @endif
 
+                    @if(auth()->user()->hasPermission('view-projects'))
                     <!-- Expenses Dropdown -->
                     <div x-data="{ expensesOpen: {{ request()->routeIs('expenses.*') ? 'true' : 'false' }} }" class="mt-1">
                         <button @click="expensesOpen = !expensesOpen" 
@@ -307,13 +347,17 @@
                                class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('expenses.index') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
                                 {{ __('Ledger') }}
                             </a>
+                            @if(auth()->user()->hasPermission('create-expenses'))
                             <a href="{{ route('expenses.create') }}" 
                                class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('expenses.create') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
                                 {{ __('Record Expense') }}
                             </a>
+                            @endif
                         </div>
                     </div>
+                    @endif
 
+                    @if(auth()->user()->hasPermission('view-inventory'))
                     <!-- Materials Dropdown -->
                     <div x-data="{ materialsOpen: {{ request()->routeIs('materials.*') || request()->routeIs('material_transactions.*') ? 'true' : 'false' }} }" class="mt-1">
                         <button @click="materialsOpen = !materialsOpen" 
@@ -332,23 +376,27 @@
                                class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('materials.index') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
                                 {{ __('Catalog') }}
                             </a>
+                            @if(auth()->user()->hasPermission('add-inventory'))
                             <a href="{{ route('materials.create') }}" 
                                class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('materials.create') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
                                 {{ __('Add Stock') }}
                             </a>
+                            @endif
                             <a href="{{ route('material_transactions.index') }}" 
                                class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('material_transactions.index') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
                                 {{ __('Log') }}
                             </a>
                         </div>
                     </div>
+                    @endif
 
+                    @if(auth()->user()->hasPermission('view-employees'))
                     <!-- Labour Dropdown -->
-                    <div x-data="{ labourOpen: {{ request()->routeIs('labour.*') || request()->routeIs('attendance.*') ? 'true' : 'false' }} }" class="mt-1">
+                    <div x-data="{ labourOpen: {{ request()->routeIs('labour.*') || request()->routeIs('attendance.*') || request()->routeIs('labour.work-progress.*') ? 'true' : 'false' }} }" class="mt-1">
                         <button @click="labourOpen = !labourOpen" 
-                                class="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all {{ request()->routeIs('labour.*') || request()->routeIs('attendance.*') ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
+                                class="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all {{ request()->routeIs('labour.*') || request()->routeIs('attendance.*') || request()->routeIs('labour.work-progress.*') ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
                             <div class="flex items-center gap-3">
-                                <span class="{{ request()->routeIs('labour.*') || request()->routeIs('attendance.*') ? 'text-white' : 'text-slate-600' }}">
+                                <span class="{{ request()->routeIs('labour.*') || request()->routeIs('attendance.*') || request()->routeIs('labour.work-progress.*') ? 'text-white' : 'text-slate-600' }}">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                                 </span>
                                 {{ __('Labour') }}
@@ -357,17 +405,33 @@
                         </button>
                         
                         <div x-show="labourOpen" x-cloak x-transition class="mt-2 ml-4 space-y-1 border-l border-slate-800/50 pl-4">
+                            <a href="{{ route('labour.dashboard') }}" 
+                               class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('labour.dashboard') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
+                                {{ __('Dashboard') }}
+                            </a>
                             <a href="{{ route('labour.index') }}" 
                                class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('labour.index') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
                                 {{ __('Force') }}
                             </a>
+                            @if(auth()->user()->hasPermission('manage-attendance'))
+                            <a href="{{ route('labour.work-progress.index') }}" 
+                               class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('labour.work-progress.index') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
+                                {{ __('Daily Work Progress') }}
+                            </a>
                             <a href="{{ route('attendance.create') }}" 
                                class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('attendance.create') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
-                                {{ __('Attendance') }}
+                                {{ __('Mark Attendance') }}
+                            </a>
+                            @endif
+                            <a href="{{ route('attendance.index') }}" 
+                               class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('attendance.index') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
+                                {{ __('Records') }}
                             </a>
                         </div>
                     </div>
+                    @endif
 
+                    @if(auth()->user()->hasPermission('view-media'))
                     <!-- Web Intelligence (CMS) Group -->
                     <div x-data="{ cmsOpen: {{ request()->routeIs('website-content.*') ? 'true' : 'false' }} }" class="mt-1">
                         <button @click="cmsOpen = !cmsOpen" 
@@ -402,17 +466,67 @@
                             @endforeach
                         </div>
                     </div>
-                @endif
-            </nav>
-        </div>
+                    @endif
+                </nav>
+            </div>
+
+            <!-- Administration Group -->
+            @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('view-settings') || auth()->user()->hasPermission('view-users'))
+            <div class="mt-8">
+                <span class="px-4 text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 block">System Control</span>
+                <nav class="space-y-1">
+                    <div x-data="{ adminOpen: {{ request()->routeIs('admin.*') || request()->routeIs('email-config.*') || request()->routeIs('group-email.*') || request()->routeIs('roles.*') ? 'true' : 'false' }} }">
+                        <button @click="adminOpen = !adminOpen" 
+                                class="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all {{ request()->routeIs('admin.*') || request()->routeIs('email-config.*') || request()->routeIs('group-email.*') || request()->routeIs('roles.*') ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
+                            <div class="flex items-center gap-3">
+                                <span class="{{ request()->routeIs('admin.*') || request()->routeIs('email-config.*') || request()->routeIs('group-email.*') || request()->routeIs('roles.*') ? 'text-white' : 'text-slate-600' }}">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                </span>
+                                {{ __('Administration') }}
+                            </div>
+                            <svg :class="adminOpen ? 'rotate-180' : ''" class="w-3.5 h-3.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        
+                        <div x-show="adminOpen" x-cloak x-transition class="mt-2 ml-4 space-y-1 border-l border-slate-800/50 pl-4">
+                            @if(auth()->user()->hasPermission('view-settings'))
+                                <a href="{{ route('admin.email-config.index') }}" 
+                                class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('admin.email-config.index') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
+                                    {{ __('Email Settings') }}
+                                </a>
+                            @endif
+                            @if(auth()->user()->hasPermission('update-settings'))
+                                <a href="{{ route('admin.group-email.index') }}" 
+                                class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('admin.group-email.index') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
+                                    {{ __('Broadcast') }}
+                                </a>
+                            @endif
+                            @if(auth()->user()->hasPermission('view-users'))
+                                <a href="/admin-panel/users" 
+                                class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->is('admin-panel/users') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
+                                    {{ __('User Management') }}
+                                </a>
+                                <a href="{{ route('roles.index') }}" 
+                                class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->routeIs('roles.*') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
+                                    {{ __('Role Permissions') }}
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            @endif
         @endif
     </div>
 
     <!-- User Profile Tooltip (Bottom) -->
     <div class="p-4 border-t border-slate-800/50 bg-[#0c1221]">
         <div class="px-4 py-3 bg-slate-900/50 border border-slate-800/50 rounded-2xl flex items-center gap-4">
-            <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-black text-xs shadow-lg shadow-indigo-600/20 uppercase">
-                {{ substr(Auth::user()->name, 0, 1) }}
+            <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-black text-xs shadow-lg shadow-indigo-600/20 uppercase overflow-hidden">
+                @if(Auth::user()->profile_picture)
+                    <img src="{{ Storage::url(Auth::user()->profile_picture) }}" alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
+                @else
+                    {{ substr(Auth::user()->name, 0, 1) }}
+                @endif
             </div>
             <div class="flex flex-col min-w-0">
                 <span class="text-xs font-black text-white leading-none truncate uppercase tracking-tighter">{{ Auth::user()->name }}</span>
@@ -421,5 +535,15 @@
                 </span>
             </div>
         </div>
+        
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="flex items-center w-full px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all">
+                <span class="mr-3">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                </span>
+                {{ __('Logout') }}
+            </button>
+        </form>
     </div>
 </aside>

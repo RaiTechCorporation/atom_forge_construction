@@ -29,7 +29,7 @@ return new class extends Migration
                 'contracts_agreements',
                 'permits_licenses',
                 'safety_documents',
-                'blueprints_layouts'
+                'blueprints_layouts',
             ]);
         });
     }

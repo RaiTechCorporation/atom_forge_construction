@@ -13,6 +13,10 @@ class Attendance extends Model
         'labour_id',
         'date',
         'status',
+        'shift',
+        'overtime_hours',
+        'payment_amount',
+        'remark',
         'notes',
     ];
 

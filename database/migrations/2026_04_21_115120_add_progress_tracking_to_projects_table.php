@@ -31,7 +31,7 @@ return new class extends Migration
                 'task_assignments',
                 'progress_percent',
                 'reports_summary',
-                'issue_tracking'
+                'issue_tracking',
             ]);
         });
     }

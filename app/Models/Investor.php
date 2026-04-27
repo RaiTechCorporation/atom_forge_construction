@@ -32,4 +32,14 @@ class Investor extends Model
     {
         return $this->hasMany(Payout::class);
     }
+
+    public function bankAccounts()
+    {
+        return $this->hasMany(BankAccount::class);
+    }
+
+    public function primaryBankAccount()
+    {
+        return $this->hasOne(BankAccount::class)->where('is_primary', true);
+    }
 }

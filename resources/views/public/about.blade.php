@@ -11,7 +11,7 @@
                 {{ $content['about_hero_title'] ?? 'About Atom Forge' }}
             </h1>
             <p class="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto font-medium">
-                {{ $content['about_hero_subtitle'] ?? 'Building the foundations of the future with passion, integrity, and absolute precision.' }}
+                {{ $content['about_hero_subtitle'] ?? 'A forward-thinking construction company focused on delivering high-quality, durable, and innovative building solutions.' }}
             </p>
         </div>
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none -z-10">
@@ -35,7 +35,7 @@
                         {{ $content['about_who_we_are_title'] ?? 'Who We Are' }}
                     </h2>
                     <div class="prose prose-slate max-w-none text-slate-500 font-medium text-lg leading-relaxed space-y-6">
-                        {!! nl2br(e($content['about_who_we_are_content'] ?? "Atom Forge Construction is a premier firm dedicated to delivering high-quality residential, commercial, and interior projects. We've built a reputation for excellence through our commitment to integrity and innovation.\n\nWe believe every project is a partnership. We work closely with our clients to understand their vision and translate it into reality, ensuring every detail is handled with care and precision.")) !!}
+                        {!! nl2br(e($content['about_who_we_are_content'] ?? "Atom Forge Construction was built on the idea that great structures start with strong foundations—both in design and in trust. We specialize in transforming concepts into reality through innovative construction practices, skilled expertise, and a relentless focus on quality.\n\nEvery project we undertake reflects our passion for building not just spaces, but lasting value. Our commitment to excellence, safety, and timely delivery makes us a trusted partner in every stage of construction.")) !!}
                     </div>
                 </div>
             </div>

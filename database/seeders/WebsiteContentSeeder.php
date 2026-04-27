@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-
 use App\Models\WebsiteContent;
+use Illuminate\Database\Seeder;
 
 class WebsiteContentSeeder extends Seeder
 {
@@ -296,7 +294,7 @@ class WebsiteContentSeeder extends Seeder
                 'type' => 'textarea',
                 'label' => 'Who We Are Content',
             ],
-            
+
             // Contact Info
             [
                 'group' => 'contact',

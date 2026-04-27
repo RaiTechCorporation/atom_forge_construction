@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
+use App\Models\Investor;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -45,7 +46,7 @@ class UserSeeder extends Seeder
             'role' => 'investor',
         ]);
 
-        \App\Models\Investor::create([
+        Investor::create([
             'user_id' => $investorUser->id,
             'name' => 'Jane Investor',
             'phone' => '1234567890',

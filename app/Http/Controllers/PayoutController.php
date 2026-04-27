@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Payout;
 use App\Models\Investor;
+use App\Models\Payout;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
@@ -12,6 +12,7 @@ class PayoutController extends Controller
     public function index()
     {
         $payouts = Payout::with(['investor', 'project', 'creator'])->latest()->paginate(15);
+
         return view('payouts.index', compact('payouts'));
     }
 
@@ -19,7 +20,8 @@ class PayoutController extends Controller
     {
         $investors = Investor::all();
         $projects = Project::all();
-        $payout = new Payout();
+        $payout = new Payout;
+
         return view('payouts.create', compact('investors', 'projects', 'payout'));
     }
 
@@ -45,12 +47,14 @@ class PayoutController extends Controller
     public function approve(Payout $payout)
     {
         $payout->update(['status' => 'approved']);
+
         return back()->with('success', 'Payout approved.');
     }
 
     public function destroy(Payout $payout)
     {
         $payout->delete();
+
         return redirect()->route('payouts.index')->with('success', 'Payout deleted.');
     }
 }

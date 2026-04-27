@@ -10,11 +10,11 @@ class ConstructionPlan extends Model
         'name',
         'price_per_sqft',
         'features',
-        'is_active'
+        'is_active',
     ];
 
     protected $casts = [
         'features' => 'array',
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
     ];
 }

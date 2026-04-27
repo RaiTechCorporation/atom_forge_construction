@@ -2,23 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProjectUpdate;
 use App\Models\Project;
+use App\Models\ProjectUpdate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class ProjectUpdateController extends Controller
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+
+class ProjectUpdateController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view-media', only: ['index']),
+            new Middleware('permission:upload-media', only: ['create', 'store']),
+            new Middleware('permission:delete-media', only: ['destroy']),
+        ];
+    }
+
     public function index()
     {
         $updates = ProjectUpdate::with('project')->latest()->paginate(15);
+
         return view('project_updates.index', compact('updates'));
     }
 
     public function create()
     {
         $projects = Project::active()->get();
-        $update = new ProjectUpdate();
+        $update = new ProjectUpdate;
+
         return view('project_updates.create', compact('projects', 'update'));
     }
 
@@ -54,6 +68,7 @@ class ProjectUpdateController extends Controller
             }
         }
         $projectUpdate->delete();
+
         return redirect()->route('project-updates.index')->with('success', 'Project update deleted.');
     }
 }

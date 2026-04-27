@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
     use HasFactory;
+
+    protected $appends = ['total_paid', 'balance_amount'];
 
     protected $fillable = [
         'project_code',
@@ -126,9 +129,19 @@ class Project extends Model
         return $this->hasMany(Attendance::class);
     }
 
+    public function labours()
+    {
+        return $this->hasMany(Labour::class);
+    }
+
     public function materialTransactions()
     {
         return $this->hasMany(MaterialTransaction::class);
+    }
+
+    public function materials()
+    {
+        return $this->hasMany(Material::class);
     }
 
     public function investments()
@@ -146,8 +159,38 @@ class Project extends Model
         return $this->hasMany(Payout::class);
     }
 
+    public function payments()
+    {
+        return $this->hasMany(ProjectPayment::class);
+    }
+
+    public function paymentPhases()
+    {
+        return $this->hasMany(ProjectPaymentPhase::class);
+    }
+
+    protected function totalPaid(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                return (float) $this->payments()->sum('amount_paid');
+            },
+        );
+    }
+
+    protected function balanceAmount(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $budget = (float) $this->total_budget;
+                $paid = (float) $this->total_paid;
+                return $budget - $paid;
+            },
+        );
+    }
+
     public function scopeActive($query)
     {
-        return $query->where('status', 'active');
+        return $query->whereIn('status', ['Planned', 'Ongoing']);
     }
 }

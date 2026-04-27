@@ -44,7 +44,8 @@ class Investment extends Model
 
     public function generateWhatsAppLink()
     {
-        $message = urlencode("Investment Confirmation\nProject: {$this->project->name}\nAmount: ₹" . number_format($this->investment_amount) . "\nDate: {$this->investment_date}\nStatus: " . ucfirst($this->status));
+        $message = urlencode("Investment Confirmation\nProject: {$this->project->name}\nAmount: ₹".number_format($this->investment_amount)."\nDate: {$this->investment_date}\nStatus: ".ucfirst($this->status));
+
         return "https://wa.me/{$this->investor->phone}?text={$message}";
     }
 }

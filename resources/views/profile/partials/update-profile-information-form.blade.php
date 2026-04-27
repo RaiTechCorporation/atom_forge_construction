@@ -13,9 +13,31 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-8 space-y-8">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-8 space-y-8" enctype="multipart/form-data">
         @csrf
         @method('patch')
+
+        <div class="flex items-center gap-6">
+            <div class="shrink-0">
+                <div class="relative group">
+                    <div class="w-24 h-24 rounded-2xl bg-slate-100 border-2 border-slate-400 overflow-hidden flex items-center justify-center">
+                        @if($user->profile_picture)
+                            <img src="{{ Storage::url($user->profile_picture) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                        @else
+                            <svg class="w-12 h-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <div class="flex-1">
+                <x-input-label for="profile_picture" :value="__('Profile Picture')" class="text-black font-black text-[14px] uppercase tracking-wider mb-2" />
+                <input id="profile_picture" name="profile_picture" type="file" 
+                    class="block w-full text-xs font-bold text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:uppercase file:tracking-widest file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer" />
+                <x-input-error class="mt-2 font-bold text-red-700" :messages="$errors->get('profile_picture')" />
+            </div>
+        </div>
 
         <div>
             <x-input-label for="name" :value="__('Full Name')" class="text-black font-black text-[14px] uppercase tracking-wider mb-2" />

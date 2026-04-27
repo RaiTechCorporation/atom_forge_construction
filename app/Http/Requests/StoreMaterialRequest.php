@@ -23,6 +23,7 @@ class StoreMaterialRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'project_id' => 'required|exists:projects,id',
             'name' => 'required|string|max:255',
             'unit' => 'required|string|max:50',
             'min_stock' => 'required|numeric|min:0',

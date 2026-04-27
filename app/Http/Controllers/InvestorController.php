@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Investor;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class InvestorController extends Controller
@@ -12,7 +13,7 @@ class InvestorController extends Controller
      */
     public function index()
     {
-        $investors = \App\Models\Investor::withCount('investments')
+        $investors = Investor::withCount('investments')
             ->withSum('investments as total_invested', 'investment_amount')
             ->latest()
             ->paginate(12);
@@ -25,7 +26,8 @@ class InvestorController extends Controller
      */
     public function create()
     {
-        $investor = new Investor();
+        $investor = new Investor;
+
         return view('admin.investors.create', compact('investor'));
     }
 
@@ -44,7 +46,7 @@ class InvestorController extends Controller
         ]);
 
         \DB::transaction(function () use ($request) {
-            $user = \App\Models\User::create([
+            $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => \Hash::make($request->password),
@@ -69,7 +71,7 @@ class InvestorController extends Controller
      */
     public function show(string $id)
     {
-        $investor = \App\Models\Investor::with(['investments', 'payouts'])
+        $investor = Investor::with(['investments', 'payouts'])
             ->withCount('investments')
             ->withSum('investments as total_invested', 'investment_amount')
             ->findOrFail($id);
@@ -82,7 +84,8 @@ class InvestorController extends Controller
      */
     public function edit(string $id)
     {
-        $investor = \App\Models\Investor::findOrFail($id);
+        $investor = Investor::findOrFail($id);
+
         return view('admin.investors.edit', compact('investor'));
     }
 
@@ -91,11 +94,11 @@ class InvestorController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $investor = \App\Models\Investor::findOrFail($id);
-        
+        $investor = Investor::findOrFail($id);
+
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $investor->user_id,
+            'email' => 'required|string|email|max:255|unique:users,email,'.$investor->user_id,
             'phone' => 'required|string|max:20',
             'address' => 'nullable|string',
             'status' => 'required|in:active,inactive',
@@ -131,8 +134,8 @@ class InvestorController extends Controller
      */
     public function destroy(string $id)
     {
-        $investor = \App\Models\Investor::findOrFail($id);
-        
+        $investor = Investor::findOrFail($id);
+
         \DB::transaction(function () use ($investor) {
             // The user will be deleted due to cascade onDelete in migration
             $investor->user->delete();

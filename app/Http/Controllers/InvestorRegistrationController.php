@@ -9,7 +9,7 @@ class InvestorRegistrationController extends Controller
     public function create()
     {
         $user = auth()->user();
-        
+
         if ($user->investor) {
             return redirect()->route('investor.dashboard');
         }

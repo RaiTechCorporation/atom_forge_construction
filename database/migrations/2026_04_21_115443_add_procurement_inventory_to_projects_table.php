@@ -29,7 +29,7 @@ return new class extends Migration
                 'material_requirements',
                 'suppliers_info',
                 'purchase_orders_summary',
-                'inventory_tracking'
+                'inventory_tracking',
             ]);
         });
     }

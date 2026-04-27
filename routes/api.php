@@ -8,14 +8,14 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-use App\Http\Controllers\Api\ProjectController;
-use App\Http\Controllers\Api\PlanController;
-use App\Http\Controllers\Api\InvestorController;
 use App\Http\Controllers\Api\ClientController;
+use App\Http\Controllers\Api\InvestorController;
+use App\Http\Controllers\Api\PlanController;
+use App\Http\Controllers\Api\ProjectController;
 
 Route::middleware(['auth:sanctum'])->as('api.')->group(function () {
     // Admin routes
-    Route::middleware(['role:super_admin'])->prefix('admin')->as('admin.')->group(function () {
+    Route::prefix('admin')->as('admin.')->group(function () {
         Route::get('/dashboard-stats', [AdminController::class, 'dashboardStats']);
         Route::get('/users', [AdminController::class, 'getUsers']);
         Route::patch('/users/{user}/role', [AdminController::class, 'updateUserRole']);

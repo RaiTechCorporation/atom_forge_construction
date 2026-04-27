@@ -29,21 +29,25 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = $request->user();
-        
-        \Log::debug('User logged in: ' . $user->email . ' with role: ' . $user->role);
+
+        \Log::debug('User logged in: '.$user->email.' with role: '.$user->role);
 
         if ($user->isAdmin()) {
             \Log::debug('Redirecting to dashboard');
+
             return redirect()->intended(route('dashboard'));
         } elseif ($user->isInvestor()) {
             \Log::debug('Redirecting to investor dashboard');
+
             return redirect()->intended(route('investor.dashboard'));
         } elseif ($user->isClient()) {
             \Log::debug('Redirecting to client-portal');
+
             return redirect()->intended('/client-portal');
         }
 
         \Log::debug('Redirecting to dashboard');
+
         return redirect()->intended(route('dashboard'));
     }
 

@@ -41,6 +41,9 @@
                             <th class="px-6 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-widest whitespace-nowrap">Contact</th>
                             <th class="px-6 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-widest whitespace-nowrap">Specialization</th>
                             <th class="px-6 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-widest whitespace-nowrap">Wage Rate</th>
+                            <th class="px-6 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-widest whitespace-nowrap">Gross Earned</th>
+                            <th class="px-6 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-widest whitespace-nowrap">Total Paid</th>
+                            <th class="px-6 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-widest whitespace-nowrap">Balance Due</th>
                             <th class="px-6 py-4 text-right text-[10px] font-bold text-slate-500 uppercase tracking-widest whitespace-nowrap">Actions</th>
                         </tr>
                     </thead>
@@ -49,30 +52,58 @@
                             <tr class="hover:bg-slate-50/50 transition-colors group">
                                 <td class="px-6 py-6">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-bold uppercase text-base border border-indigo-100">
-                                            {{ substr($worker->name, 0, 1) }}
+                                        <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-bold uppercase text-base border border-indigo-100 shrink-0">
+                                            @if($worker->photo_path)
+                                                <img src="{{ Storage::url($worker->photo_path) }}" alt="{{ $worker->name }}" class="w-full h-full object-cover rounded-xl">
+                                            @else
+                                                {{ substr($worker->name, 0, 1) }}
+                                            @endif
                                         </div>
-                                        <span class="text-sm font-bold text-slate-900 tracking-tight">{{ $worker->name }}</span>
+                                        <div class="flex flex-col">
+                                            <a href="{{ route('labour.show', $worker) }}" class="text-sm font-black text-slate-900 tracking-tight hover:text-indigo-600 transition-colors">{{ $worker->name }}</a>
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $worker->labour_unique_id }}</span>
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-6 text-xs font-semibold text-slate-500">
-                                    {{ $worker->phone ?? 'Not Provided' }}
+                                    <div class="flex flex-col gap-1">
+                                        <span class="font-bold text-slate-700">{{ $worker->phone ?? 'Not Provided' }}</span>
+                                        <span class="text-[9px] text-slate-400 uppercase tracking-widest">{{ $worker->city ?? 'City N/A' }}</span>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-6">
-                                    <span class="inline-flex px-2.5 py-0.5 bg-slate-100 text-slate-700 rounded-md text-[10px] font-bold uppercase tracking-wider">
-                                        {{ $worker->work_type }}
-                                    </span>
+                                    <div class="flex flex-col gap-1">
+                                        <span class="inline-flex w-fit px-2.5 py-0.5 bg-slate-100 text-slate-700 rounded-md text-[10px] font-bold uppercase tracking-wider">
+                                            {{ $worker->work_type }}
+                                        </span>
+                                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ $worker->skill_level ?? 'Level N/A' }}</span>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-6">
                                     <div class="flex flex-col">
-                                        <span class="text-sm font-bold text-slate-900 tracking-tight">₹{{ number_format($worker->wage_rate, 2) }}</span>
-                                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Per Shift</span>
+                                        <span class="text-sm font-black text-slate-900 tracking-tight">₹{{ number_format($worker->wage_rate, 2) }}</span>
+                                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">/ {{ $worker->wage_type ?? 'Day' }}</span>
                                     </div>
+                                </td>
+                                <td class="px-6 py-6">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-black text-slate-900 tracking-tight">₹{{ number_format($worker->total_earned, 2) }}</span>
+                                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Incl. Regular + OT</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-6">
+                                    <span class="text-sm font-black text-emerald-600 italic">₹{{ number_format($worker->total_paid, 2) }}</span>
+                                </td>
+                                <td class="px-6 py-6">
+                                    <span class="text-sm font-black text-rose-600 italic">₹{{ number_format($worker->balance_due, 2) }}</span>
                                 </td>
                                 <td class="px-6 py-6 text-right whitespace-nowrap">
                                     <div class="flex justify-end items-center gap-2">
-                                        <a href="{{ route('labour.edit', $worker) }}" class="p-2 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-all" title="Update Profile">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                        <span class="mr-4 px-2 py-1 {{ $worker->status === 'Active' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700' }} text-[9px] font-black uppercase tracking-widest rounded-full">
+                                            {{ $worker->status }}
+                                        </span>
+                                        <a href="{{ route('labour.show', $worker) }}" class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all" title="View Details">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                         </a>
                                         <form action="{{ route('labour.destroy', $worker) }}" method="POST" class="inline-block" onsubmit="return confirm('Confirm removal of this worker from the active registry?');">
                                             @csrf

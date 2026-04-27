@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('est_cost_miscellaneous', 15, 2)->nullable()->after('est_cost_equipment');
             $table->text('payment_terms')->nullable()->after('est_cost_miscellaneous');
             $table->decimal('advance_payment', 15, 2)->nullable()->after('payment_terms');
-            $table->enum('billing_cycle', ['Milestone-based', 'Monthly'])->default('Milestone-based')->after('advance_payment');
+            $table->enum('billing_cycle', ['Milestone-based', 'Monthly'])->nullable()->default('Milestone-based')->after('advance_payment');
         });
     }
 
@@ -35,7 +35,7 @@ return new class extends Migration
                 'est_cost_miscellaneous',
                 'payment_terms',
                 'advance_payment',
-                'billing_cycle'
+                'billing_cycle',
             ]);
         });
     }

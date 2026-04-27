@@ -2,17 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MaterialTransaction;
-use App\Models\Material;
-use App\Models\Project;
-use App\Models\Vendor;
 use App\Http\Requests\StoreMaterialTransactionRequest;
 use App\Http\Requests\UpdateMaterialTransactionRequest;
+use App\Models\Material;
+use App\Models\MaterialTransaction;
+use App\Models\Project;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Storage;
 
-class MaterialTransactionController extends Controller
+class MaterialTransactionController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view-inventory', only: ['index', 'show']),
+            new Middleware('permission:add-inventory', only: ['create', 'store']),
+            new Middleware('permission:edit-inventory', only: ['edit', 'update']),
+            new Middleware('permission:delete-inventory', only: ['destroy']),
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -48,7 +60,7 @@ class MaterialTransactionController extends Controller
         $vendors = Vendor::all();
         $selectedProjectId = $request->project_id;
         $selectedMaterialId = $request->material_id;
-        $transaction = new MaterialTransaction();
+        $transaction = new MaterialTransaction;
 
         return view('material_transactions.create', compact('projects', 'materials', 'vendors', 'selectedProjectId', 'selectedMaterialId', 'transaction'));
     }
@@ -87,6 +99,7 @@ class MaterialTransactionController extends Controller
         $projects = Project::all();
         $materials = Material::all();
         $vendors = Vendor::all();
+
         return view('material_transactions.edit', compact('materialTransaction', 'projects', 'materials', 'vendors'));
     }
 

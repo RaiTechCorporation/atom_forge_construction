@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Investment;
-use App\Models\Project;
 use Illuminate\Http\Request;
 
 class InvestorController extends Controller
@@ -12,8 +11,8 @@ class InvestorController extends Controller
     public function dashboard(Request $request)
     {
         $investor = $request->user()->investor;
-        
-        if (!$investor) {
+
+        if (! $investor) {
             return response()->json(['message' => 'Investor profile not found'], 404);
         }
 

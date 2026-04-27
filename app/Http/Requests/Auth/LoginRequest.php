@@ -42,19 +42,19 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        \Log::debug('Attempting login for: ' . $this->email);
+        \Log::debug('Attempting login for: '.$this->email);
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
-            \Log::debug('Login failed for: ' . $this->email);
+            \Log::debug('Login failed for: '.$this->email);
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
 
-        \Log::debug('Login successful for: ' . $this->email);
+        \Log::debug('Login successful for: '.$this->email);
 
         RateLimiter::clear($this->throttleKey());
     }

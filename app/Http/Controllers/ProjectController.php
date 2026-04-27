@@ -2,19 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
-use Illuminate\Http\Request;
+use App\Models\Project;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class ProjectController extends Controller
+class ProjectController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view-projects', only: ['index', 'show']),
+            new Middleware('permission:create-projects', only: ['create', 'store']),
+            new Middleware('permission:edit-projects', only: ['edit', 'update']),
+            new Middleware('permission:delete-projects', only: ['destroy']),
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $projects = Project::latest()->paginate(10);
+
         return view('projects.index', compact('projects'));
     }
 
@@ -23,7 +35,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $project = new Project();
+        $project = new Project;
+
         return view('projects.create', compact('project'));
     }
 
@@ -35,14 +48,14 @@ class ProjectController extends Controller
         $validated = $request->validated();
 
         $fileFields = [
-            'design_documents', 
-            'contracts_agreements', 
-            'permits_licenses', 
-            'safety_documents', 
+            'design_documents',
+            'contracts_agreements',
+            'permits_licenses',
+            'safety_documents',
             'blueprints_layouts',
             'site_media',
             'progress_photos',
-            'inspection_reports'
+            'inspection_reports',
         ];
 
         foreach ($fileFields as $field) {
@@ -56,7 +69,13 @@ class ProjectController extends Controller
             }
         }
 
-        Project::create($validated);
+        $project = Project::create($validated);
+
+        if ($request->has('payment_phases')) {
+            foreach ($request->payment_phases as $phase) {
+                $project->paymentPhases()->create($phase);
+            }
+        }
 
         return redirect()->route('projects.index')
             ->with('success', 'Project created successfully.');
@@ -67,8 +86,8 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $project->load(['expenses', 'attendances.labour', 'materialTransactions.material', 'investments.investor', 'payouts.investor']);
-        
+        $project->load(['expenses', 'attendances.labour', 'materialTransactions.material', 'investments.investor', 'payouts.investor', 'payments', 'paymentPhases']);
+
         $totalExpenses = $project->expenses->sum('amount');
         $totalInvested = $project->investments()->where('status', 'approved')->sum('investment_amount');
         $budgetRemaining = $project->total_budget - $totalExpenses;
@@ -93,14 +112,14 @@ class ProjectController extends Controller
         $validated = $request->validated();
 
         $fileFields = [
-            'design_documents', 
-            'contracts_agreements', 
-            'permits_licenses', 
-            'safety_documents', 
+            'design_documents',
+            'contracts_agreements',
+            'permits_licenses',
+            'safety_documents',
             'blueprints_layouts',
             'site_media',
             'progress_photos',
-            'inspection_reports'
+            'inspection_reports',
         ];
 
         foreach ($fileFields as $field) {
@@ -115,6 +134,13 @@ class ProjectController extends Controller
         }
 
         $project->update($validated);
+
+        if ($request->has('payment_phases')) {
+            $project->paymentPhases()->delete();
+            foreach ($request->payment_phases as $phase) {
+                $project->paymentPhases()->create($phase);
+            }
+        }
 
         return redirect()->route('projects.index')
             ->with('success', 'Project updated successfully.');

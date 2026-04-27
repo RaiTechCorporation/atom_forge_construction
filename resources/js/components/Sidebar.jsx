@@ -11,7 +11,8 @@ import {
     DollarSign,
     BarChart3,
     Globe,
-    ChevronDown
+    ChevronDown,
+    Shield
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -21,16 +22,19 @@ const Sidebar = () => {
     const [cmsOpen, setCmsOpen] = useState(false);
 
     const menuItems = [
-        { name: 'Dashboard', path: '/admin-panel', icon: LayoutDashboard, roles: ['super_admin'] },
-        { name: 'Projects', path: '/admin-panel/projects', icon: Briefcase, roles: ['super_admin', 'admin_staff'] },
-        { name: 'Users', path: '/admin-panel/users', icon: Users, roles: ['super_admin'] },
-        { name: 'Plans', path: '/admin-panel/plans', icon: ClipboardList, roles: ['super_admin'] },
-        { name: 'Materials', path: '/admin-panel/materials', icon: Hammer, roles: ['super_admin', 'admin_staff'] },
-        { name: 'Finance', path: '/admin-panel/finance', icon: DollarSign, roles: ['super_admin'] },
+        { name: 'Dashboard', path: '/admin-panel', icon: LayoutDashboard, roles: ['super_admin', 'project_manager', 'tender_executive', 'site_supervisor', 'accountant'] },
+        { name: 'Leads', path: '/admin-panel/leads', icon: Users, roles: ['super_admin', 'project_manager', 'tender_executive'] },
+        { name: 'Contracts', path: '/admin-panel/contracts', icon: ClipboardList, roles: ['super_admin', 'project_manager', 'tender_executive'] },
+        { name: 'Projects', path: '/admin-panel/projects', icon: Briefcase, roles: ['super_admin', 'project_manager', 'site_supervisor'] },
+        { name: 'Milestones', path: '/admin-panel/milestones', icon: ClipboardList, roles: ['super_admin', 'project_manager', 'site_supervisor'] },
+        { name: 'Materials', path: '/admin-panel/materials', icon: Hammer, roles: ['super_admin', 'project_manager', 'site_supervisor'] },
+        { name: 'Finance', path: '/admin-panel/finance', icon: DollarSign, roles: ['super_admin', 'project_manager', 'accountant'] },
+        { name: 'Users', path: '/admin-panel/users', icon: Users, roles: ['super_admin', 'project_manager', 'admin_staff', 'accountant', 'tender_executive'] },
+        { name: 'Roles', path: '/admin-panel/roles', icon: Shield, roles: ['super_admin'] },
     ];
 
     const managementItems = [
-        { name: 'Analytics', path: '/reports', icon: BarChart3, roles: ['super_admin'], external: true },
+        { name: 'Analytics', path: '/reports', icon: BarChart3, roles: ['super_admin', 'project_manager'], external: true },
         { name: 'Pricing Plans', path: '/construction-plans', icon: ClipboardList, roles: ['super_admin'], external: true },
     ];
 

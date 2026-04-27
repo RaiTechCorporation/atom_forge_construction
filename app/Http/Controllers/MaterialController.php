@@ -2,20 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Material;
 use App\Http\Requests\StoreMaterialRequest;
 use App\Http\Requests\UpdateMaterialRequest;
-use Illuminate\Http\Request;
+use App\Models\Material;
+use App\Models\Project;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class MaterialController extends Controller
+class MaterialController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view-inventory', only: ['index', 'show']),
+            new Middleware('permission:add-inventory', only: ['create', 'store']),
+            new Middleware('permission:edit-inventory', only: ['edit', 'update']),
+            new Middleware('permission:delete-inventory', only: ['destroy']),
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $materials = Material::with(['transactions'])->latest()->paginate(15);
-        
+        $materials = Material::with(['transactions', 'project'])->latest()->paginate(15);
+
         // Calculate stock for each material
         foreach ($materials as $material) {
             $in = $material->transactions->whereIn('type', ['purchase', 'transfer_in'])->sum('quantity');
@@ -31,8 +43,19 @@ class MaterialController extends Controller
      */
     public function create()
     {
-        $material = new Material();
-        return view('materials.create', compact('material'));
+        $material = new Material;
+        $projects = Project::active()->get();
+        $units = [
+            'Bags' => 'Bags (e.g. Cement)',
+            'CFT' => 'CFT (e.g. Sand)',
+            'KG' => 'KG (e.g. Steel)',
+            'Nos' => 'Nos (e.g. Bricks)',
+            'Liters' => 'Liters (e.g. Paint)',
+            'Sq Ft' => 'Sq Ft (e.g. Area)',
+            'm³' => 'm³ (e.g. Volume)',
+        ];
+
+        return view('materials.create', compact('material', 'projects', 'units'));
     }
 
     /**
@@ -52,6 +75,7 @@ class MaterialController extends Controller
     public function show(Material $material)
     {
         $material->load('transactions.project');
+
         return view('materials.show', compact('material'));
     }
 
@@ -60,7 +84,18 @@ class MaterialController extends Controller
      */
     public function edit(Material $material)
     {
-        return view('materials.edit', compact('material'));
+        $projects = Project::active()->get();
+        $units = [
+            'Bags' => 'Bags (e.g. Cement)',
+            'CFT' => 'CFT (e.g. Sand)',
+            'KG' => 'KG (e.g. Steel)',
+            'Nos' => 'Nos (e.g. Bricks)',
+            'Liters' => 'Liters (e.g. Paint)',
+            'Sq Ft' => 'Sq Ft (e.g. Area)',
+            'm³' => 'm³ (e.g. Volume)',
+        ];
+
+        return view('materials.edit', compact('material', 'projects', 'units'));
     }
 
     /**

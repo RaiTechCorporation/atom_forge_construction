@@ -31,7 +31,7 @@ return new class extends Migration
                 'units_count',
                 'construction_type',
                 'material_specifications',
-                'design_documents'
+                'design_documents',
             ]);
         });
     }

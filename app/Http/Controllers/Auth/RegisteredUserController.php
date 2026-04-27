@@ -53,9 +53,10 @@ class RegisteredUserController extends Controller
             return redirect()->route('dashboard');
         } elseif ($user->isInvestor()) {
             // Check if investor profile exists, if not send to complete it
-            if (!$user->investor) {
+            if (! $user->investor) {
                 return redirect()->route('investor.register.create');
             }
+
             return redirect()->route('investor.dashboard');
         } elseif ($user->isClient()) {
             return redirect('/client-portal');

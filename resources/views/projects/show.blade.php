@@ -32,12 +32,24 @@
     <div class="space-y-8 pb-12">
         
         <!-- Executive Dashboard Stats -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-indigo-200 transition-all group">
                 <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                    <div class="w-2 h-2 rounded-full bg-indigo-400"></div> Budget Liquidity
+                    <div class="w-2 h-2 rounded-full bg-indigo-400"></div> Total Budget
                 </span>
                 <span class="text-2xl font-black text-slate-900 tracking-tighter">₹{{ number_format($project->total_budget, 0) }}</span>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-emerald-200 transition-all group">
+                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-emerald-400"></div> Client Paid
+                </span>
+                <span class="text-2xl font-black text-emerald-600 tracking-tighter">₹{{ number_format($project->total_paid, 0) }}</span>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-red-200 transition-all group">
+                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-red-400"></div> Balance Due
+                </span>
+                <span class="text-2xl font-black text-red-600 tracking-tighter">₹{{ number_format($project->balance_amount, 0) }}</span>
             </div>
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-rose-200 transition-all group">
                 <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
@@ -45,17 +57,10 @@
                 </span>
                 <span class="text-2xl font-black text-rose-600 tracking-tighter">₹{{ number_format($totalExpenses, 0) }}</span>
             </div>
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-emerald-200 transition-all group">
-                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                    <div class="w-2 h-2 rounded-full bg-emerald-400"></div> Project Headroom
-                </span>
-                <span class="text-2xl font-black text-emerald-600 tracking-tighter">₹{{ number_format($budgetRemaining, 0) }}</span>
-            </div>
             <div class="bg-indigo-600 p-6 rounded-2xl shadow-xl shadow-indigo-600/20 flex flex-col justify-between">
                 <span class="text-[10px] font-black text-indigo-200 uppercase tracking-widest mb-3">Lifecycle Stage</span>
                 <div class="flex items-center gap-3">
                     <span class="text-xl font-black text-white uppercase tracking-tighter">{{ $project->status }}</span>
-                    <span class="px-2 py-0.5 bg-white/20 rounded-md text-[9px] font-black text-white uppercase tracking-widest border border-white/10">{{ $project->priority }} PRIORITY</span>
                 </div>
             </div>
         </div>
@@ -233,7 +238,137 @@
                     </div>
                 </div>
 
-                <!-- 04. Resource & Progress Tracking -->
+                <!-- Payment Phases Section -->
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="px-8 py-5 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-emerald-600/20">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest">04. Payment Phases</h3>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Defined Structural Milestones</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-0">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead class="bg-slate-50/50">
+                                    <tr class="border-b border-slate-100">
+                                        <th class="px-8 py-4 text-[9px] font-black text-slate-500 uppercase tracking-widest">Phase Name</th>
+                                        <th class="px-8 py-4 text-[9px] font-black text-slate-500 uppercase tracking-widest">Due Date</th>
+                                        <th class="px-8 py-4 text-[9px] font-black text-slate-500 uppercase tracking-widest">Amount</th>
+                                        <th class="px-8 py-4 text-[9px] font-black text-slate-500 uppercase tracking-widest text-right">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-50">
+                                    @forelse($project->paymentPhases as $phase)
+                                        <tr class="hover:bg-slate-50/50 transition-colors">
+                                            <td class="px-8 py-4 whitespace-nowrap text-[11px] font-bold text-slate-700 uppercase tracking-wider">
+                                                {{ $phase->phase_name }}
+                                            </td>
+                                            <td class="px-8 py-4 whitespace-nowrap text-[11px] font-medium text-slate-500">
+                                                {{ $phase->due_date ? $phase->due_date->format('d M Y') : 'NOT SET' }}
+                                            </td>
+                                            <td class="px-8 py-4 whitespace-nowrap text-[11px] font-black text-slate-900">
+                                                ₹{{ number_format($phase->amount, 2) }}
+                                            </td>
+                                            <td class="px-8 py-4 whitespace-nowrap text-right">
+                                                <span class="px-2 py-0.5 
+                                                    {{ $phase->status === 'Paid' ? 'bg-emerald-100 text-emerald-700' : 
+                                                       ($phase->status === 'Partially Paid' ? 'bg-indigo-100 text-indigo-700' : 
+                                                       ($phase->status === 'Overdue' ? 'bg-rose-100 text-rose-700' : 'bg-amber-100 text-amber-700')) }} 
+                                                    rounded-md text-[9px] font-black uppercase tracking-widest">
+                                                    {{ $phase->status }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="px-8 py-10 text-center text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+                                                No payment phases defined for this project
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 05. Project Payment History -->
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="px-8 py-5 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-emerald-600/20">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest">05. Payment Ledger</h3>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Transaction History & Receipts</p>
+                            </div>
+                        </div>
+                        <a href="{{ route('project-payments.create', ['project_id' => $project->id]) }}" class="px-4 py-2 bg-indigo-600 text-white text-[10px] font-black rounded-xl uppercase tracking-widest hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-600/20">
+                            Add Payment
+                        </a>
+                    </div>
+                    <div class="p-0">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead class="bg-slate-50/50">
+                                    <tr class="border-b border-slate-100">
+                                        <th class="px-8 py-4 text-[9px] font-black text-slate-500 uppercase tracking-widest">Date</th>
+                                        <th class="px-8 py-4 text-[9px] font-black text-slate-500 uppercase tracking-widest">Amount</th>
+                                        <th class="px-8 py-4 text-[9px] font-black text-slate-500 uppercase tracking-widest">Mode</th>
+                                        <th class="px-8 py-4 text-[9px] font-black text-slate-500 uppercase tracking-widest">Ref No</th>
+                                        <th class="px-8 py-4 text-[9px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-50">
+                                    @forelse($project->payments->sortByDesc('payment_date') as $payment)
+                                        <tr class="hover:bg-slate-50/50 transition-colors">
+                                            <td class="px-8 py-4 whitespace-nowrap text-[11px] font-bold text-slate-700">
+                                                {{ $payment->payment_date->format('d-m-Y') }}
+                                            </td>
+                                            <td class="px-8 py-4 whitespace-nowrap text-[11px] font-black text-slate-900">
+                                                ₹{{ number_format($payment->amount_paid, 2) }}
+                                            </td>
+                                            <td class="px-8 py-4 whitespace-nowrap">
+                                                <span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md text-[9px] font-black uppercase tracking-widest">
+                                                    {{ $payment->payment_mode }}
+                                                </span>
+                                            </td>
+                                            <td class="px-8 py-4 whitespace-nowrap text-[11px] font-medium text-slate-500 font-mono">
+                                                {{ $payment->reference_no ?: '-' }}
+                                            </td>
+                                            <td class="px-8 py-4 whitespace-nowrap text-right">
+                                                <div class="flex items-center justify-end gap-2">
+                                                    @if($payment->proof_image)
+                                                        <a href="{{ asset('storage/' . $payment->proof_image) }}" target="_blank" class="p-1.5 text-slate-400 hover:text-amber-600 transition-colors" title="View Proof">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                                        </a>
+                                                    @endif
+                                                    <a href="{{ route('project-payments.receipt', $payment) }}" class="p-1.5 text-slate-400 hover:text-indigo-600 transition-colors" title="Receipt">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="px-8 py-10 text-center text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+                                                No payment history recorded
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 06. Resource & Progress Tracking -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- Resource Allocation -->
                     <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
@@ -285,10 +420,10 @@
                     </div>
                 </div>
 
-                <!-- 05. Risk, Issues & Media -->
+                <!-- 07. Risk, Issues & Media -->
                 <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
                     <div class="px-8 py-5 border-b border-slate-100 bg-slate-50/50">
-                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest">Operational Intelligence</h3>
+                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest">07. Operational Intelligence</h3>
                     </div>
                     <div class="p-8">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -342,6 +477,72 @@
                                 </div>
                             </div>
                         @endif
+                    </div>
+                </div>
+
+                <!-- 08. Expense Ledger -->
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="px-8 py-5 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-rose-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-rose-600/20">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest">Expense Ledger</h3>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Detailed Expenditure Log</p>
+                            </div>
+                        </div>
+                        <a href="{{ route('expenses.create', ['project_id' => $project->id]) }}" class="px-4 py-2 bg-rose-50 text-rose-600 text-[10px] font-black rounded-lg uppercase tracking-widest hover:bg-rose-100 transition-all border border-rose-100">
+                            Record Expense
+                        </a>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50/50">
+                                    <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Date</th>
+                                    <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Category</th>
+                                    <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Description</th>
+                                    <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-50">
+                                @forelse($project->expenses as $expense)
+                                    <tr class="hover:bg-slate-50/50 transition-colors group">
+                                        <td class="px-8 py-4 text-xs font-bold text-slate-500">
+                                            {{ $expense->date ? \Carbon\Carbon::parse($expense->date)->format('d M, Y') : 'N/A' }}
+                                        </td>
+                                        <td class="px-8 py-4">
+                                            <span class="px-2 py-1 bg-slate-100 text-slate-600 text-[9px] font-black rounded-md uppercase tracking-widest">
+                                                {{ str_replace('_', ' ', $expense->category) }}
+                                            </span>
+                                        </td>
+                                        <td class="px-8 py-4 text-xs font-bold text-slate-600 truncate max-w-[200px]" title="{{ $expense->description }}">
+                                            {{ $expense->description }}
+                                        </td>
+                                        <td class="px-8 py-4 text-xs font-black text-slate-900 text-right tracking-tight">
+                                            ₹{{ number_format($expense->amount, 2) }}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="px-8 py-12 text-center text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                                            No expenses logged for this project scope.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                            @if($project->expenses->count() > 0)
+                                <tfoot>
+                                    <tr class="bg-rose-50/30">
+                                        <td colspan="3" class="px-8 py-4 text-[10px] font-black text-rose-600 uppercase tracking-widest text-right">Cumulative Total:</td>
+                                        <td class="px-8 py-4 text-sm font-black text-rose-600 text-right tracking-tighter">
+                                            ₹{{ number_format($totalExpenses, 2) }}
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            @endif
+                        </table>
                     </div>
                 </div>
 

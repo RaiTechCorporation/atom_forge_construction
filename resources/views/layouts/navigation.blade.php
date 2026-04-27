@@ -1,6 +1,6 @@
-<nav class="bg-white/70 backdrop-blur-xl border-b border-slate-200/60 fixed top-0 left-0 w-full h-[60px] z-[60] shadow-sm shadow-slate-200/20">
+<nav class="bg-white/70 backdrop-blur-xl border-b border-slate-200/60 fixed top-0 left-0 md:left-[280px] w-full md:w-[calc(100%-280px)] h-[60px] z-[60] shadow-sm shadow-slate-200/20">
     <!-- Primary Navigation Menu -->
-    <div class="px-4 sm:px-6 lg:px-10 h-full">
+    <div class="px-4 sm:px-6 lg:px-8 h-full">
         <div class="flex justify-between h-full">
             <!-- Left Side: Mobile Toggle & Context -->
             <div class="flex items-center gap-6">
@@ -53,8 +53,12 @@
                                         @endif
                                     </span>
                                 </div>
-                                <div class="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center text-white font-black text-xs ring-4 ring-white shadow-lg shadow-slate-900/10 group-hover:bg-indigo-600 transition-colors">
-                                    {{ substr(Auth::user()->name, 0, 1) }}
+                                <div class="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center text-white font-black text-xs ring-4 ring-white shadow-lg shadow-slate-900/10 group-hover:bg-indigo-600 transition-colors overflow-hidden">
+                                    @if(Auth::user()->profile_picture)
+                                        <img src="{{ Storage::url(Auth::user()->profile_picture) }}" alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
+                                    @else
+                                        {{ substr(Auth::user()->name, 0, 1) }}
+                                    @endif
                                 </div>
                             </button>
                         </x-slot>

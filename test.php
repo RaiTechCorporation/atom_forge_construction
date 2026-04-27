@@ -1,1 +1,1 @@
-<?php echo "PHP is working in root"; ?>
+<?php echo 'PHP is working in root';

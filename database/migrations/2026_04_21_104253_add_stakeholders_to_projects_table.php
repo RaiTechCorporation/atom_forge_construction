@@ -35,7 +35,7 @@ return new class extends Migration
                 'project_manager',
                 'architect',
                 'consultant',
-                'vendor_list'
+                'vendor_list',
             ]);
         });
     }

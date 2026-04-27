@@ -5,9 +5,19 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\ConstructionPlan;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class PlanController extends Controller
+class PlanController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view-settings', only: ['index', 'show']),
+            new Middleware('permission:update-settings', only: ['store', 'update', 'destroy']),
+        ];
+    }
+
     public function index()
     {
         return response()->json(ConstructionPlan::all());
@@ -49,6 +59,7 @@ class PlanController extends Controller
     public function destroy(ConstructionPlan $plan)
     {
         $plan->delete();
+
         return response()->json(null, 204);
     }
 }

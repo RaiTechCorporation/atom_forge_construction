@@ -10,6 +10,7 @@ class EmailConfigurationController extends Controller
     public function index()
     {
         $settings = WebsiteContent::where('group', 'email_config')->get()->keyBy('key');
+
         return view('admin.email_config', compact('settings'));
     }
 

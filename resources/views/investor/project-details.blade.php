@@ -94,6 +94,48 @@
                         @endforelse
                     </div>
                 </div>
+
+                <!-- Expense Ledger (Investor View) -->
+                <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8">
+                    <h3 class="text-xl font-bold text-slate-900 mb-6">Fund Utilization Detail</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="border-b border-slate-50">
+                                    <th class="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Date</th>
+                                    <th class="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Category</th>
+                                    <th class="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-50">
+                                @forelse($project->expenses->sortByDesc('date')->take(10) as $expense)
+                                    <tr>
+                                        <td class="py-4 text-xs font-bold text-slate-500">
+                                            {{ $expense->date ? \Carbon\Carbon::parse($expense->date)->format('M d, Y') : 'N/A' }}
+                                        </td>
+                                        <td class="py-4">
+                                            <span class="text-[10px] font-black text-slate-700 uppercase tracking-wider">{{ str_replace('_', ' ', $expense->category) }}</span>
+                                        </td>
+                                        <td class="py-4 text-xs font-black text-slate-900 text-right">
+                                            ₹{{ number_format($expense->amount, 2) }}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="3" class="py-8 text-center text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                            No recent expenditures logged.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                    @if($project->expenses->count() > 10)
+                        <p class="mt-4 text-[10px] font-bold text-slate-400 uppercase text-center tracking-widest italic">
+                            Showing latest 10 transactions
+                        </p>
+                    @endif
+                </div>
             </div>
 
             <!-- Payouts & Documents -->

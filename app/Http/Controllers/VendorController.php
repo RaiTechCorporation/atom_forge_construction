@@ -2,19 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Vendor;
 use App\Http\Requests\StoreVendorRequest;
 use App\Http\Requests\UpdateVendorRequest;
-use Illuminate\Http\Request;
+use App\Models\Vendor;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class VendorController extends Controller
+class VendorController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view-vendors', only: ['index', 'show']),
+            new Middleware('permission:create-vendors', only: ['create', 'store']),
+            new Middleware('permission:edit-vendors', only: ['edit', 'update']),
+            new Middleware('permission:delete-vendors', only: ['destroy']),
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $vendors = Vendor::latest()->paginate(15);
+
         return view('vendors.index', compact('vendors'));
     }
 
@@ -23,7 +35,8 @@ class VendorController extends Controller
      */
     public function create()
     {
-        $vendor = new Vendor();
+        $vendor = new Vendor;
+
         return view('vendors.create', compact('vendor'));
     }
 
@@ -44,6 +57,7 @@ class VendorController extends Controller
     public function show(Vendor $vendor)
     {
         $vendor->load(['expenses.project', 'materialTransactions.project']);
+
         return view('vendors.show', compact('vendor'));
     }
 

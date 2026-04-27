@@ -4,18 +4,30 @@ namespace App\Http\Controllers;
 
 use App\Models\ConstructionPlan;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class ConstructionPlanController extends Controller
+class ConstructionPlanController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view-settings', only: ['index']),
+            new Middleware('permission:update-settings', only: ['create', 'store', 'edit', 'update', 'destroy']),
+        ];
+    }
+
     public function index()
     {
         $plans = ConstructionPlan::all();
+
         return view('construction_plans.index', compact('plans'));
     }
 
     public function create()
     {
-        $constructionPlan = new ConstructionPlan();
+        $constructionPlan = new ConstructionPlan;
+
         return view('construction_plans.create', compact('constructionPlan'));
     }
 

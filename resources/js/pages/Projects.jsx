@@ -14,7 +14,7 @@ const Projects = () => {
         total_area_sqft: '',
         total_budget: '',
         start_date: '',
-        status: 'active',
+        status: 'Ongoing',
         stage: 'Planning',
         description: ''
     });
@@ -51,7 +51,7 @@ const Projects = () => {
                 total_area_sqft: '',
                 total_budget: '',
                 start_date: '',
-                status: 'active',
+                status: 'Ongoing',
                 stage: 'Planning',
                 description: ''
             });
@@ -90,7 +90,7 @@ const Projects = () => {
                         total_area_sqft: '',
                         total_budget: '',
                         start_date: '',
-                        status: 'active',
+                        status: 'Ongoing',
                         stage: 'Planning',
                         description: ''
                     }); }}
@@ -180,7 +180,9 @@ const Projects = () => {
                                             {project.project_type}
                                         </span>
                                         <span className={`px-2 py-0.5 text-[9px] font-black uppercase tracking-widest rounded ${
-                                            project.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                                            project.status === 'Ongoing' ? 'bg-emerald-100 text-emerald-700' : 
+                                            project.status === 'Planned' ? 'bg-sky-100 text-sky-700' :
+                                            'bg-amber-100 text-amber-700'
                                         }`}>
                                             {project.status}
                                         </span>

@@ -33,7 +33,7 @@ return new class extends Migration
                 'milestone_foundation_start',
                 'milestone_structure_completion',
                 'milestone_finishing_phase',
-                'milestone_handover'
+                'milestone_handover',
             ]);
         });
     }

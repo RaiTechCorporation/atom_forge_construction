@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\WebsiteContent;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Mail;
 
 class GroupEmailController extends Controller
 {
@@ -39,7 +39,8 @@ class GroupEmailController extends Controller
                         ->subject($request->subject);
                 });
             }
-            return redirect()->back()->with('success', 'Group email sent successfully to ' . count($users) . ' users.');
+
+            return redirect()->back()->with('success', 'Group email sent successfully to '.count($users).' users.');
         }
 
         return redirect()->back()->with('error', 'No users found for the selected type.');

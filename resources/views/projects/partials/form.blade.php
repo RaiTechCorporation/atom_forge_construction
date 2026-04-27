@@ -205,6 +205,82 @@
         </div>
     @endforeach
 
+    <!-- Phase-wise Payments Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-16 pt-16 border-t border-slate-200" x-data="{ 
+        phases: {{ json_encode(old('payment_phases', $project->paymentPhases->toArray() ?? [])) }},
+        addPhase() {
+            this.phases.push({ phase_name: '', amount: '', due_date: '', status: 'Pending' });
+        },
+        removePhase(index) {
+            this.phases.splice(index, 1);
+        }
+    }">
+        <div class="col-span-1">
+            <div class="sticky top-24">
+                <div class="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-emerald-600/20 mb-6">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-black text-slate-900 tracking-tight uppercase">09. Phase Payments</h3>
+                <p class="mt-3 text-sm text-slate-500 font-bold leading-relaxed">
+                    Define structural payment milestones and release schedules.
+                </p>
+                <button type="button" @click="addPhase()" class="mt-8 inline-flex items-center px-6 py-3 bg-emerald-50 text-emerald-700 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-100 transition-all border border-emerald-200">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path></svg>
+                    Add Payment Phase
+                </button>
+            </div>
+        </div>
+
+        <div class="col-span-1 lg:col-span-2 space-y-6">
+            <template x-for="(phase, index) in phases" :key="index">
+                <div class="premium-card p-8 relative group">
+                    <button type="button" @click="removePhase(index)" class="absolute top-6 right-6 text-slate-400 hover:text-rose-600 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    </button>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="md:col-span-2">
+                            <label class="stat-label mb-2.5 ml-1 block">Phase Description</label>
+                            <input type="text" :name="`payment_phases[${index}][phase_name]`" x-model="phase.phase_name" class="input-premium" placeholder="e.g. Foundation Completion, 1st Floor Slab" required>
+                        </div>
+                        <div>
+                            <label class="stat-label mb-2.5 ml-1 block">Release Amount</label>
+                            <input type="number" :name="`payment_phases[${index}][amount]`" x-model="phase.amount" step="any" class="input-premium" placeholder="0.00" required>
+                        </div>
+                        <div>
+                            <label class="stat-label mb-2.5 ml-1 block">Expected Date</label>
+                            <input type="date" :name="`payment_phases[${index}][due_date]`" x-model="phase.due_date" class="input-premium">
+                        </div>
+                        <div>
+                            <label class="stat-label mb-2.5 ml-1 block">Status</label>
+                            <div class="relative">
+                                <select :name="`payment_phases[${index}][status]`" x-model="phase.status" class="input-premium appearance-none cursor-pointer pr-12" required>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Partially Paid">Partially Paid</option>
+                                    <option value="Paid">Paid</option>
+                                    <option value="Overdue">Overdue</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-5 text-slate-400">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <div x-show="phases.length === 0" class="premium-card p-12 text-center border-dashed">
+                <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                </div>
+                <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-1">No Phases Defined</h4>
+                <p class="text-xs text-slate-500 font-bold uppercase tracking-tight">Click the button to add payment milestones</p>
+            </div>
+        </div>
+    </div>
+
     <div class="mt-16 pt-12 border-t border-slate-200 flex flex-col-reverse sm:flex-row justify-end items-center gap-6">
         <a href="{{ route('projects.index') }}" class="w-full sm:w-auto px-8 py-3.5 bg-white border border-slate-200 rounded-2xl font-black text-[10px] text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-all text-center uppercase tracking-[0.2em]">
             Discard Changes

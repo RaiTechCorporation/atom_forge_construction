@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Investor;
 use App\Models\Investment;
+use App\Models\Investor;
 use App\Models\Project;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class InvestorSeeder extends Seeder

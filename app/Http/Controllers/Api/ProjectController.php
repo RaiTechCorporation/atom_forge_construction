@@ -5,9 +5,21 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class ProjectController extends Controller
+class ProjectController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:view-projects', only: ['index', 'show']),
+            new Middleware('permission:create-projects', only: ['store']),
+            new Middleware('permission:edit-projects', only: ['update']),
+            new Middleware('permission:delete-projects', only: ['destroy']),
+        ];
+    }
+
     public function index()
     {
         return response()->json(Project::with('client')->latest()->get());
@@ -67,6 +79,7 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         $project->delete();
+
         return response()->json(null, 204);
     }
 }
