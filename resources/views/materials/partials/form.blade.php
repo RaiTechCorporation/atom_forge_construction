@@ -49,6 +49,26 @@
                     </select>
                     <x-input-error class="mt-2 font-bold text-rose-600 text-[10px]" :messages="$errors->get('unit')" />
                 </div>
+
+                <!-- Opening Stock -->
+                <div>
+                    <x-input-label for="opening_stock" :value="__('Opening Quantity')" class="text-slate-700 font-bold text-xs uppercase tracking-wider mb-2 ml-1" />
+                    <x-text-input id="opening_stock" name="opening_stock" type="number" step="0.01" 
+                        placeholder="e.g. 100.00"
+                        class="mt-0 block w-full px-4 py-3 bg-slate-50 border-slate-200 focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 rounded-xl transition-all duration-200 text-slate-900 font-semibold placeholder-slate-400" 
+                        :value="old('opening_stock', $material->opening_stock ?? '0')" />
+                    <x-input-error class="mt-2 font-bold text-rose-600 text-[10px]" :messages="$errors->get('opening_stock')" />
+                </div>
+
+                <!-- Min Stock / Alert Threshold -->
+                <div>
+                    <x-input-label for="min_stock" :value="__('Alert Threshold (Min Stock)')" class="text-slate-700 font-bold text-xs uppercase tracking-wider mb-2 ml-1" />
+                    <x-text-input id="min_stock" name="min_stock" type="number" step="0.01" 
+                        placeholder="e.g. 10.00"
+                        class="mt-0 block w-full px-4 py-3 bg-slate-50 border-slate-200 focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/5 rounded-xl transition-all duration-200 text-slate-900 font-semibold placeholder-slate-400" 
+                        :value="old('min_stock', $material->min_stock ?? '0')" required />
+                    <x-input-error class="mt-2 font-bold text-rose-600 text-[10px]" :messages="$errors->get('min_stock')" />
+                </div>
             </div>
         </div>
     </div>

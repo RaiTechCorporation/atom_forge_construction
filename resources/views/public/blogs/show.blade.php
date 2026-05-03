@@ -1,0 +1,132 @@
+@extends('layouts.public')
+
+@section('content')
+<article class="bg-white">
+    <!-- Article Header -->
+    <header class="relative py-24 bg-slate-900 overflow-hidden">
+        <div class="absolute inset-0 opacity-30">
+            <img src="{{ $post->featured_image ?? 'https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80' }}" alt="Background" class="w-full h-full object-cover">
+        </div>
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex justify-center mb-6">
+                <span class="px-4 py-1.5 bg-orange-construction text-white text-sm font-bold rounded-full uppercase tracking-widest">Industry Insights</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight">
+                {{ $post->title }}
+            </h1>
+            <div class="flex flex-wrap justify-center items-center gap-6 text-slate-300 font-medium">
+                <div class="flex items-center gap-2">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=EE5A24&color=fff" class="w-10 h-10 rounded-full border-2 border-orange-construction" alt="Admin">
+                    <span>By Atom Forge Team</span>
+                </div>
+                <div class="w-1.5 h-1.5 rounded-full bg-slate-500"></div>
+                <div class="flex items-center gap-2">
+                    <i class="far fa-calendar-alt text-orange-construction"></i>
+                    {{ $post->created_at->format('M d, Y') }}
+                </div>
+                <div class="w-1.5 h-1.5 rounded-full bg-slate-500"></div>
+                <div class="flex items-center gap-2">
+                    <i class="far fa-clock text-orange-construction"></i>
+                    6 Min Read
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Article Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="flex flex-col lg:flex-row gap-16">
+            <!-- Main Content -->
+            <div class="lg:w-2/3">
+                @if($post->featured_video_file)
+                    <div class="mb-12 rounded-3xl overflow-hidden shadow-2xl aspect-video bg-black">
+                        <video class="w-full h-full" controls>
+                            <source src="{{ $post->featured_video_file }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                @elseif($post->featured_video_url)
+                    <div class="mb-12 rounded-3xl overflow-hidden shadow-2xl aspect-video bg-black">
+                        @php
+                            $videoId = '';
+                            if (preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i', $post->featured_video_url, $match)) {
+                                $videoId = $match[1];
+                            }
+                        @endphp
+                        @if($videoId)
+                            <iframe class="w-full h-full" src="https://www.youtube.com/embed/{{ $videoId }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        @else
+                            <video class="w-full h-full" controls>
+                                <source src="{{ $post->featured_video_url }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        @endif
+                    </div>
+                @endif
+
+                <div class="prose prose-lg prose-slate max-w-none 
+                    prose-headings:text-slate-900 prose-headings:font-bold 
+                    prose-p:text-gray-600 prose-p:leading-relaxed
+                    prose-a:text-orange-construction prose-a:no-underline hover:prose-a:underline
+                    prose-img:rounded-3xl prose-img:shadow-2xl">
+                    {!! $post->content !!}
+                </div>
+
+                @if($post->faq)
+                <div class="mt-20">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-8">Frequently Asked Questions</h2>
+                    <div class="space-y-4">
+                        @foreach($post->faq as $item)
+                        <div class="bg-slate-50 rounded-2xl p-6 border border-slate-100">
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">{{ $item['question'] }}</h3>
+                            <p class="text-gray-600">{{ $item['answer'] }}</p>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+                <!-- Tags -->
+                @if($post->tags)
+                <div class="mt-12 flex flex-wrap gap-2 pt-12 border-t border-gray-100">
+                    <span class="text-slate-900 font-bold mr-2">Tags:</span>
+                    @foreach($post->tags as $tag)
+                    <span class="px-4 py-2 bg-slate-100 text-slate-600 text-sm font-semibold rounded-full hover:bg-orange-50 hover:text-orange-construction transition-colors cursor-default">
+                        #{{ $tag }}
+                    </span>
+                    @endforeach
+                </div>
+                @endif
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="lg:w-1/3 space-y-12">
+                <!-- Search -->
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100">
+                    <h3 class="text-xl font-bold text-slate-900 mb-6">Search Articles</h3>
+                    <div class="relative">
+                        <input type="text" placeholder="Search insights..." class="w-full px-6 py-4 bg-white border-transparent focus:border-orange-construction focus:ring-orange-construction rounded-2xl shadow-sm">
+                        <button class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-orange-construction transition-colors">
+                            <i class="fas fa-search text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CTA Card -->
+                <div class="bg-slate-900 p-8 rounded-3xl relative overflow-hidden group">
+                    <div class="absolute inset-0 opacity-10">
+                        <img src="https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80" alt="Background" class="w-full h-full object-cover">
+                    </div>
+                    <div class="relative z-10 text-center">
+                        <h3 class="text-2xl font-bold text-white mb-4">Have a Project in Mind?</h3>
+                        <p class="text-slate-400 mb-8">Let our team of experts help you build your vision with precision and excellence.</p>
+                        <a href="{{ route('contact') }}" class="block w-full py-4 bg-orange-construction text-white font-bold rounded-2xl hover:bg-orange-600 shadow-xl shadow-orange-500/20 transition-all transform hover:scale-[1.02] active:scale-95">
+                            Get a Free Quote
+                        </a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</article>
+@endsection

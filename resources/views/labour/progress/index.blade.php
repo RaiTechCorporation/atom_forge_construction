@@ -166,7 +166,7 @@
                 <div class="space-y-4 pt-4">
                     <div class="p-6 bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-200 group hover:border-indigo-400 transition-colors relative">
                         <label class="cursor-pointer">
-                            <input type="file" name="images[]" id="imageInput" multiple accept="image/*" class="hidden" onchange="handleFileSelect(this, 'imagePreview')">
+                            <input type="file" name="images[]" id="imageInput" multiple accept="image/*" capture="environment" class="hidden" onchange="handleFileSelect(this, 'imagePreview')">
                             <div class="flex flex-col items-center gap-2">
                                 <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm group-hover:scale-110 transition-transform">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -180,7 +180,7 @@
 
                     <div class="p-6 bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-200 group hover:border-indigo-400 transition-colors relative">
                         <label class="cursor-pointer">
-                            <input type="file" name="videos[]" id="videoInput" multiple accept="video/*" class="hidden" onchange="handleFileSelect(this, 'videoPreview')">
+                            <input type="file" name="videos[]" id="videoInput" multiple accept="video/*" capture="environment" class="hidden" onchange="handleFileSelect(this, 'videoPreview')">
                             <div class="flex flex-col items-center gap-2">
                                 <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm group-hover:scale-110 transition-transform">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>

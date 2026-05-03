@@ -69,7 +69,7 @@
                         <!-- Images -->
                         <div class="col-span-1">
                             <x-input-label for="images" :value="__('Progress Photos')" />
-                            <input id="images" name="images[]" type="file" multiple class="mt-1 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+                            <input id="images" name="images[]" type="file" multiple capture="environment" class="mt-1 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
                             <x-input-error :messages="$errors->get('images')" class="mt-2" />
                         </div>
 

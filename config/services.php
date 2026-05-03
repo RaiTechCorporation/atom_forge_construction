@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'ai' => [
+        'api_key' => env('AI_API_KEY'),
+        'model' => env('AI_MODEL', 'gpt-4o'),
+    ],
+
 ];

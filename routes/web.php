@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ConstructionPlanController;
@@ -39,6 +40,10 @@ Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
 Route::get('/privacy-policy', [PublicController::class, 'privacy'])->name('privacy');
 Route::get('/terms-and-conditions', [PublicController::class, 'terms'])->name('terms');
 Route::get('/faq', [PublicController::class, 'faq'])->name('faq');
+
+// Blog Public Routes
+Route::get('/blogs', [BlogController::class, 'publicIndex'])->name('blogs.index');
+Route::get('/blogs/{slug}', [BlogController::class, 'publicShow'])->name('blogs.show');
 
 // Auth Routes (handled by Laravel)
 require __DIR__.'/auth.php';
@@ -119,6 +124,19 @@ Route::middleware(['auth', 'two-factor'])->group(function () {
     // Group Email
     Route::get('/group-email', [GroupEmailController::class, 'index'])->name('admin.group-email.index');
     Route::post('/group-email', [GroupEmailController::class, 'send'])->name('admin.group-email.send');
+
+    // Blog Management
+    Route::resource('admin/blogs', BlogController::class)->names([
+        'index' => 'admin.blogs.index',
+        'create' => 'admin.blogs.create',
+        'store' => 'admin.blogs.store',
+        'edit' => 'admin.blogs.edit',
+        'update' => 'admin.blogs.update',
+        'destroy' => 'admin.blogs.destroy',
+    ])->parameters([
+        'blogs' => 'blog'
+    ]);
+    Route::post('/admin/blogs/generate', [BlogController::class, 'generate'])->name('admin.blogs.generate');
 
     // Investor Management
     Route::resource('investors', InvestorController::class);

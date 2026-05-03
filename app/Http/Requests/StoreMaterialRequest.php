@@ -26,6 +26,7 @@ class StoreMaterialRequest extends FormRequest
             'project_id' => 'required|exists:projects,id',
             'name' => 'required|string|max:255',
             'unit' => 'required|string|max:50',
+            'opening_stock' => 'nullable|numeric|min:0',
             'min_stock' => 'required|numeric|min:0',
         ];
     }

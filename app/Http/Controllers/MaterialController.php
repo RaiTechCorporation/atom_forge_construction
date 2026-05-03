@@ -32,7 +32,7 @@ class MaterialController extends Controller implements HasMiddleware
         foreach ($materials as $material) {
             $in = $material->transactions->whereIn('type', ['purchase', 'transfer_in'])->sum('quantity');
             $out = $material->transactions->whereIn('type', ['transfer_out', 'consumption'])->sum('quantity');
-            $material->current_stock = $in - $out;
+            $material->current_stock = ($material->opening_stock ?? 0) + $in - $out;
         }
 
         return view('materials.index', compact('materials'));

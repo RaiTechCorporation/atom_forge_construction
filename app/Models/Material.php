@@ -10,6 +10,7 @@ class Material extends Model
         'project_id',
         'name',
         'unit',
+        'opening_stock',
         'min_stock',
     ];
 
