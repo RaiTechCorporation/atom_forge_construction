@@ -13,6 +13,8 @@ import Roles from './pages/Roles';
 import Leads from './pages/Leads';
 import Contracts from './pages/Contracts';
 import Projects from './pages/Projects';
+import Milestones from './pages/Milestones';
+import Finance from './pages/Finance';
 import InvestorDashboard from './pages/InvestorDashboard';
 import ClientDashboard from './pages/ClientDashboard';
 
@@ -38,7 +40,7 @@ const App = () => {
                 <Routes>
                     {/* Admin Routes */}
                     <Route 
-                        path="/admin-panel" 
+                        path="/admin/dashboard" 
                         element={
                             <PrivateRoute>
                                 <Dashboard />
@@ -46,7 +48,7 @@ const App = () => {
                         } 
                     />
                     <Route 
-                        path="/admin-panel/plans" 
+                        path="/plans" 
                         element={
                             <PrivateRoute>
                                 <Plans />
@@ -54,7 +56,7 @@ const App = () => {
                         } 
                     />
                     <Route 
-                        path="/admin-panel/users" 
+                        path="/users" 
                         element={
                             <PrivateRoute>
                                 <Users />
@@ -62,15 +64,11 @@ const App = () => {
                         } 
                     />
                     <Route 
-                        path="/admin-panel/roles" 
-                        element={
-                            <PrivateRoute>
-                                <Roles />
-                            </PrivateRoute>
-                        } 
+                        path="/admin/users" 
+                        element={<Navigate to="/users" replace />} 
                     />
                     <Route 
-                        path="/admin-panel/leads" 
+                        path="/leads" 
                         element={
                             <PrivateRoute>
                                 <Leads />
@@ -78,7 +76,7 @@ const App = () => {
                         } 
                     />
                     <Route 
-                        path="/admin-panel/contracts" 
+                        path="/contracts" 
                         element={
                             <PrivateRoute>
                                 <Contracts />
@@ -86,20 +84,26 @@ const App = () => {
                         } 
                     />
                     <Route 
-                        path="/admin-panel/projects" 
+                        path="/projects" 
                         element={
                             <PrivateRoute>
                                 <Projects />
                             </PrivateRoute>
                         } 
                     />
-
-                    {/* Shared Dashboard Redirect */}
                     <Route 
-                        path="/dashboard" 
+                        path="/milestones" 
                         element={
                             <PrivateRoute>
-                                <Dashboard />
+                                <Milestones />
+                            </PrivateRoute>
+                        } 
+                    />
+                    <Route 
+                        path="/finance" 
+                        element={
+                            <PrivateRoute>
+                                <Finance />
                             </PrivateRoute>
                         } 
                     />
@@ -108,7 +112,7 @@ const App = () => {
                     <Route path="/investor-portal" element={<PrivateRoute><InvestorDashboard /></PrivateRoute>} />
                     <Route path="/client-portal" element={<PrivateRoute><ClientDashboard /></PrivateRoute>} />
 
-                    <Route path="*" element={<div className="p-8">Page not found or unauthorized.</div>} />
+                    <Route path="*" element={<div className="p-8">Page not found or unauthorized. (Path: {window.location.pathname})</div>} />
                 </Routes>
             </Router>
         </AuthProvider>

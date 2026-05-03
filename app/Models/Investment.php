@@ -19,6 +19,7 @@ class Investment extends Model
         'profit_share',
         'payout_cycle',
         'agreement_file',
+        'payment_proof',
         'status',
         'notes',
     ];

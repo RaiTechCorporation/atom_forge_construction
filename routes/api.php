@@ -17,7 +17,11 @@ Route::middleware(['auth:sanctum'])->as('api.')->group(function () {
     // Admin routes
     Route::prefix('admin')->as('admin.')->group(function () {
         Route::get('/dashboard-stats', [AdminController::class, 'dashboardStats']);
+        Route::get('/roles', [AdminController::class, 'getRoles']);
         Route::get('/users', [AdminController::class, 'getUsers']);
+        Route::post('/users', [AdminController::class, 'storeUser']);
+        Route::put('/users/{user}', [AdminController::class, 'updateUser']);
+        Route::delete('/users/{user}', [AdminController::class, 'deleteUser']);
         Route::patch('/users/{user}/role', [AdminController::class, 'updateUserRole']);
         Route::apiResource('projects', ProjectController::class);
         Route::apiResource('plans', PlanController::class);

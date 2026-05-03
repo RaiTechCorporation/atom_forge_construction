@@ -4,7 +4,7 @@
             <div>
                 <h2 class="font-bold text-2xl text-slate-900 leading-tight tracking-tight">
                     @if(auth()->user()->isAdmin())
-                        {{ __('Administrative Control') }}
+                        {{ __('Dashboard Control') }}
                     @elseif(auth()->user()->isInvestor())
                         {{ __('Investor Portfolio') }}
                     @else
@@ -25,41 +25,186 @@
     </x-slot>
 
     <div class="space-y-8">
-        <!-- Welcome Section -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <div class="p-8 flex flex-col md:flex-row items-center justify-between gap-8 bg-slate-900 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white">
-                <div class="flex items-center gap-6">
-                    <div class="w-20 h-20 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-bold tracking-tight">{{ __('Welcome back') }}, {{ auth()->user()->name }}</h3>
-                        <div class="flex items-center gap-2 mt-2">
-                            <span class="text-slate-300 text-sm font-medium">{{ __('Access Tier:') }}</span>
-                            <span class="bg-indigo-500/20 border border-indigo-400/30 px-3 py-0.5 rounded-full text-indigo-100 font-bold text-[10px] tracking-widest uppercase">
-                                {{ str_replace('_', ' ', auth()->user()->role) }}
-                            </span>
-                        </div>
+        @if(auth()->user()->isSiteSupervisor())
+        <!-- Supervisor Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-8 h-8 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                     </div>
                 </div>
-                <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-                    @if(auth()->user()->isInvestor())
-                        <a href="{{ route('investor.dashboard') }}" class="w-full sm:w-auto text-center px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-indigo-600/20">Investor Desk</a>
-                    @else
-                        <a href="{{ route('investor.register.create') }}" class="w-full sm:w-auto text-center px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-emerald-600/20">Become an Investor</a>
-                    @endif
-                    <a href="{{ route('profile.edit') }}" class="w-full sm:w-auto text-center px-6 py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold rounded-xl transition-all text-sm">Account Settings</a>
-                    <form method="POST" action="{{ route('logout') }}" class="w-full sm:w-auto">
-                        @csrf
-                        <button type="submit" class="w-full text-center px-6 py-2.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 font-bold rounded-xl transition-all text-sm">
-                            {{ __('Logout') }}
-                        </button>
-                    </form>
+                <h3 class="text-xl font-bold text-slate-900">{{ $totalLabours }}</h3>
+                <p class="text-slate-500 text-xs font-medium">{{ __('Total Labours') }}</p>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-8 h-8 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    </div>
                 </div>
+                <h3 class="text-xl font-bold text-slate-900">{{ $supervisorLabours }}</h3>
+                <p class="text-slate-500 text-xs font-medium">{{ __('Project Labours') }}</p>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-10V4m0 10V4m0 10l1.293 1.293a1 1 0 010 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414L10 14m4 0l-4 4-4-4"></path></svg>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900">{{ $projectLabours->count() }}</h3>
+                <p class="text-slate-500 text-xs font-medium">{{ __('Active Projects') }}</p>
             </div>
         </div>
 
-        @if(auth()->user()->isAdmin())
+        <!-- Project Wise Labour Summary -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm mb-8 overflow-hidden">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+                <h3 class="text-lg font-bold text-slate-900">{{ __('Labour Distribution Per Project') }}</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-slate-50">
+                            <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">{{ __('Project Name') }}</th>
+                            <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest text-center">{{ __('Labour Count') }}</th>
+                            <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">{{ __('Status') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        @foreach($projectLabours as $project)
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4">
+                                <span class="text-sm font-bold text-slate-900">{{ $project->name }}</span>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-sm font-bold">
+                                    {{ $project->labours_count }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-2.5 py-1 {{ $project->status === 'Ongoing' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }} text-[10px] font-bold uppercase tracking-wider rounded-lg">
+                                    {{ $project->status }}
+                                </span>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Supervisor Quick Actions -->
+        <div>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="h-6 w-1 bg-indigo-600 rounded-full"></div>
+                <h3 class="text-lg font-bold text-slate-900">{{ __('Supervisor Control Center') }}</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Manage Attendance -->
+                <a href="{{ route('attendance.create') }}" class="group bg-white p-6 rounded-2xl border border-slate-200 hover:border-emerald-600/50 hover:shadow-xl hover:shadow-emerald-600/5 transition-all duration-300">
+                    <div class="w-12 h-12 bg-slate-50 border border-slate-100 text-slate-600 rounded-xl flex items-center justify-center mb-5 group-hover:bg-emerald-600 group-hover:text-white group-hover:border-emerald-600 transition-all duration-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                    </div>
+                    <h4 class="text-base font-bold text-slate-900 mb-1 group-hover:text-emerald-600 transition-colors">{{ __('Labour Attendance') }}</h4>
+                    <p class="text-slate-500 font-medium text-xs leading-relaxed">{{ __('Mark daily attendance for site workers.') }}</p>
+                </a>
+
+                <!-- Daily Work Progress -->
+                <a href="{{ route('labour.work-progress.index') }}" class="group bg-white p-6 rounded-2xl border border-slate-200 hover:border-blue-600/50 hover:shadow-xl hover:shadow-blue-600/5 transition-all duration-300">
+                    <div class="w-12 h-12 bg-slate-50 border border-slate-100 text-slate-600 rounded-xl flex items-center justify-center mb-5 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all duration-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <h4 class="text-base font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">{{ __('Work Progress') }}</h4>
+                    <p class="text-slate-500 font-medium text-xs leading-relaxed">{{ __('Log daily activities and construction milestones.') }}</p>
+                </a>
+
+                <!-- Attendance Records -->
+                <a href="{{ route('attendance.index') }}" class="group bg-white p-6 rounded-2xl border border-slate-200 hover:border-amber-600/50 hover:shadow-xl hover:shadow-amber-600/5 transition-all duration-300">
+                    <div class="w-12 h-12 bg-slate-50 border border-slate-100 text-slate-600 rounded-xl flex items-center justify-center mb-5 group-hover:bg-amber-600 group-hover:text-white group-hover:border-amber-600 transition-all duration-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h4 class="text-base font-bold text-slate-900 mb-1 group-hover:text-amber-600 transition-colors">{{ __('Attendance Logs') }}</h4>
+                    <p class="text-slate-500 font-medium text-xs leading-relaxed">{{ __('Review past attendance history and reports.') }}</p>
+                </a>
+
+                <!-- Add New Labour -->
+                <a href="{{ route('labour.create') }}" class="group bg-white p-6 rounded-2xl border border-slate-200 hover:border-indigo-600/50 hover:shadow-xl hover:shadow-indigo-600/5 transition-all duration-300">
+                    <div class="w-12 h-12 bg-slate-50 border border-slate-100 text-slate-600 rounded-xl flex items-center justify-center mb-5 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 transition-all duration-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                    </div>
+                    <h4 class="text-base font-bold text-slate-900 mb-1 group-hover:text-indigo-600 transition-colors">{{ __('Register Labour') }}</h4>
+                    <p class="text-slate-500 font-medium text-xs leading-relaxed">{{ __('Onboard new workers to the site database.') }}</p>
+                </a>
+            </div>
+
+            <!-- Assigned Projects Section -->
+            <div class="mt-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="h-6 w-1 bg-emerald-600 rounded-full"></div>
+                        <h3 class="text-lg font-bold text-slate-900">{{ __('My Assigned Projects') }}</h3>
+                    </div>
+                    <a href="{{ route('projects.index') }}" class="text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors flex items-center gap-1">
+                        {{ __('View All') }}
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </a>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    @php
+                        $assignedManager = auth()->user()->siteManager;
+                        $assignedProject = $assignedManager ? $assignedManager->project : null;
+                    @endphp
+
+                    @if($assignedProject)
+                    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <span class="px-2.5 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold uppercase tracking-wider rounded-lg mb-2 inline-block">
+                                        {{ $assignedProject->status ?? 'Active' }}
+                                    </span>
+                                    <h4 class="text-xl font-bold text-slate-900">{{ $assignedProject->name }}</h4>
+                                    <p class="text-slate-500 text-sm mt-1 flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                        {{ $assignedProject->location }}
+                                    </p>
+                                </div>
+                                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                    <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-10V4m0 10V4m0 10l1.293 1.293a1 1 0 010 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414L10 14m4 0l-4 4-4-4"></path></svg>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 mt-6">
+                                <div class="bg-slate-50/50 p-3 rounded-xl border border-slate-100">
+                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ __('Start Date') }}</p>
+                                    <p class="text-sm font-bold text-slate-700 mt-0.5">{{ $assignedProject->start_date ? $assignedProject->start_date->format('M d, Y') : 'N/A' }}</p>
+                                </div>
+                                <div class="bg-slate-50/50 p-3 rounded-xl border border-slate-100">
+                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ __('End Date') }}</p>
+                                    <p class="text-sm font-bold text-slate-700 mt-0.5">{{ $assignedProject->end_date ? $assignedProject->end_date->format('M d, Y') : 'N/A' }}</p>
+                                </div>
+                            </div>
+                            <a href="{{ route('projects.show', $assignedProject->id) }}" class="mt-6 w-full inline-flex items-center justify-center px-4 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl hover:bg-slate-800 transition-all">
+                                {{ __('Access Project Details') }}
+                            </a>
+                        </div>
+                    </div>
+                    @else
+                    <div class="col-span-full bg-slate-50 border-2 border-dashed border-slate-200 rounded-3xl p-12 text-center">
+                        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm border border-slate-100">
+                            <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-10V4m0 10V4m0 10l1.293 1.293a1 1 0 010 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414L10 14m4 0l-4 4-4-4"></path></svg>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900">{{ __('No Projects Assigned') }}</h4>
+                        <p class="text-slate-500 text-sm mt-1 max-w-sm mx-auto">{{ __('You currently have no active projects assigned. Contact your administrator for assignment.') }}</p>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+        @elseif(auth()->user()->isAdmin())
         <!-- Quick Actions -->
         <div>
             <div class="flex items-center gap-3 mb-6">

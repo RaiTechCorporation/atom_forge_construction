@@ -15,8 +15,14 @@ class Investor extends Model
         'phone',
         'email',
         'address',
+        'balance',
         'status',
     ];
+
+    public function fundRequests()
+    {
+        return $this->hasMany(FundRequest::class);
+    }
 
     public function user()
     {

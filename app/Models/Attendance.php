@@ -18,6 +18,12 @@ class Attendance extends Model
         'payment_amount',
         'remark',
         'notes',
+        'recorded_by',
+        'recorded_at',
+    ];
+
+    protected $casts = [
+        'recorded_at' => 'datetime',
     ];
 
     public function project()
@@ -28,5 +34,10 @@ class Attendance extends Model
     public function labour()
     {
         return $this->belongsTo(Labour::class);
+    }
+
+    public function recorder()
+    {
+        return $this->belongsTo(User::class, 'recorded_by');
     }
 }

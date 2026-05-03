@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ConstructionPlanController;
 use App\Http\Controllers\EmailConfigurationController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\FundRequestController;
 use App\Http\Controllers\GroupEmailController;
 use App\Http\Controllers\InvestmentController;
 use App\Http\Controllers\InvestorController;
@@ -24,6 +26,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\WebsiteContentController;
+use App\Http\Controllers\SiteManagerController;
 use Illuminate\Support\Facades\Route;
 
 // Public Website Routes (Blade-based)
@@ -48,9 +51,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Admin Panel Routes (Blade-based)
 Route::middleware(['auth', 'two-factor'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Roles & Permissions
     Route::resource('roles', RoleController::class)->middleware('permission:view-users');
@@ -80,6 +81,20 @@ Route::middleware(['auth', 'two-factor'])->group(function () {
     Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
     Route::match(['get', 'post'], '/attendance/createsave', [AttendanceController::class, 'store'])->name('attendance.createsave');
 
+    // Site Manager Management
+    Route::get('/site-managers/dashboard', [SiteManagerController::class, 'dashboard'])->name('site-managers.dashboard');
+    Route::get('/site-managers/attendance', [SiteManagerController::class, 'attendance'])->name('site-managers.attendance');
+    Route::get('/site-managers/attendance-records', [SiteManagerController::class, 'attendanceRecords'])->name('site-managers.attendance-records');
+    Route::post('/site-managers/attendance', [SiteManagerController::class, 'storeAttendance'])->name('site-managers.attendance.store');
+    Route::get('/site-managers/payouts', [SiteManagerController::class, 'payouts'])->name('site-managers.payouts.index');
+    Route::post('/site-managers/generate-payroll', [SiteManagerController::class, 'generatePayroll'])->name('site-managers.generate-payroll');
+    Route::get('/site-managers/export-payroll', [SiteManagerController::class, 'exportPayroll'])->name('site-managers.export-payroll');
+    Route::patch('/site-managers/payouts/{payout}/status', [SiteManagerController::class, 'updatePayoutStatus'])->name('site-managers.payouts.update-status');
+    Route::get('/site-managers/payouts/{payout}/payslip', [SiteManagerController::class, 'downloadPayslip'])->name('site-managers.download-payslip');
+    Route::get('/site-managers/payouts/create', [SiteManagerController::class, 'createPayout'])->name('site-managers.payouts.create');
+    Route::post('/site-managers/payouts', [SiteManagerController::class, 'storePayout'])->name('site-managers.payouts.store');
+    Route::resource('site-managers', SiteManagerController::class);
+
     // Materials & Transactions
     Route::resource('materials', MaterialController::class);
     Route::resource('material_transactions', MaterialTransactionController::class);
@@ -107,6 +122,11 @@ Route::middleware(['auth', 'two-factor'])->group(function () {
 
     // Investor Management
     Route::resource('investors', InvestorController::class);
+    Route::get('fund-requests', [FundRequestController::class, 'index'])->name('fund-requests.index');
+    // We'll use traditional paths since resource might be too much for just index/approve/reject
+    Route::patch('fund-requests/{fundRequest}/approve', [FundRequestController::class, 'approve'])->name('fund-requests.approve');
+    Route::patch('fund-requests/{fundRequest}/reject', [FundRequestController::class, 'reject'])->name('fund-requests.reject');
+
     Route::patch('investments/{investment}/approve', [InvestmentController::class, 'approve'])->name('investments.approve');
     Route::resource('investments', InvestmentController::class);
     Route::patch('payouts/{payout}/approve', [PayoutController::class, 'approve'])->name('payouts.approve');
@@ -115,6 +135,11 @@ Route::middleware(['auth', 'two-factor'])->group(function () {
     // Investor Dashboard Routes
     Route::prefix('investor')->name('investor.')->group(function () {
         Route::get('/dashboard', [InvestorDashboardController::class, 'index'])->name('dashboard');
+        Route::post('/add-funds', [InvestorDashboardController::class, 'addFunds'])->name('add-funds');
+
+        Route::prefix('wallet')->name('wallet.')->group(function () {
+            Route::get('/add-funds', [InvestorDashboardController::class, 'showAddFunds'])->name('add-funds');
+        });
 
         Route::prefix('portfolio')->name('portfolio.')->group(function () {
             Route::get('/overview', [InvestorDashboardController::class, 'portfolioOverview'])->name('overview');
@@ -126,6 +151,7 @@ Route::middleware(['auth', 'two-factor'])->group(function () {
             Route::get('/all', [InvestorDashboardController::class, 'projectsAll'])->name('all');
             Route::get('/performance', [InvestorDashboardController::class, 'projectsPerformance'])->name('performance');
             Route::get('/{id}', [InvestorDashboardController::class, 'projectDetails'])->name('details');
+            Route::post('/{id}/invest', [InvestorDashboardController::class, 'storeInvestment'])->name('invest');
         });
 
         Route::prefix('earnings')->name('earnings.')->group(function () {
@@ -167,9 +193,23 @@ Route::middleware(['auth', 'two-factor'])->group(function () {
 });
 
 // React Application Entry Points
-Route::get('/admin-panel/{any?}', function () {
-    return view('app');
-})->middleware(['auth', 'two-factor'])->where('any', '.*')->name('admin-panel');
+Route::middleware(['auth', 'two-factor'])->group(function () {
+    $reactRoutes = [
+        '/admin/dashboard',
+        '/users',
+        '/leads',
+        '/contracts',
+        '/plans',
+        '/milestones',
+        '/finance',
+    ];
+
+    foreach ($reactRoutes as $path) {
+        Route::get($path, function () {
+            return view('app');
+        });
+    }
+});
 
 Route::get('/investor-portal/{any?}', function () {
     return view('app');

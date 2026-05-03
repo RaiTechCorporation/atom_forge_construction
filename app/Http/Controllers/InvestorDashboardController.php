@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Investment;
 use App\Models\Investor;
 use App\Models\Project;
+use App\Models\FundRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InvestorDashboardController extends Controller
 {
@@ -47,7 +49,34 @@ class InvestorDashboardController extends Controller
             'total_payouts' => $investor->payouts()->where('status', 'approved')->sum('amount_paid'),
         ];
 
-        return view('investor.dashboard', compact('investor', 'investments', 'stats', 'availableProjects'));
+        // Combine FundRequests and Investments for transaction history
+        $fundRequests = $investor->fundRequests()->latest()->get();
+        
+        $transactions = collect();
+        
+        foreach($fundRequests as $fr) {
+            $transactions->push((object)[
+                'type' => 'credit',
+                'amount' => $fr->amount,
+                'status' => $fr->status,
+                'date' => $fr->created_at,
+                'description' => 'Added Funds via ' . str_replace('_', ' ', $fr->payment_method),
+            ]);
+        }
+        
+        foreach($investments as $inv) {
+            $transactions->push((object)[
+                'type' => 'debit',
+                'amount' => $inv->investment_amount,
+                'status' => $inv->status,
+                'date' => $inv->investment_date,
+                'description' => 'Investment in ' . $inv->project->name,
+            ]);
+        }
+        
+        $transactions = $transactions->sortByDesc('date')->values()->take(10);
+
+        return view('investor.dashboard', compact('investor', 'investments', 'stats', 'availableProjects', 'transactions'));
     }
 
     public function projectDetails($id)
@@ -77,7 +106,89 @@ class InvestorDashboardController extends Controller
         $payouts = $investor->payouts()->where('project_id', $id)->latest('payment_date')->get();
         $totalReceived = $payouts->where('status', 'approved')->sum('amount_paid');
 
-        return view('investor.project-details', compact('project', 'investment', 'totalExpenses', 'totalInvestedInProject', 'payouts', 'totalReceived'));
+        // Get all investments for this project by this investor
+        $allInvestments = Investment::where('investor_id', $investor->id)
+            ->where('project_id', $id)
+            ->latest('investment_date')
+            ->get();
+
+        return view('investor.project-details', compact('project', 'investment', 'totalExpenses', 'totalInvestedInProject', 'payouts', 'totalReceived', 'allInvestments', 'investor'));
+    }
+
+    public function addFunds(Request $request)
+    {
+        $investor = $this->getInvestor();
+        if (! $investor) {
+            return back()->with('error', 'Investor profile not found.');
+        }
+
+        $validated = $request->validate([
+            'amount' => 'required|numeric|min:1',
+            'payment_method' => 'required|in:bank_transfer,cheque,cash,upi',
+            'reference_number' => 'nullable|string|max:100',
+            'receipt_proof' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($request->hasFile('receipt_proof')) {
+            $path = $request->file('receipt_proof')->store('receipt_proofs', 'public');
+            $validated['receipt_proof'] = $path;
+        }
+
+        $validated['investor_id'] = $investor->id;
+        $validated['status'] = 'pending';
+
+        FundRequest::create($validated);
+
+        return redirect()->route('investor.dashboard')->with('success', 'Fund request submitted. Balance will be updated after admin verification.');
+    }
+
+    public function showAddFunds()
+    {
+        $investor = $this->getInvestor();
+        if (! $investor) {
+            return redirect()->route('dashboard')->with('error', 'Investor profile not found.');
+        }
+
+        $fundRequests = $investor->fundRequests()->latest()->paginate(10);
+
+        return view('investor.wallet.add-funds', compact('investor', 'fundRequests'));
+    }
+
+    public function storeInvestment(Request $request, $id)
+    {
+        $investor = $this->getInvestor();
+        if (! $investor) {
+            return back()->with('error', 'Investor profile not found.');
+        }
+
+        $project = Project::findOrFail($id);
+
+        $validated = $request->validate([
+            'investment_amount' => 'required|numeric|min:1',
+            'investment_date' => 'required|date',
+            'notes' => 'nullable|string|max:500',
+        ]);
+
+        if ($investor->balance < $validated['investment_amount']) {
+            return back()->with('error', 'Insufficient balance in your account. Please add funds first.');
+        }
+
+        DB::transaction(function () use ($investor, $id, $validated) {
+            $validated['investor_id'] = $investor->id;
+            $validated['project_id'] = $id;
+            $validated['status'] = 'pending';
+            $validated['created_by'] = auth()->id();
+            $validated['payout_cycle'] = 'monthly';
+
+            Investment::create($validated);
+            
+            // We can either deduct now or wait for approval. 
+            // Usually, for "investments", we deduct upon request and maybe refund if rejected.
+            // Or only allow investing from balance and deduct immediately.
+            $investor->decrement('balance', $validated['investment_amount']);
+        });
+
+        return back()->with('success', 'Investment request submitted successfully. Amount deducted from your balance.');
     }
 
     // Portfolio

@@ -8,6 +8,9 @@ export default {
     ],
     theme: {
         extend: {
+            colors: {
+                'orange-primary': '#EE5A24',
+            },
             fontFamily: {
                 sans: ['Inter', 'sans-serif'],
             },

@@ -140,6 +140,33 @@
 
             <!-- Payouts & Documents -->
             <div class="space-y-8">
+                <!-- Add Fund Section -->
+                <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8">
+                    <h3 class="text-xl font-bold text-slate-900 mb-6">Add Funds</h3>
+                    <form action="{{ route('investor.projects.invest', $project->id) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                        @csrf
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Amount (₹)</label>
+                            <input type="number" name="investment_amount" step="0.01" min="1" required class="w-full px-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500 font-bold text-slate-900" placeholder="Enter amount">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Investment Date</label>
+                            <input type="date" name="investment_date" required class="w-full px-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500 font-bold text-slate-900" value="{{ date('Y-m-d') }}">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Payment Proof (Image)</label>
+                            <input type="file" name="payment_proof" accept="image/*" required class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Notes</label>
+                            <textarea name="notes" rows="2" class="w-full px-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500 font-medium text-slate-900" placeholder="Optional notes"></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-0.5">
+                            Submit Investment
+                        </button>
+                    </form>
+                </div>
+
                 <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8">
                     <h3 class="text-xl font-bold text-slate-900 mb-6">Payout History</h3>
                     <div class="space-y-4">
@@ -175,6 +202,31 @@
                         @else
                         <p class="text-slate-500 text-center py-4 text-sm font-medium border border-dashed border-slate-200 rounded-2xl">No agreement file uploaded.</p>
                         @endif
+                    </div>
+                </div>
+
+                <!-- Payment Proofs Section -->
+                <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8">
+                    <h3 class="text-xl font-bold text-slate-900 mb-6">Payment Proofs</h3>
+                    <div class="space-y-4">
+                        @forelse($allInvestments->whereNotNull('payment_proof') as $proof)
+                        <div class="p-4 border border-slate-100 rounded-2xl">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $proof->investment_date->format('M d, Y') }}</p>
+                                    <p class="font-bold text-slate-900 text-sm">₹{{ number_format($proof->investment_amount, 2) }}</p>
+                                </div>
+                                <span class="px-2 py-1 {{ $proof->status === 'approved' ? 'bg-emerald-50 text-emerald-600' : ($proof->status === 'rejected' ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600') }} text-[10px] font-black rounded-lg uppercase tracking-wider">
+                                    {{ $proof->status }}
+                                </span>
+                            </div>
+                            <a href="{{ asset('storage/' . $proof->payment_proof) }}" target="_blank" class="block">
+                                <img src="{{ asset('storage/' . $proof->payment_proof) }}" class="w-full h-32 object-cover rounded-xl border border-slate-50 hover:opacity-90 transition-opacity">
+                            </a>
+                        </div>
+                        @empty
+                        <p class="text-slate-500 text-center py-4 text-sm font-medium border border-dashed border-slate-200 rounded-2xl">No payment proofs uploaded.</p>
+                        @endforelse
                     </div>
                 </div>
             </div>

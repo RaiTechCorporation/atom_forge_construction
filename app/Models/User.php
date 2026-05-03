@@ -65,6 +65,11 @@ class User extends Authenticatable
         return $this->role === 'super_admin';
     }
 
+    public function isAdminStaff()
+    {
+        return $this->role === 'admin_staff';
+    }
+
     public function isProjectManager()
     {
         return $this->role === 'project_manager';
@@ -98,6 +103,11 @@ class User extends Authenticatable
     public function investor()
     {
         return $this->hasOne(Investor::class);
+    }
+
+    public function siteManager()
+    {
+        return $this->hasOne(SiteManager::class);
     }
 
     /**

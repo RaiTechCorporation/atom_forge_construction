@@ -148,7 +148,7 @@ class LabourController extends Controller implements HasMiddleware
 
         // Recent Attendances
         $recentAttendances = (clone $attendanceQuery)
-            ->with(['labour', 'project'])
+            ->with(['labour', 'project', 'recorder'])
             ->latest('date')
             ->take(5)
             ->get();
@@ -252,7 +252,7 @@ class LabourController extends Controller implements HasMiddleware
      */
     public function show(Labour $labour, Request $request)
     {
-        $query = $labour->attendances()->with('project');
+        $query = $labour->attendances()->with(['project', 'recorder']);
 
         // Attendance list filter
         $startDate = $request->start_date ?? now()->startOfMonth()->format('Y-m-d');
@@ -270,7 +270,7 @@ class LabourController extends Controller implements HasMiddleware
 
         // Detailed attendance for calendar
         $calendarAttendance = $labour->attendances()
-            ->with('project')
+            ->with(['project', 'recorder'])
             ->whereYear('date', $selectedYear)
             ->whereMonth('date', $selectedMonth)
             ->get()

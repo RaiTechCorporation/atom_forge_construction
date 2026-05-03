@@ -37,12 +37,18 @@ class InvestmentController extends Controller
             'profit_share' => 'nullable|numeric|min:0',
             'payout_cycle' => 'required|in:monthly,quarterly,end',
             'agreement' => 'nullable|file|mimes:pdf|max:2048',
+            'payment_proof' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'notes' => 'nullable|string',
         ]);
 
         if ($request->hasFile('agreement')) {
             $path = $request->file('agreement')->store('agreements', 'public');
             $validated['agreement_file'] = $path;
+        }
+
+        if ($request->hasFile('payment_proof')) {
+            $path = $request->file('payment_proof')->store('payment_proofs', 'public');
+            $validated['payment_proof'] = $path;
         }
 
         $validated['created_by'] = auth()->id();
@@ -64,6 +70,9 @@ class InvestmentController extends Controller
     {
         if ($investment->agreement_file) {
             Storage::disk('public')->delete($investment->agreement_file);
+        }
+        if ($investment->payment_proof) {
+            Storage::disk('public')->delete($investment->payment_proof);
         }
         $investment->delete();
 

@@ -19,16 +19,16 @@
                 <h3 class="text-3xl font-black text-slate-900">{{ $investors->total() }}</h3>
             </div>
             <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                <p class="text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] mb-2">Total Wallet Balance</p>
+                <h3 class="text-3xl font-black text-indigo-600">₹{{ number_format(\App\Models\Investor::sum('balance') / 1000, 1) }}K</h3>
+            </div>
+            <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
                 <p class="text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] mb-2">Funds Raised</p>
                 <h3 class="text-3xl font-black text-emerald-600">₹{{ number_format(\App\Models\Investment::where('status', 'approved')->sum('investment_amount') / 1000000, 1) }}M</h3>
             </div>
             <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-                <p class="text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] mb-2">Pending Returns</p>
-                <h3 class="text-3xl font-black text-amber-600">₹{{ number_format(\App\Models\Payout::where('status', 'pending')->sum('amount_paid') / 1000, 1) }}K</h3>
-            </div>
-            <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
                 <p class="text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] mb-2">Active Stakes</p>
-                <h3 class="text-3xl font-black text-indigo-600">{{ \App\Models\Investment::where('status', 'approved')->count() }}</h3>
+                <h3 class="text-3xl font-black text-slate-900">{{ \App\Models\Investment::where('status', 'approved')->count() }}</h3>
             </div>
         </div>
 
@@ -51,12 +51,12 @@
 
                     <div class="grid grid-cols-2 gap-6 py-6 border-y border-slate-50 mb-8">
                         <div>
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Invested</p>
-                            <p class="text-base font-black text-slate-900">₹{{ number_format($investor->total_invested ?? 0, 0) }}</p>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Wallet Balance</p>
+                            <p class="text-base font-black text-indigo-600">₹{{ number_format($investor->balance ?? 0, 2) }}</p>
                         </div>
                         <div>
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Portfolio</p>
-                            <p class="text-base font-black text-slate-900">{{ $investor->investments_count }} Assets</p>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Invested</p>
+                            <p class="text-base font-black text-slate-900">₹{{ number_format($investor->total_invested ?? 0, 0) }}</p>
                         </div>
                     </div>
 

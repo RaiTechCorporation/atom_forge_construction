@@ -89,39 +89,33 @@
     <body class="antialiased text-slate-900 bg-white selection:bg-orange-600 selection:text-white" x-data="{ mobileMenuOpen: false }">
         <div class="min-h-screen flex flex-col">
             <!-- Modern Clean Navigation -->
-            @php
-                $navLinks = [
-                    ['name' => 'Home', 'route' => 'home'],
-                    ['name' => 'Services', 'route' => 'services'],
-                    ['name' => 'Projects', 'route' => 'projects'],
-                    ['name' => 'About', 'route' => 'about'],
-                    ['name' => 'Contact', 'route' => 'contact'],
-                ];
-            @endphp
             <nav class="bg-white sticky top-0 z-[100] border-b border-gray-100 header-shadow transition-all duration-300" x-data="{ servicesOpen: false, pagesOpen: false }">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-20">
                         <div class="flex items-center">
-                            <!-- Atom Forge Logo & Text -->
                             <a href="{{ route('home') }}" class="group flex items-center gap-3">
-                                <img src="{{ asset('images/Atom Forge Logo.png For White Background.png') }}" alt="Atom Forge Logo" class="h-16 w-auto">
-                                <span class="font-bold text-2xl text-black tracking-tight">
-                                    Atom Forge 
-                                    {{-- <span class="text-orange-construction">Construction</span> --}}
-                                </span>
+                                <img src="{{ asset('images/Atom Forge Logo.png For White Background.png') }}" alt="Atom Forge Logo" class="h-12 lg:h-14 xl:h-16 w-auto">
+                                <div class="flex flex-col justify-center -space-y-0.5">
+                                    <span class="font-bold text-lg lg:text-xl xl:text-2xl text-black tracking-tight whitespace-nowrap leading-tight">
+                                        Atom Forge 
+                                    </span>
+                                    <span class="font-bold text-[10px] lg:text-xs xl:text-sm text-orange-construction tracking-[0.2em] uppercase leading-tight">
+                                        Construction
+                                    </span>
+                                </div>
                             </a>
 
                             <!-- Desktop Navigation Links -->
-                            <div class="hidden md:flex lg:ml-12 lg:space-x-4">
-                                <a href="{{ route('home') }}" class="px-3 py-2 text-[15px] font-semibold transition-all duration-200 {{ request()->routeIs('home') ? 'nav-link-active' : 'text-gray-700 hover:text-orange-construction' }}">
+                            <div class="hidden md:flex md:ml-6 lg:ml-8 xl:ml-12 md:space-x-1 lg:space-x-2 xl:space-x-4">
+                                <a href="{{ route('home') }}" class="px-1.5 lg:px-2 xl:px-3 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold transition-all duration-200 {{ request()->routeIs('home') ? 'nav-link-active' : 'text-gray-700 hover:text-orange-construction' }}">
                                     Home
                                 </a>
 
                                 <!-- Services Dropdown -->
                                 <div class="relative" @mouseenter="servicesOpen = true" @mouseleave="servicesOpen = false">
-                                    <button class="flex items-center gap-1 px-3 py-2 text-[15px] font-semibold text-gray-700 hover:text-orange-construction transition-all duration-200 {{ request()->routeIs('services') ? 'nav-link-active' : '' }}">
+                                    <button class="flex items-center gap-0.5 lg:gap-1 px-1.5 lg:px-2 xl:px-3 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold text-gray-700 hover:text-orange-construction transition-all duration-200 {{ request()->routeIs('services') ? 'nav-link-active' : '' }}">
                                         Services
-                                        <svg class="w-4 h-4 transition-transform duration-200" :class="servicesOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                        <svg class="w-3.5 h-3.5 lg:w-4 lg:h-4 transition-transform duration-200" :class="servicesOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                     </button>
                                     <div x-show="servicesOpen" 
                                          x-transition:enter="transition ease-out duration-100"
@@ -136,27 +130,29 @@
                                     </div>
                                 </div>
 
-                                <a href="{{ route('projects') }}" class="px-3 py-2 text-[15px] font-semibold transition-all duration-200 {{ request()->routeIs('projects') ? 'nav-link-active' : 'text-gray-700 hover:text-orange-construction' }}">
+                                <a href="{{ route('projects') }}" class="px-1.5 lg:px-2 xl:px-3 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold transition-all duration-200 {{ request()->routeIs('projects') ? 'nav-link-active' : 'text-gray-700 hover:text-orange-construction' }}">
                                     Projects
                                 </a>
-                                <a href="#" class="px-3 py-2 text-[15px] font-semibold text-gray-700 hover:text-orange-construction transition-all duration-200">
+                                <a href="#" class="px-1.5 lg:px-2 xl:px-3 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold text-gray-700 hover:text-orange-construction transition-all duration-200">
                                     Blog
                                 </a>
-                                <a href="{{ route('faq') }}" class="px-3 py-2 text-[15px] font-semibold transition-all duration-200 {{ request()->routeIs('faq') ? 'nav-link-active' : 'text-gray-700 hover:text-orange-construction' }}">
+                                <a href="{{ route('faq') }}" class="px-1.5 lg:px-2 xl:px-3 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold transition-all duration-200 {{ request()->routeIs('faq') ? 'nav-link-active' : 'text-gray-700 hover:text-orange-construction' }}">
                                     FAQ
                                 </a>
-                                <a href="{{ route('public.invest') }}" class="web3-glass group hover:scale-105">
-                                    <div class="web3-glass-content">
-                                        <div class="relative w-2 h-2 rounded-full bg-orange-construction animate-pulse"></div>
-                                        Invest
-                                    </div>
-                                </a>
+                                <div class="flex items-center px-1 lg:px-1 xl:px-2">
+                                    <a href="{{ route('public.invest') }}" class="web3-glass group hover:scale-105 scale-[0.8] lg:scale-90 xl:scale-100 origin-left">
+                                        <div class="web3-glass-content">
+                                            <div class="relative w-2 h-2 rounded-full bg-orange-construction animate-pulse"></div>
+                                            Invest
+                                        </div>
+                                    </a>
+                                </div>
 
                                 <!-- Pages Dropdown -->
                                 <div class="relative" @mouseenter="pagesOpen = true" @mouseleave="pagesOpen = false">
-                                    <button class="flex items-center gap-1 px-3 py-2 text-[15px] font-semibold text-gray-700 hover:text-orange-construction transition-all duration-200">
+                                    <button class="flex items-center gap-0.5 lg:gap-1 px-1.5 lg:px-2 xl:px-3 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold text-gray-700 hover:text-orange-construction transition-all duration-200 {{ request()->routeIs('about') ? 'nav-link-active' : '' }}">
                                         Pages
-                                        <svg class="w-4 h-4 transition-transform duration-200" :class="pagesOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                        <svg class="w-3.5 h-3.5 lg:w-4 lg:h-4 transition-transform duration-200" :class="pagesOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                     </button>
                                     <div x-show="pagesOpen" 
                                          x-transition:enter="transition ease-out duration-100"
@@ -170,18 +166,24 @@
                                     </div>
                                 </div>
 
-                                <a href="{{ route('contact') }}" class="px-3 py-2 text-[15px] font-semibold transition-all duration-200 {{ request()->routeIs('contact') ? 'nav-link-active' : 'text-gray-700 hover:text-orange-construction' }}">
-                                    Contact Us
+                                <a href="{{ route('contact') }}" class="px-1.5 lg:px-2 xl:px-3 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold transition-all duration-200 {{ request()->routeIs('contact') ? 'nav-link-active' : 'text-gray-700 hover:text-orange-construction' }}">
+                                    Contact
                                 </a>
                             </div>
                         </div>
 
-                        <div class="flex items-center gap-4">
-                            <div class="hidden md:flex items-center gap-6">
-                                <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-600 hover:text-orange-construction transition-colors">Sign In</a>
-                                <a href="{{ route('contact') }}" class="inline-flex items-center px-6 py-3 text-[15px] font-bold text-white transition-all bg-orange-construction rounded-full hover:bg-orange-600 shadow-md shadow-orange-500/20">
-                                    Request a Quote
-                                </a>
+                        <div class="flex items-center gap-2 lg:gap-4">
+                            <div class="flex items-center gap-2 lg:gap-3 xl:gap-6">
+                                @auth
+                                    <a href="{{ route('dashboard') }}" class="text-[13px] lg:text-sm font-semibold text-gray-600 hover:text-orange-construction transition-colors whitespace-nowrap">Dashboard</a>
+                                @else
+                                    <a href="{{ route('login') }}" class="text-[13px] lg:text-sm font-semibold text-gray-600 hover:text-orange-construction transition-colors whitespace-nowrap">Sign In</a>
+                                @endauth
+                                <div class="hidden md:flex">
+                                    <a href="{{ route('contact') }}" class="inline-flex items-center px-3 lg:px-4 xl:px-6 py-2 xl:py-3 text-[13px] lg:text-[14px] xl:text-[15px] font-bold text-white transition-all bg-orange-construction rounded-full hover:bg-orange-600 shadow-md shadow-orange-500/20 whitespace-nowrap">
+                                        Request a Quote
+                                    </a>
+                                </div>
                             </div>
                             
                             <!-- Mobile Menu Toggle -->
@@ -217,6 +219,7 @@
                                 <a href="{{ route('services') }}" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">All Services</a>
                                 <a href="#" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">Building Construction</a>
                                 <a href="#" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">House Renovation</a>
+                                <a href="#" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">Architecture Design</a>
                             </div>
                         </div>
                         <a href="{{ route('projects') }}" class="block px-4 py-3 text-base font-bold text-gray-700 hover:text-orange-construction hover:bg-orange-50 rounded-xl transition-all">
@@ -243,6 +246,8 @@
                             </button>
                             <div x-show="open" class="pl-8 space-y-1" x-cloak>
                                 <a href="{{ route('about') }}" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">About Us</a>
+                                <a href="#" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">Team</a>
+                                <a href="#" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">Testimonials</a>
                             </div>
                         </div>
                         <a href="{{ route('contact') }}" class="block px-4 py-3 text-base font-bold text-gray-700 hover:text-orange-construction hover:bg-orange-50 rounded-xl transition-all">
@@ -250,7 +255,11 @@
                         </a>
                         
                         <div class="pt-4 mt-4 border-t border-gray-100 px-4 flex flex-col gap-3">
-                            <a href="{{ route('login') }}" class="text-center py-3 text-gray-600 font-bold hover:bg-gray-50 rounded-xl">Sign In</a>
+                            @auth
+                                <a href="{{ route('dashboard') }}" class="text-center py-3 text-gray-600 font-bold hover:bg-gray-50 rounded-xl">Dashboard</a>
+                            @else
+                                <a href="{{ route('login') }}" class="text-center py-3 text-gray-600 font-bold hover:bg-gray-50 rounded-xl">Sign In</a>
+                            @endauth
                             <a href="{{ route('contact') }}" class="block w-full text-center py-4 bg-orange-construction text-white font-bold rounded-xl shadow-lg shadow-orange-500/10">
                                 Request a Quote
                             </a>
@@ -272,9 +281,14 @@
                         <div class="space-y-8">
                             <a href="{{ route('home') }}" class="flex items-center gap-3">
                                 <img src="{{ asset('images/Atom Forge Logo.png For White Background.png') }}" alt="Atom Forge Logo" class="h-16 w-auto brightness-0 invert">
-                                <span class="font-bold text-2xl text-white tracking-tight">
-                                    Atom Forge
-                                </span>
+                                <div class="flex flex-col justify-center -space-y-1">
+                                    <span class="font-bold text-2xl text-white tracking-tight leading-tight">
+                                        Atom Forge
+                                    </span>
+                                    <span class="font-bold text-xs text-orange-construction tracking-[0.3em] uppercase leading-tight">
+                                        Construction
+                                    </span>
+                                </div>
                             </a>
                             <p class="leading-relaxed text-[15px]">
                                 {{ $content['footer_description'] ?? "Atom Forge Construction is focused on delivering high-quality, durable, and innovative building solutions. We combine modern engineering and precision craftsmanship to turn ideas into solid structures." }}
@@ -335,7 +349,7 @@
                     
                     <!-- Copyright Bar -->
                     <div class="mt-20 pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-center items-center gap-4 text-xs font-bold uppercase tracking-widest text-slate-500">
-                        <p>COPYRIGHT &copy; {{ date('Y') }}. All Rights Reserved By <a href="https://GeniusOcean.com" class="text-orange-construction">GeniusOcean.com</a></p>
+                        <p>COPYRIGHT &copy; {{ date('Y') }}. All Rights Reserved By <a href="{{ route('home') }}" class="text-orange-construction">Atom Forge Construction</a></p>
                     </div>
                 </div>
             </footer>

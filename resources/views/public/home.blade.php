@@ -49,12 +49,6 @@
             display: flex;
             align-items: center;
         }
-        .text-orange-primary {
-            color: #EE5A24;
-        }
-        .bg-orange-primary {
-            background-color: #EE5A24;
-        }
         .btn-pill {
             border-radius: 9999px;
             transition: all 0.3s ease;
@@ -544,40 +538,40 @@
     <!-- Why Choose Us -->
     <section class="py-24 bg-slate-900 relative overflow-hidden">
         <!-- Decoration -->
-        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
-        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full -translate-x-1/2 translate-y-1/2 blur-3xl"></div>
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-primary/10 rounded-full translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-orange-primary/10 rounded-full -translate-x-1/2 translate-y-1/2 blur-3xl"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center max-w-3xl mx-auto mb-20">
-                <span class="text-blue-500 font-bold uppercase tracking-widest text-xs mb-4 block">Values</span>
+                <span class="text-orange-primary font-bold uppercase tracking-widest text-xs mb-4 block">Values</span>
                 <h2 class="text-4xl font-extrabold text-white mb-6 tracking-tight">Why Choose Atom Forge?</h2>
                 <p class="text-slate-400 font-medium text-lg">At Atom Forge Construction, we don’t just build structures—we engineer the future. Leveraging cutting-edge technology, smart planning, and efficient execution, we deliver solutions that are built to last.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                 <div class="text-center">
-                    <div class="w-16 h-16 bg-blue-600/20 text-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <div class="w-16 h-16 bg-orange-primary/20 text-orange-primary rounded-2xl flex items-center justify-center mx-auto mb-6">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                     </div>
                     <h4 class="text-xl font-bold text-white mb-3 tracking-tight">Quality First</h4>
                     <p class="text-slate-400 text-sm font-medium leading-relaxed">No compromises on materials or construction standards.</p>
                 </div>
                 <div class="text-center">
-                    <div class="w-16 h-16 bg-blue-600/20 text-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <div class="w-16 h-16 bg-orange-primary/20 text-orange-primary rounded-2xl flex items-center justify-center mx-auto mb-6">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
                     <h4 class="text-xl font-bold text-white mb-3 tracking-tight">On-Time Delivery</h4>
                     <p class="text-slate-400 text-sm font-medium leading-relaxed">Systematic project management to ensure we meet every deadline.</p>
                 </div>
                 <div class="text-center">
-                    <div class="w-16 h-16 bg-blue-600/20 text-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <div class="w-16 h-16 bg-orange-primary/20 text-orange-primary rounded-2xl flex items-center justify-center mx-auto mb-6">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                     </div>
                     <h4 class="text-xl font-bold text-white mb-3 tracking-tight">Expert Team</h4>
                     <p class="text-slate-400 text-sm font-medium leading-relaxed">Highly skilled engineers, architects, and master craftsmen.</p>
                 </div>
                 <div class="text-center">
-                    <div class="w-16 h-16 bg-blue-600/20 text-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <div class="w-16 h-16 bg-orange-primary/20 text-orange-primary rounded-2xl flex items-center justify-center mx-auto mb-6">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </div>
                     <h4 class="text-xl font-bold text-white mb-3 tracking-tight">Modern Tech</h4>

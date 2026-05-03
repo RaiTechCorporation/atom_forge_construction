@@ -21,7 +21,7 @@ class AttendanceController extends Controller implements HasMiddleware
 
     public function index(Request $request)
     {
-        $query = Attendance::with(['labour', 'project']);
+        $query = Attendance::with(['labour', 'project', 'recorder']);
 
         if ($request->date) {
             $query->where('date', $request->date);
@@ -107,6 +107,8 @@ class AttendanceController extends Controller implements HasMiddleware
                         'overtime_hours' => $overtime,
                         'payment_amount' => $payment,
                         'remark' => $remark,
+                        'recorded_by' => auth()->id(),
+                        'recorded_at' => now(),
                     ]
                 );
             }

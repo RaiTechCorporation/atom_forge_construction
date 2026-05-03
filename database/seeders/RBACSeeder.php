@@ -17,6 +17,7 @@ class RBACSeeder extends Seeder
         $modules = [
             'Dashboard' => ['View'],
             'Users' => ['View', 'Create', 'Edit', 'Delete'],
+            'Roles' => ['View', 'Create', 'Edit', 'Delete'],
             'Employees' => ['View', 'Create', 'Edit', 'Delete'],
             'Projects' => ['View', 'Create', 'Edit', 'Delete', 'Assign Staff'],
             'Attendance' => ['View', 'Manage'],

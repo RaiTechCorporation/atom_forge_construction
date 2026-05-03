@@ -532,6 +532,7 @@
                                         <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ __('Date') }}</th>
                                         <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ __('Project') }}</th>
                                         <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">{{ __('OT Hours') }}</th>
+                                        <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">{{ __('Recorded By') }}</th>
                                         <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">{{ __('Payout') }}</th>
                                     </tr>
                                 </thead>
@@ -550,13 +551,19 @@
                                         <td class="px-8 py-5 text-xs font-black text-slate-600 text-center italic">
                                             {{ $payment->overtime_hours ?? 0 }}
                                         </td>
+                                        <td class="px-8 py-5 text-xs font-black text-slate-600 text-center italic">
+                                            <div>{{ $payment->recorder->name ?? 'System' }}</div>
+                                            @if($payment->recorded_at)
+                                                <div class="text-[8px] text-slate-400 not-italic">{{ $payment->recorded_at->timezone('Asia/Kolkata')->format('h:i A') }} IST</div>
+                                            @endif
+                                        </td>
                                         <td class="px-8 py-5 text-sm font-black text-emerald-600 text-right italic">
                                             ₹{{ number_format($payment->payment_amount, 2) }}
                                         </td>
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="3" class="px-8 py-12 text-center">
+                                        <td colspan="4" class="px-8 py-12 text-center">
                                             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">{{ __('No Payouts found for selected range') }}</p>
                                         </td>
                                     </tr>
@@ -565,7 +572,7 @@
                                 @if($attendances->where('payment_amount', '>', 0)->count() > 0)
                                 <tfoot class="bg-emerald-50/50">
                                     <tr>
-                                        <td colspan="3" class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">{{ __('Total for Range:') }}</td>
+                                        <td colspan="4" class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">{{ __('Total for Range:') }}</td>
                                         <td class="px-8 py-4 text-sm font-black text-emerald-700 text-right">₹{{ number_format($totalPaidInRange, 2) }}</td>
                                     </tr>
                                 </tfoot>

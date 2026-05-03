@@ -129,6 +129,14 @@
                     <x-input-error class="mt-2 font-bold text-rose-600 text-[10px]" :messages="$errors->get('agreement')" />
                 </div>
 
+                <!-- Payment Proof -->
+                <div>
+                    <x-input-label for="payment_proof" :value="__('Payment Proof (Image)')" class="text-slate-700 font-bold text-xs uppercase tracking-wider mb-2 ml-1" />
+                    <input type="file" id="payment_proof" name="payment_proof" accept="image/*"
+                        class="mt-0 block w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer" />
+                    <x-input-error class="mt-2 font-bold text-rose-600 text-[10px]" :messages="$errors->get('payment_proof')" />
+                </div>
+
                 <!-- Notes -->
                 <div class="md:col-span-2">
                     <x-input-label for="notes" :value="__('Notes')" class="text-slate-700 font-bold text-xs uppercase tracking-wider mb-2 ml-1" />

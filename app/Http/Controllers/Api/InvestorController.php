@@ -6,8 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Models\Investment;
 use Illuminate\Http\Request;
 
+use OpenApi\Attributes as OA;
+
 class InvestorController extends Controller
 {
+    #[OA\Get(
+        path: "/api/investor/dashboard",
+        summary: "Get investor dashboard data",
+        tags: ["Investor"],
+        security: [["sanctum" => []]],
+        responses: [
+            new OA\Response(response: 200, description: "Successful operation"),
+            new OA\Response(response: 401, description: "Unauthenticated"),
+            new OA\Response(response: 404, description: "Investor profile not found")
+        ]
+    )]
     public function dashboard(Request $request)
     {
         $investor = $request->user()->investor;

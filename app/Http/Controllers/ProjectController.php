@@ -25,7 +25,18 @@ class ProjectController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        $projects = Project::latest()->paginate(10);
+        $query = Project::query();
+
+        if (auth()->user()->isSiteSupervisor()) {
+            $siteManager = auth()->user()->siteManager;
+            if ($siteManager && $siteManager->project_id) {
+                $query->where('id', $siteManager->project_id);
+            } else {
+                $query->where('id', 0);
+            }
+        }
+
+        $projects = $query->latest()->paginate(10);
 
         return view('projects.index', compact('projects'));
     }
@@ -86,6 +97,8 @@ class ProjectController extends Controller implements HasMiddleware
      */
     public function show(Project $project)
     {
+        $this->authorizeProjectAccess($project);
+
         $project->load(['expenses', 'attendances.labour', 'materialTransactions.material', 'investments.investor', 'payouts.investor', 'payments', 'paymentPhases']);
 
         $totalExpenses = $project->expenses->sum('amount');
@@ -101,6 +114,7 @@ class ProjectController extends Controller implements HasMiddleware
      */
     public function edit(Project $project)
     {
+        $this->authorizeProjectAccess($project);
         return view('projects.edit', compact('project'));
     }
 
@@ -109,6 +123,7 @@ class ProjectController extends Controller implements HasMiddleware
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
+        $this->authorizeProjectAccess($project);
         $validated = $request->validated();
 
         $fileFields = [
@@ -151,9 +166,20 @@ class ProjectController extends Controller implements HasMiddleware
      */
     public function destroy(Project $project)
     {
+        $this->authorizeProjectAccess($project);
         $project->delete();
 
         return redirect()->route('projects.index')
             ->with('success', 'Project deleted successfully.');
+    }
+
+    protected function authorizeProjectAccess(Project $project)
+    {
+        if (auth()->user()->isSiteSupervisor()) {
+            $siteManager = auth()->user()->siteManager;
+            if (!$siteManager || $siteManager->project_id !== $project->id) {
+                abort(403, 'Unauthorized access to this project.');
+            }
+        }
     }
 }

@@ -3,7 +3,7 @@
         <div class="flex flex-col md:flex-row justify-between items-center gap-6">
             <div>
                 <h2 class="font-bold text-2xl text-slate-900 leading-tight tracking-tight">
-                    {{ __('Labour Force') }}
+                    {{ __('All Labours') }}
                 </h2>
                 <p class="mt-1 text-sm font-medium text-slate-500">
                     {{ __('Manage your skilled and unskilled construction workforce.') }}
