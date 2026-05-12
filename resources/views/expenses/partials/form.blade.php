@@ -186,7 +186,7 @@
                                     <p class="text-xs font-semibold text-slate-700">{{ basename($expense->bill_path) }}</p>
                                 </div>
                             </div>
-                            <a href="{{ Storage::url($expense->bill_path) }}" target="_blank" class="px-4 py-1.5 bg-white border border-slate-200 text-indigo-600 rounded-lg text-xs font-bold hover:bg-indigo-50 transition-all">
+                            <a href="{{ asset('storage/' . $expense->bill_path) }}" target="_blank" class="px-4 py-1.5 bg-white border border-slate-200 text-indigo-600 rounded-lg text-xs font-bold hover:bg-indigo-50 transition-all">
                                 {{ __('View') }}
                             </a>
                         </div>

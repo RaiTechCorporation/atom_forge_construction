@@ -85,6 +85,11 @@ class VendorController extends Controller implements HasMiddleware
      */
     public function destroy(Vendor $vendor)
     {
+        if (auth()->user()->isSiteSupervisor()) {
+            return redirect()->route('vendors.index')
+                ->with('error', 'Site Supervisors are not allowed to delete vendor records.');
+        }
+
         $vendor->delete();
 
         return redirect()->route('vendors.index')

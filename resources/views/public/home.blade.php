@@ -122,7 +122,7 @@
                 'title_dark' => 'Building',
                 'title_orange' => 'Strength',
                 'description' => 'We deliver reliable, innovative, and high-quality construction solutions designed to stand the test of time.',
-                'image' => 'https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80&w=1920',
+                'image' => 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1920',
             ],
             [
                 'subtitle' => 'PRECISE CREATED ONLY FOR YOU',
@@ -150,7 +150,7 @@
                 'title_dark' => 'Reliable',
                 'title_orange' => 'Partners',
                 'description' => 'A commitment to excellence, safety, and timely delivery in every stage of construction.',
-                'image' => 'https://images.unsplash.com/photo-1449156003053-c29824b26c21?auto=format&fit=crop&q=80&w=1920',
+                'image' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1920',
             ],
             [
                 'subtitle' => 'PRECISE CREATED ONLY FOR YOU',
@@ -164,7 +164,14 @@
                 'title_dark' => 'Excellence',
                 'title_orange' => 'Redefined',
                 'description' => 'Turning your ideas into solid structures with unmatched quality and precision.',
-                'image' => 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=1920',
+                'image' => 'https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80&w=1920',
+            ],
+            [
+                'subtitle' => 'PRECISE CREATED ONLY FOR YOU',
+                'title_dark' => 'Potential',
+                'title_orange' => 'Growth',
+                'description' => 'Unlocking massive opportunities in the construction sector with strategic planning.',
+                'image' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1920',
             ],
         ];
     @endphp
@@ -432,17 +439,17 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @php
                     $bestServices = [
-                        ['title' => 'Residential Construction', 'description' => 'From custom villas to modern apartments, we deliver high-quality residential spaces built with precision.'],
-                        ['title' => 'Commercial Development', 'description' => 'Large-scale commercial projects that combine modern engineering with efficient execution.'],
-                        ['title' => 'Industrial Infrastructure', 'description' => 'Delivering durable and scalable infrastructure solutions for industrial growth and performance.'],
-                        ['title' => 'Custom Interior Design', 'description' => 'Turning concepts into reality with skilled expertise and a relentless focus on aesthetic quality.'],
-                        ['title' => 'Sustainable Building', 'description' => 'Eco-friendly construction practices and smart planning for structures that are built to last.'],
-                        ['title' => 'Project Management', 'description' => 'Reliable end-to-end management ensuring timely delivery and commitment to excellence.'],
+                        ['title' => 'Residential Construction', 'description' => 'From custom villas to modern apartments, we deliver high-quality residential spaces built with precision.', 'link' => route('services.residential')],
+                        ['title' => 'Commercial Development', 'description' => 'Large-scale commercial projects that combine modern engineering with efficient execution.', 'link' => route('services.commercial')],
+                        ['title' => 'Industrial Infrastructure', 'description' => 'Delivering durable and scalable infrastructure solutions for industrial growth and performance.', 'link' => route('services.industrial')],
+                        ['title' => 'Custom Interior Design', 'description' => 'Turning concepts into reality with skilled expertise and a relentless focus on aesthetic quality.', 'link' => route('services.interior')],
+                        ['title' => 'Sustainable Building', 'description' => 'Eco-friendly construction practices and smart planning for structures that are built to last.', 'link' => route('services.sustainable')],
+                        ['title' => 'Project Management', 'description' => 'Reliable end-to-end management ensuring timely delivery and commitment to excellence.', 'link' => route('services.management')],
                     ];
                 @endphp
 
                 @foreach($bestServices as $service)
-                <div class="p-8 border border-gray-100 rounded-xl hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                <a href="{{ $service['link'] }}" class="p-8 border border-gray-100 rounded-xl hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group block">
                     <div class="flex items-center gap-4 mb-4">
                         <div class="w-10 h-10 bg-orange-primary/10 rounded-lg flex items-center justify-center text-orange-primary group-hover:bg-orange-primary group-hover:text-white transition-colors">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
@@ -450,7 +457,7 @@
                         <h3 class="text-xl font-bold text-slate-900">{{ $service['title'] }}</h3>
                     </div>
                     <p class="text-slate-500 line-clamp-2">{{ $service['description'] }}</p>
-                </div>
+                </a>
                 @endforeach
             </div>
         </div>
@@ -469,10 +476,10 @@
                     <div class="swiper-wrapper">
                         @php
                             $projects = [
-                                ['name' => 'Building Construction', 'image' => 'https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80&w=800'],
+                                ['name' => 'Building Construction', 'image' => 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800'],
                                 ['name' => 'Interior Design', 'image' => 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=800'],
                                 ['name' => 'Bridge Engineering', 'image' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800'],
-                                ['name' => 'Urban Planning', 'image' => 'https://images.unsplash.com/photo-1449156003053-c29824b26c21?auto=format&fit=crop&q=80&w=800'],
+                                ['name' => 'Urban Planning', 'image' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800'],
                                 ['name' => 'Modern Architecture', 'image' => 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800'],
                             ];
                         @endphp
@@ -778,12 +785,12 @@
                             </span>
                         </div>
                         <h3 class="text-2xl font-bold text-slate-900 mb-4 group-hover:text-orange-primary transition-colors">
-                            <a href="#">{{ $blog['title'] }}</a>
+                            <a href="{{ route('blogs.index') }}">{{ $blog['title'] }}</a>
                         </h3>
                         <p class="text-slate-500 mb-8 line-clamp-2">
                             {{ $blog['excerpt'] }}
                         </p>
-                        <a href="#" class="inline-flex items-center gap-2 text-orange-primary font-bold group/link">
+                        <a href="{{ route('blogs.index') }}" class="inline-flex items-center gap-2 text-orange-primary font-bold group/link">
                             Read More
                             <i class="fa-solid fa-chevron-right text-[10px] transition-transform group-hover/link:translate-x-1"></i>
                         </a>

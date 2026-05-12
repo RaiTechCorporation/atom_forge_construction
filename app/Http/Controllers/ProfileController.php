@@ -35,7 +35,7 @@ class ProfileController extends Controller
             if ($user->profile_picture) {
                 Storage::disk('public')->delete($user->profile_picture);
             }
-            $data['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $data['profile_picture'] = Storage::disk('public')->putFile('profile_pictures', $request->file('profile_picture'));
         }
 
         $user->fill($data);
@@ -54,6 +54,10 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        if ($request->user()->isSiteSupervisor()) {
+            return Redirect::back()->withErrors(['userDeletion' => 'Site Supervisors are not allowed to delete their accounts.']);
+        }
+
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
         ]);

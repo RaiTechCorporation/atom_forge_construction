@@ -64,7 +64,7 @@ class ExpenseController extends Controller implements HasMiddleware
         $validated['user_id'] = auth()->id();
 
         if ($request->hasFile('bill')) {
-            $path = $request->file('bill')->store('bills', 'public');
+            $path = Storage::disk('public')->putFile('bills', $request->file('bill'));
             $validated['bill_path'] = $path;
         }
 
@@ -105,7 +105,7 @@ class ExpenseController extends Controller implements HasMiddleware
             if ($expense->bill_path) {
                 Storage::disk('public')->delete($expense->bill_path);
             }
-            $path = $request->file('bill')->store('bills', 'public');
+            $path = Storage::disk('public')->putFile('bills', $request->file('bill'));
             $validated['bill_path'] = $path;
         }
 
@@ -120,6 +120,11 @@ class ExpenseController extends Controller implements HasMiddleware
      */
     public function destroy(Expense $expense)
     {
+        if (auth()->user()->isSiteSupervisor()) {
+            return redirect()->route('expenses.index')
+                ->with('error', 'Site Supervisors are not allowed to delete expense records.');
+        }
+
         if ($expense->bill_path) {
             Storage::disk('public')->delete($expense->bill_path);
         }

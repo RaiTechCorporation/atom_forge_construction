@@ -73,7 +73,7 @@ class MaterialTransactionController extends Controller implements HasMiddleware
         $validated = $request->validated();
 
         if ($request->hasFile('bill')) {
-            $path = $request->file('bill')->store('material_bills', 'public');
+            $path = Storage::disk('public')->putFile('material_bills', $request->file('bill'));
             $validated['bill_path'] = $path;
         }
 
@@ -114,7 +114,7 @@ class MaterialTransactionController extends Controller implements HasMiddleware
             if ($materialTransaction->bill_path) {
                 Storage::disk('public')->delete($materialTransaction->bill_path);
             }
-            $path = $request->file('bill')->store('material_bills', 'public');
+            $path = Storage::disk('public')->putFile('material_bills', $request->file('bill'));
             $validated['bill_path'] = $path;
         }
 
@@ -129,6 +129,11 @@ class MaterialTransactionController extends Controller implements HasMiddleware
      */
     public function destroy(MaterialTransaction $materialTransaction)
     {
+        if (auth()->user()->isSiteSupervisor()) {
+            return redirect()->route('material_transactions.index')
+                ->with('error', 'Site Supervisors are not allowed to delete material transaction records.');
+        }
+
         if ($materialTransaction->bill_path) {
             Storage::disk('public')->delete($materialTransaction->bill_path);
         }

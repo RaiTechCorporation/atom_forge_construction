@@ -39,7 +39,7 @@
                             $latestMedia = \App\Models\LabourWorkProgress::where('project_id', $project->id)->orderBy('created_at', 'desc')->first();
                         @endphp
                         @if($latestMedia && $latestMedia->file_type === 'image')
-                            <img src="{{ Storage::url($latestMedia->file_path) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <img src="{{ asset('storage/' . $latestMedia->file_path) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         @else
                             <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600">
                                 <svg class="w-16 h-16 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
@@ -74,6 +74,12 @@
                                 <p class="text-[10px] font-black text-slate-900 italic">
                                     {{ $latestMedia ? \Carbon\Carbon::parse($latestMedia->date)->format('d M, Y') : 'No Updates' }}
                                 </p>
+                                @if($latestMedia && $latestMedia->latitude && $latestMedia->longitude)
+                                    <a href="https://www.google.com/maps/search/?api=1&query={{ $latestMedia->latitude }},{{ $latestMedia->longitude }}" target="_blank" @click.stop class="mt-2 inline-flex items-center gap-1 text-[8px] font-bold text-emerald-600 hover:text-emerald-700 uppercase tracking-widest transition-colors">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                                        {{ __('Latest Location') }}
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -101,7 +107,7 @@
             <div class="flex items-center justify-between mb-8 pb-6 border-b border-slate-100">
                 <div>
                     <h2 class="text-xl font-black text-slate-900 uppercase tracking-tighter">{{ __('Upload Daily Progress') }}</h2>
-                    <p class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-widest">{{ __('Categorize visual updates by labourer and shift') }}</p>
+                    <p class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-widest">{{ __('Categorize visual updates by site manager and shift') }}</p>
                 </div>
                 <button @click="$dispatch('close-modal', 'upload-progress')" class="p-2 text-slate-400 hover:text-slate-600 transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -110,6 +116,8 @@
 
             <form id="uploadForm" action="" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
+                <input type="hidden" name="latitude" id="latitudeInput">
+                <input type="hidden" name="longitude" id="longitudeInput">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="md:col-span-2">
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 ml-1">{{ __('Select Project Site') }}</label>
@@ -121,11 +129,11 @@
                         </select>
                     </div>
                     <div>
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 ml-1">{{ __('Select Labourer') }}</label>
-                        <select name="labour_id" id="labourSelect" required onchange="updateFormAction(this.value)" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl text-xs font-bold focus:border-indigo-600 focus:ring-0 transition-all">
-                            <option value="">Choose Worker...</option>
-                            @foreach($labours as $labour)
-                                <option value="{{ $labour->id }}">{{ $labour->name }} ({{ $labour->labour_unique_id }})</option>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 ml-1">{{ __('Select Site Manager') }}</label>
+                        <select name="site_manager_id" id="siteManagerSelect" required onchange="updateFormAction(this.value)" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl text-xs font-bold focus:border-indigo-600 focus:ring-0 transition-all">
+                            <option value="">Choose Site Manager...</option>
+                            @foreach($siteManagers as $siteManager)
+                                <option value="{{ $siteManager->id }}">{{ $siteManager->name }} ({{ $siteManager->manager_unique_id }})</option>
                             @endforeach
                         </select>
                     </div>
@@ -207,10 +215,10 @@
     </x-modal>
 
     <script>
-        function updateFormAction(labourId) {
+        function updateFormAction(siteManagerId) {
             const form = document.getElementById('uploadForm');
-            if (labourId) {
-                form.action = `/labour/${labourId}/work-progress`;
+            if (siteManagerId) {
+                form.action = `/site-manager/${siteManagerId}/work-progress`;
             } else {
                 form.action = '';
             }
@@ -256,16 +264,31 @@
             const submitBtn = form.querySelector('button[type="submit"]');
 
             if (!form.action || form.action === window.location.href) {
-                alert('Please select a labourer first.');
+                alert('Please select a site manager first.');
                 return;
             }
 
-            progressContainer.classList.remove('hidden');
-            submitBtn.disabled = true;
-            submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            // File size validation
+            const images = document.getElementById('imageInput').files;
+            const videos = document.getElementById('videoInput').files;
+            
+            for (let i = 0; i < images.length; i++) {
+                if (images[i].size > 10 * 1024 * 1024) { // 10MB
+                    alert('Image ' + images[i].name + ' is too large (max 10MB)');
+                    return;
+                }
+            }
+            
+            for (let i = 0; i < videos.length; i++) {
+                if (videos[i].size > 50 * 1024 * 1024) { // 50MB
+                    alert('Video ' + videos[i].name + ' is too large (max 50MB)');
+                    return;
+                }
+            }
 
             const xhr = new XMLHttpRequest();
             xhr.open('POST', form.action, true);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
             xhr.upload.onprogress = function(e) {
                 if (e.lengthComputable) {
@@ -277,9 +300,30 @@
 
             xhr.onload = function() {
                 if (xhr.status === 200 || xhr.status === 302) {
-                    window.location.reload();
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            window.location.reload();
+                        } else {
+                            alert('Upload failed: ' + (response.message || 'Unknown error'));
+                            submitBtn.disabled = false;
+                            submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                        }
+                    } catch (e) {
+                        window.location.reload();
+                    }
                 } else {
-                    alert('Upload failed. Please try again.');
+                    let errorMessage = 'Upload failed. Please try again.';
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.errors) {
+                            errorMessage = Object.values(response.errors).flat().join('\n');
+                        } else if (response.message) {
+                            errorMessage = response.message;
+                        }
+                    } catch (e) {}
+                    
+                    alert(errorMessage);
                     submitBtn.disabled = false;
                     submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
                 }
@@ -291,7 +335,35 @@
                 submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
             };
 
-            xhr.send(formData);
+            // Get location if available
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    document.getElementById('latitudeInput').value = position.coords.latitude;
+                    document.getElementById('longitudeInput').value = position.coords.longitude;
+                    
+                    formData.set('latitude', position.coords.latitude);
+                    formData.set('longitude', position.coords.longitude);
+                    
+                    startUpload(xhr, formData, progressContainer, progressBar, percentageText, submitBtn);
+                }, function(error) {
+                    console.error("Error getting location: ", error);
+                    startUpload(xhr, formData, progressContainer, progressBar, percentageText, submitBtn);
+                }, {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                });
+            } else {
+                startUpload(xhr, formData, progressContainer, progressBar, percentageText, submitBtn);
+            }
         });
+
+        function startUpload(xhr, formData, progressContainer, progressBar, percentageText, submitBtn) {
+            progressContainer.classList.remove('hidden');
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+            xhr.send(formData);
+        }
     </script>
 </x-app-layout>

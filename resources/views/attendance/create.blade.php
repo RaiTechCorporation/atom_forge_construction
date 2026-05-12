@@ -191,7 +191,8 @@
                                             <x-text-input name="payment_amount[{{ $worker->id }}]" type="number" step="0.01" min="0" 
                                                 class="block w-full px-3 py-2 bg-slate-50 border-slate-200 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/5 rounded-lg text-sm font-bold text-emerald-700" 
                                                 placeholder="0.00"
-                                                :value="isset($existingAttendance[$worker->id]) ? $existingAttendance[$worker->id]->payment_amount : ''" />
+                                                :value="isset($existingAttendance[$worker->id]) ? $existingAttendance[$worker->id]->payment_amount : ''"
+                                                :readonly="$isSupervisor && !$isToday" />
                                         </div>
                                         <div class="space-y-2">
                                             <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{{ __('Remark') }}</span>
@@ -262,7 +263,8 @@
                                             <x-text-input name="payment_amount[{{ $worker->id }}]" type="number" step="0.01" min="0" 
                                                 class="block w-32 mx-auto px-3 py-1 bg-slate-50 border-slate-200 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/5 rounded-lg text-sm font-bold text-emerald-700 text-center" 
                                                 placeholder="0.00"
-                                                :value="isset($existingAttendance[$worker->id]) ? $existingAttendance[$worker->id]->payment_amount : ''" />
+                                                :value="isset($existingAttendance[$worker->id]) ? $existingAttendance[$worker->id]->payment_amount : ''"
+                                                :readonly="$isSupervisor && !$isToday" />
                                         </td>
                                         <td class="px-6 py-4">
                                             <textarea name="remark[{{ $worker->id }}]" 
@@ -355,7 +357,7 @@
 
                 if (currentShift === "1st Shift" || currentShift === "2nd Shift") {
                     if (status === "present") {
-                        payment += wageRate * 0.5;
+                        // payment += wageRate * 0.5;
                     }
                 }
                 

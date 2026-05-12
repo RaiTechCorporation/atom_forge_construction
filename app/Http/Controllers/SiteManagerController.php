@@ -22,8 +22,8 @@ class SiteManagerController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('permission:view-employees', only: ['index', 'show', 'dashboard']),
-            new Middleware('permission:create-employees', only: ['create', 'store']),
+            new Middleware('permission:view-employees', only: ['index', 'show', 'dashboard', 'export']),
+            new Middleware('permission:create-employees', only: ['create', 'store', 'import']),
             new Middleware('permission:edit-employees', only: ['edit', 'update']),
             new Middleware('permission:delete-employees', only: ['destroy']),
             new Middleware('permission:manage-attendance', only: ['storeAttendance']),
@@ -81,31 +81,31 @@ class SiteManagerController extends Controller implements HasMiddleware
             }
 
             if ($request->hasFile('id_proof_path')) {
-                $data['id_proof_path'] = $request->file('id_proof_path')->store('site_managers/id_proofs', 'public');
+                $data['id_proof_path'] = Storage::disk('public')->putFile('site_managers/id_proofs', $request->file('id_proof_path'));
             }
 
             if ($request->hasFile('pan_proof_path')) {
-                $data['pan_proof_path'] = $request->file('pan_proof_path')->store('site_managers/pan_proofs', 'public');
+                $data['pan_proof_path'] = Storage::disk('public')->putFile('site_managers/pan_proofs', $request->file('pan_proof_path'));
             }
 
             if ($request->hasFile('certificate_10th_path')) {
-                $data['certificate_10th_path'] = $request->file('certificate_10th_path')->store('site_managers/certificates', 'public');
+                $data['certificate_10th_path'] = Storage::disk('public')->putFile('site_managers/certificates', $request->file('certificate_10th_path'));
             }
 
             if ($request->hasFile('certificate_12th_path')) {
-                $data['certificate_12th_path'] = $request->file('certificate_12th_path')->store('site_managers/certificates', 'public');
+                $data['certificate_12th_path'] = Storage::disk('public')->putFile('site_managers/certificates', $request->file('certificate_12th_path'));
             }
 
             if ($request->hasFile('graduation_certificate_path')) {
-                $data['graduation_certificate_path'] = $request->file('graduation_certificate_path')->store('site_managers/certificates', 'public');
+                $data['graduation_certificate_path'] = Storage::disk('public')->putFile('site_managers/certificates', $request->file('graduation_certificate_path'));
             }
 
             if ($request->hasFile('skilled_certificate_path')) {
-                $data['skilled_certificate_path'] = $request->file('skilled_certificate_path')->store('site_managers/certificates', 'public');
+                $data['skilled_certificate_path'] = Storage::disk('public')->putFile('site_managers/certificates', $request->file('skilled_certificate_path'));
             }
 
             if ($request->hasFile('photo_path')) {
-                $data['photo_path'] = $request->file('photo_path')->store('site_managers/photos', 'public');
+                $data['photo_path'] = Storage::disk('public')->putFile('site_managers/photos', $request->file('photo_path'));
                 // Sync photo to user profile as well
                 $user->update(['profile_picture' => $data['photo_path']]);
             }
@@ -132,7 +132,7 @@ class SiteManagerController extends Controller implements HasMiddleware
         $endDate = $request->end_date ?? now()->endOfMonth()->format('Y-m-d');
 
         $attendances = $query->whereBetween('date', [$startDate, $endDate])
-            ->orderBy('date', 'desc')
+            ->orderBy('date', 'asc')
             ->get();
 
         // Monthly Summary & Calendar Logic
@@ -209,37 +209,37 @@ class SiteManagerController extends Controller implements HasMiddleware
 
             if ($request->hasFile('id_proof_path')) {
                 if ($siteManager->id_proof_path) Storage::disk('public')->delete($siteManager->id_proof_path);
-                $data['id_proof_path'] = $request->file('id_proof_path')->store('site_managers/id_proofs', 'public');
+                $data['id_proof_path'] = Storage::disk('public')->putFile('site_managers/id_proofs', $request->file('id_proof_path'));
             }
 
             if ($request->hasFile('pan_proof_path')) {
                 if ($siteManager->pan_proof_path) Storage::disk('public')->delete($siteManager->pan_proof_path);
-                $data['pan_proof_path'] = $request->file('pan_proof_path')->store('site_managers/pan_proofs', 'public');
+                $data['pan_proof_path'] = Storage::disk('public')->putFile('site_managers/pan_proofs', $request->file('pan_proof_path'));
             }
 
             if ($request->hasFile('certificate_10th_path')) {
                 if ($siteManager->certificate_10th_path) Storage::disk('public')->delete($siteManager->certificate_10th_path);
-                $data['certificate_10th_path'] = $request->file('certificate_10th_path')->store('site_managers/certificates', 'public');
+                $data['certificate_10th_path'] = Storage::disk('public')->putFile('site_managers/certificates', $request->file('certificate_10th_path'));
             }
 
             if ($request->hasFile('certificate_12th_path')) {
                 if ($siteManager->certificate_12th_path) Storage::disk('public')->delete($siteManager->certificate_12th_path);
-                $data['certificate_12th_path'] = $request->file('certificate_12th_path')->store('site_managers/certificates', 'public');
+                $data['certificate_12th_path'] = Storage::disk('public')->putFile('site_managers/certificates', $request->file('certificate_12th_path'));
             }
 
             if ($request->hasFile('graduation_certificate_path')) {
                 if ($siteManager->graduation_certificate_path) Storage::disk('public')->delete($siteManager->graduation_certificate_path);
-                $data['graduation_certificate_path'] = $request->file('graduation_certificate_path')->store('site_managers/certificates', 'public');
+                $data['graduation_certificate_path'] = Storage::disk('public')->putFile('site_managers/certificates', $request->file('graduation_certificate_path'));
             }
 
             if ($request->hasFile('skilled_certificate_path')) {
                 if ($siteManager->skilled_certificate_path) Storage::disk('public')->delete($siteManager->skilled_certificate_path);
-                $data['skilled_certificate_path'] = $request->file('skilled_certificate_path')->store('site_managers/certificates', 'public');
+                $data['skilled_certificate_path'] = Storage::disk('public')->putFile('site_managers/certificates', $request->file('skilled_certificate_path'));
             }
 
             if ($request->hasFile('photo_path')) {
                 if ($siteManager->photo_path) Storage::disk('public')->delete($siteManager->photo_path);
-                $data['photo_path'] = $request->file('photo_path')->store('site_managers/photos', 'public');
+                $data['photo_path'] = Storage::disk('public')->putFile('site_managers/photos', $request->file('photo_path'));
                 if ($siteManager->user) {
                     $siteManager->user->update(['profile_picture' => $data['photo_path']]);
                 }
@@ -260,6 +260,10 @@ class SiteManagerController extends Controller implements HasMiddleware
 
     public function destroy(SiteManager $siteManager)
     {
+        if (auth()->user()->isSiteSupervisor()) {
+            return redirect()->route('site-managers.index')->with('error', 'Site Supervisors are not allowed to delete supervisor records.');
+        }
+
         DB::transaction(function () use ($siteManager) {
             if ($siteManager->user) {
                 $siteManager->user->delete();
@@ -482,6 +486,56 @@ class SiteManagerController extends Controller implements HasMiddleware
         exit;
     }
 
+    public function exportPayrollPDF(Request $request)
+    {
+        $month = $request->month ?? now()->format('Y-m');
+        $payouts = SiteManagerPayout::with('siteManager.project')
+            ->where('month', $month)
+            ->get();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('site_managers.payouts.pdf', compact('payouts', 'month'));
+        return $pdf->download("Payroll_Report_$month.pdf");
+    }
+
+    public function exportPayrollExcel(Request $request)
+    {
+        $month = $request->month ?? now()->format('Y-m');
+        $payouts = SiteManagerPayout::with('siteManager.project')
+            ->where('month', $month)
+            ->get();
+
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\PayrollExport($payouts), "Payroll_Report_$month.xlsx");
+    }
+
+    public function downloadPDFReport(SiteManager $siteManager, Request $request)
+    {
+        $startDate = $request->start_date ?? now()->startOfMonth()->format('Y-m-d');
+        $endDate = $request->end_date ?? now()->endOfMonth()->format('Y-m-d');
+
+        $attendances = $siteManager->attendances()
+            ->with('project')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->orderBy('date', 'asc')
+            ->get();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('site_managers.reports.pdf', compact('siteManager', 'attendances', 'startDate', 'endDate'));
+        return $pdf->download("Supervisor_Report_{$siteManager->name}.pdf");
+    }
+
+    public function downloadExcelReport(SiteManager $siteManager, Request $request)
+    {
+        $startDate = $request->start_date ?? now()->startOfMonth()->format('Y-m-d');
+        $endDate = $request->end_date ?? now()->endOfMonth()->format('Y-m-d');
+
+        $attendances = $siteManager->attendances()
+            ->with('project')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->orderBy('date', 'asc')
+            ->get();
+
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\SiteManagerAttendanceExport($attendances), "Supervisor_Report_{$siteManager->name}.xlsx");
+    }
+
     public function attendanceRecords(Request $request)
     {
         $query = SiteManagerAttendance::with(['siteManager', 'project', 'recorder']);
@@ -505,5 +559,21 @@ class SiteManagerController extends Controller implements HasMiddleware
         $siteManagers = SiteManager::all();
 
         return view('site_managers.attendance_records', compact('attendances', 'projects', 'siteManagers'));
+    }
+
+    public function export()
+    {
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\SiteManagerExport, 'site_managers.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\SiteManagerImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Site Manager data imported successfully.');
     }
 }

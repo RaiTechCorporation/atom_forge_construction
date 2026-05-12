@@ -91,7 +91,7 @@ const Sidebar = () => {
             <div className="h-[60px] flex items-center px-8 border-b border-slate-800/50">
                 <a href="/dashboard" className="flex items-center gap-3.5 group">
                     <div className="w-8 h-8 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/20 group-hover:scale-105 transition-transform duration-300">
-                        <img src="/images/Atom Forge Logo.png For White Background.png" alt="Logo" className="w-full h-full object-contain" />
+                        <img src="/images/cropped-Atom-Forge-Logo.png-For-White-Background.png" alt="Logo" className="w-full h-full object-contain" />
                     </div>
                     <span className="font-black text-lg text-white tracking-tighter uppercase italic">
                         Atom<span className="text-indigo-500">Forge</span>

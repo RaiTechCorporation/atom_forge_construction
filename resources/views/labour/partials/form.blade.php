@@ -14,7 +14,7 @@
                 <div class="relative">
                     <div class="w-32 h-32 rounded-2xl bg-slate-50 border-2 border-slate-200 overflow-hidden flex items-center justify-center shadow-inner">
                         <img id="photo_preview" 
-                            src="{{ $labour->photo_path ? Storage::url($labour->photo_path) : 'https://ui-avatars.com/api/?name=Worker&background=6366f1&color=fff&size=128' }}" 
+                            src="{{ $labour->photo_path ? asset('storage/' . $labour->photo_path) : 'https://ui-avatars.com/api/?name=Worker&background=6366f1&color=fff&size=128' }}" 
                             class="w-full h-full object-cover" 
                             alt="Preview">
                     </div>
@@ -362,7 +362,7 @@
                         class="mt-0 block w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900" />
                     @if($labour->id_proof_path)
                         <p class="mt-2 text-xs text-indigo-600 font-bold">
-                            <a href="{{ Storage::url($labour->id_proof_path) }}" target="_blank">{{ __('View Current Aadhaar Proof') }}</a>
+                            <a href="{{ asset('storage/' . $labour->id_proof_path) }}" target="_blank">{{ __('View Current Aadhaar Proof') }}</a>
                         </p>
                     @endif
                     <x-input-error class="mt-2 font-bold text-rose-600 text-[10px]" :messages="$errors->get('id_proof_path')" />
@@ -375,7 +375,7 @@
                         class="mt-0 block w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900" />
                     @if($labour->pan_proof_path)
                         <p class="mt-2 text-xs text-indigo-600 font-bold">
-                            <a href="{{ Storage::url($labour->pan_proof_path) }}" target="_blank">{{ __('View Current PAN Proof') }}</a>
+                            <a href="{{ asset('storage/' . $labour->pan_proof_path) }}" target="_blank">{{ __('View Current PAN Proof') }}</a>
                         </p>
                     @endif
                     <x-input-error class="mt-2 font-bold text-rose-600 text-[10px]" :messages="$errors->get('pan_proof_path')" />

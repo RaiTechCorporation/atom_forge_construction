@@ -1,0 +1,1 @@
+<?php include 'vendor/autoload.php'; $app = include 'bootstrap/app.php'; $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class); $kernel->handle(Illuminate\Http\Request::capture()); echo 'Count: ' . \App\Models\Attendance::where('payment_amount', ', 0)->count() . PHP_EOL; echo 'Sum: ' . \App\Models\Attendance::sum('payment_amount') . PHP_EOL; ?>  

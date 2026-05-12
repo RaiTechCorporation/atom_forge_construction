@@ -7,10 +7,24 @@ use App\Services\AiContentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class BlogController extends Controller
+class BlogController extends Controller implements HasMiddleware
 {
     protected $aiService;
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(function ($request, $next) {
+                if (auth()->check() && auth()->user()->isSiteSupervisor()) {
+                    abort(403, 'Unauthorized action.');
+                }
+                return $next($request);
+            }, except: ['publicIndex', 'publicShow']),
+        ];
+    }
 
     public function __construct(AiContentService $aiService)
     {
@@ -41,10 +55,16 @@ class BlogController extends Controller
     {
         $request->validate([
             'topic' => 'required|string|max:255',
+            'features' => 'nullable|string',
+            'specific_topics' => 'nullable|string',
         ]);
 
         try {
-            $content = $this->aiService->generateBlogPost($request->topic);
+            $content = $this->aiService->generateBlogPost(
+                $request->topic, 
+                $request->features ?? '', 
+                $request->specific_topics ?? ''
+            );
             return response()->json($content);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to generate content: ' . $e->getMessage()], 500);
@@ -72,12 +92,12 @@ class BlogController extends Controller
         ]);
 
         if ($request->hasFile('featured_image')) {
-            $path = $request->file('featured_image')->store('blog-images', 'public');
+            $path = Storage::disk('public')->putFile('blog-images', $request->file('featured_image'));
             $validated['featured_image'] = asset('storage/' . $path);
         }
 
         if ($request->hasFile('featured_video_file')) {
-            $path = $request->file('featured_video_file')->store('blog-videos', 'public');
+            $path = Storage::disk('public')->putFile('blog-videos', $request->file('featured_video_file'));
             $validated['featured_video_file'] = asset('storage/' . $path);
         }
 
@@ -116,12 +136,20 @@ class BlogController extends Controller
         ]);
 
         if ($request->hasFile('featured_image')) {
-            $path = $request->file('featured_image')->store('blog-images', 'public');
+            if ($blog->featured_image) {
+                $oldPath = Str::after($blog->featured_image, 'storage/');
+                Storage::disk('public')->delete($oldPath);
+            }
+            $path = Storage::disk('public')->putFile('blog-images', $request->file('featured_image'));
             $validated['featured_image'] = asset('storage/' . $path);
         }
 
         if ($request->hasFile('featured_video_file')) {
-            $path = $request->file('featured_video_file')->store('blog-videos', 'public');
+            if ($blog->featured_video_file) {
+                $oldPath = Str::after($blog->featured_video_file, 'storage/');
+                Storage::disk('public')->delete($oldPath);
+            }
+            $path = Storage::disk('public')->putFile('blog-videos', $request->file('featured_video_file'));
             $validated['featured_video_file'] = asset('storage/' . $path);
         }
 
@@ -136,6 +164,14 @@ class BlogController extends Controller
      */
     public function destroy(BlogPost $blog)
     {
+        if ($blog->featured_image) {
+            $path = Str::after($blog->featured_image, 'storage/');
+            Storage::disk('public')->delete($path);
+        }
+        if ($blog->featured_video_file) {
+            $path = Str::after($blog->featured_video_file, 'storage/');
+            Storage::disk('public')->delete($path);
+        }
         $blog->delete();
         return redirect()->route('admin.blogs.index')->with('success', 'Blog post deleted successfully.');
     }
@@ -154,7 +190,14 @@ class BlogController extends Controller
      */
     public function publicShow($slug)
     {
-        $post = BlogPost::where('slug', $slug)->where('is_published', true)->firstOrFail();
+        $query = BlogPost::where('slug', $slug);
+
+        // Allow authenticated users to preview drafts
+        if (!auth()->check()) {
+            $query->where('is_published', true);
+        }
+
+        $post = $query->firstOrFail();
         return view('public.blogs.show', compact('post'));
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\BlogController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ConstructionPlanController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmailConfigurationController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\FundRequestController;
@@ -24,19 +24,27 @@ use App\Http\Controllers\ProjectUpdateController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SiteManagerController;
 use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\WebsiteContentController;
-use App\Http\Controllers\SiteManagerController;
 use Illuminate\Support\Facades\Route;
 
 // Public Website Routes (Blade-based)
 Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('/about', [PublicController::class, 'about'])->name('about');
 Route::get('/services', [PublicController::class, 'services'])->name('services');
+Route::get('/services/residential-construction', [PublicController::class, 'residentialConstruction'])->name('services.residential');
+Route::get('/services/commercial-development', [PublicController::class, 'commercialDevelopment'])->name('services.commercial');
+Route::get('/services/industrial-infrastructure', [PublicController::class, 'industrialInfrastructure'])->name('services.industrial');
+Route::get('/services/interior-design', [PublicController::class, 'interiorDesign'])->name('services.interior');
+Route::get('/services/sustainable-building', [PublicController::class, 'sustainableBuilding'])->name('services.sustainable');
+Route::get('/services/project-management', [PublicController::class, 'projectManagement'])->name('services.management');
 Route::get('/projects-portfolio', [PublicController::class, 'projects'])->name('projects');
 Route::get('/invest', [PublicController::class, 'invest'])->name('public.invest');
 Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
+Route::get('/team', [PublicController::class, 'team'])->name('team');
+Route::get('/testimonials', [PublicController::class, 'testimonials'])->name('testimonials');
 Route::get('/privacy-policy', [PublicController::class, 'privacy'])->name('privacy');
 Route::get('/terms-and-conditions', [PublicController::class, 'terms'])->name('terms');
 Route::get('/faq', [PublicController::class, 'faq'])->name('faq');
@@ -74,17 +82,37 @@ Route::middleware(['auth', 'two-factor'])->group(function () {
     // Expenses
     Route::resource('expenses', ExpenseController::class);
 
+    // Site Manager Work Progress
+    Route::get('/site-manager/work-progress', [LabourWorkProgressController::class, 'index'])->name('labour.work-progress.index');
+    Route::post('/site-manager/{site_manager}/work-progress', [LabourWorkProgressController::class, 'store'])->name('labour.work-progress.store');
+    Route::delete('/site-manager/work-progress/{progress}', [LabourWorkProgressController::class, 'destroy'])->name('labour.work-progress.destroy');
+
     // Labour & Attendance
     Route::get('/labour/dashboard', [LabourController::class, 'dashboard'])->name('labour.dashboard');
-    Route::get('/labour/work-progress', [LabourWorkProgressController::class, 'index'])->name('labour.work-progress.index');
+    Route::get('/labour/export', [LabourController::class, 'export'])->name('labour.export');
+    Route::post('/labour/import', [LabourController::class, 'import'])->name('labour.import');
     Route::resource('labour', LabourController::class);
+    Route::post('/labour/{labour}/payment', [LabourController::class, 'addPayment'])->name('labour.payment.store');
+    Route::put('/labour/payment/{attendance}', [LabourController::class, 'updatePayment'])->name('labour.payment.update');
+    Route::delete('/labour/payment/{attendance}', [LabourController::class, 'destroyPayment'])->name('labour.payment.destroy');
     Route::get('/labour/{labour}/report', [LabourController::class, 'downloadReport'])->name('labour.report');
-    Route::post('/labour/{labour}/work-progress', [LabourWorkProgressController::class, 'store'])->name('labour.work-progress.store');
-    Route::delete('/labour/work-progress/{progress}', [LabourWorkProgressController::class, 'destroy'])->name('labour.work-progress.destroy');
+    Route::get('/labour/{labour}/download-pdf', [LabourController::class, 'downloadPDF'])->name('labour.download-pdf');
+    Route::get('/labour/{labour}/report/pdf', [LabourController::class, 'downloadPDFReport'])->name('labour.report.pdf');
+    Route::get('/labour/{labour}/report/excel', [LabourController::class, 'downloadExcelReport'])->name('labour.report.excel');
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
     Route::get('/attendance/create', [AttendanceController::class, 'create'])->name('attendance.create');
     Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
     Route::match(['get', 'post'], '/attendance/createsave', [AttendanceController::class, 'store'])->name('attendance.createsave');
+    Route::get('/attendance/export', [AttendanceController::class, 'export'])->name('attendance.export');
+    Route::get('/attendance/bulk-delete', function () {
+        return redirect()->route('attendance.index');
+    });
+    Route::delete('/attendance/bulk-delete', [AttendanceController::class, 'bulkDelete'])->name('attendance.bulk-delete');
+    // POST request is handled as well via standard form upload
+    Route::get('/attendance/import', function () {
+        return redirect()->route('attendance.index');
+    });
+    Route::post('/attendance/import', [AttendanceController::class, 'import'])->name('attendance.import');
 
     // Site Manager Management
     Route::get('/site-managers/dashboard', [SiteManagerController::class, 'dashboard'])->name('site-managers.dashboard');
@@ -94,10 +122,16 @@ Route::middleware(['auth', 'two-factor'])->group(function () {
     Route::get('/site-managers/payouts', [SiteManagerController::class, 'payouts'])->name('site-managers.payouts.index');
     Route::post('/site-managers/generate-payroll', [SiteManagerController::class, 'generatePayroll'])->name('site-managers.generate-payroll');
     Route::get('/site-managers/export-payroll', [SiteManagerController::class, 'exportPayroll'])->name('site-managers.export-payroll');
+    Route::get('/site-managers/export-payroll/pdf', [SiteManagerController::class, 'exportPayrollPDF'])->name('site-managers.export-payroll.pdf');
+    Route::get('/site-managers/export-payroll/excel', [SiteManagerController::class, 'exportPayrollExcel'])->name('site-managers.export-payroll.excel');
+    Route::get('/site-managers/{site_manager}/report/pdf', [SiteManagerController::class, 'downloadPDFReport'])->name('site-managers.report.pdf');
+    Route::get('/site-managers/{site_manager}/report/excel', [SiteManagerController::class, 'downloadExcelReport'])->name('site-managers.report.excel');
     Route::patch('/site-managers/payouts/{payout}/status', [SiteManagerController::class, 'updatePayoutStatus'])->name('site-managers.payouts.update-status');
     Route::get('/site-managers/payouts/{payout}/payslip', [SiteManagerController::class, 'downloadPayslip'])->name('site-managers.download-payslip');
     Route::get('/site-managers/payouts/create', [SiteManagerController::class, 'createPayout'])->name('site-managers.payouts.create');
     Route::post('/site-managers/payouts', [SiteManagerController::class, 'storePayout'])->name('site-managers.payouts.store');
+    Route::get('/site-managers/export', [SiteManagerController::class, 'export'])->name('site-managers.export');
+    Route::post('/site-managers/import', [SiteManagerController::class, 'import'])->name('site-managers.import');
     Route::resource('site-managers', SiteManagerController::class);
 
     // Materials & Transactions
@@ -130,11 +164,12 @@ Route::middleware(['auth', 'two-factor'])->group(function () {
         'index' => 'admin.blogs.index',
         'create' => 'admin.blogs.create',
         'store' => 'admin.blogs.store',
+        'show' => 'admin.blogs.show',
         'edit' => 'admin.blogs.edit',
         'update' => 'admin.blogs.update',
         'destroy' => 'admin.blogs.destroy',
     ])->parameters([
-        'blogs' => 'blog'
+        'blogs' => 'blog',
     ]);
     Route::post('/admin/blogs/generate', [BlogController::class, 'generate'])->name('admin.blogs.generate');
 

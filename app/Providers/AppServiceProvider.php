@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Project;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +22,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Ensure public/storage directory exists for shared hosting
+        File::ensureDirectoryExists(public_path('storage'));
+
         View::composer('layouts.sidebar', function ($view) {
             $query = Project::query();
             

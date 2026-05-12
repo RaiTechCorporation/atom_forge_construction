@@ -23,7 +23,7 @@
                 <div class="relative">
                     <div class="w-20 h-20 rounded-2xl bg-indigo-600 overflow-hidden border-4 border-white shadow-xl">
                         @if($siteManager->photo_path)
-                            <img src="{{ Storage::url($siteManager->photo_path) }}" alt="{{ $siteManager->name }}" class="w-full h-full object-cover">
+                            <img src="{{ asset('storage/' . $siteManager->photo_path) }}" alt="{{ $siteManager->name }}" class="w-full h-full object-cover">
                         @else
                             <div class="w-full h-full flex items-center justify-center text-white text-2xl font-black">
                                 {{ substr($siteManager->name, 0, 1) }}
@@ -261,7 +261,7 @@
                                             @endif
                                         </div>
                                         @if($doc['path'])
-                                            <a href="{{ Storage::url($doc['path']) }}" target="_blank" class="w-8 h-8 bg-white border border-slate-200 rounded-lg flex items-center justify-center text-slate-600 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all shadow-sm">
+                                            <a href="{{ asset('storage/' . $doc['path']) }}" target="_blank" class="w-8 h-8 bg-white border border-slate-200 rounded-lg flex items-center justify-center text-slate-600 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all shadow-sm">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                             </a>
                                         @endif
@@ -480,7 +480,19 @@
                                 <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
                                 {{ __('Attendance Records History') }}
                             </h3>
-                            <a href="{{ route('site-managers.attendance-records', ['site_manager_id' => $siteManager->id]) }}" class="text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:text-indigo-700">View Detailed Log</a>
+                            <div class="flex items-center gap-3">
+                                <a href="{{ route('site-managers.report.pdf', [$siteManager->id, 'start_date' => $startDate, 'end_date' => $endDate]) }}" 
+                                    class="inline-flex items-center gap-2 px-3 py-1.5 bg-rose-600 text-white rounded-lg font-black text-[9px] uppercase tracking-widest hover:bg-rose-700 transition-all shadow-md">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                    PDF
+                                </a>
+                                <a href="{{ route('site-managers.report.excel', [$siteManager->id, 'start_date' => $startDate, 'end_date' => $endDate]) }}" 
+                                    class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-600 text-white rounded-lg font-black text-[9px] uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-md">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                    Excel
+                                </a>
+                                <a href="{{ route('site-managers.attendance-records', ['site_manager_id' => $siteManager->id]) }}" class="text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:text-indigo-700">View Log</a>
+                            </div>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">

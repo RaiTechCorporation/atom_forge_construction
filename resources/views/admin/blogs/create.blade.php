@@ -5,21 +5,47 @@
         </h2>
     </x-slot>
 
+    @push('styles')
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+    <style>
+        .ck-editor__editable {
+            min-height: 400px;
+            border-radius: 0 0 0.5rem 0.5rem !important;
+        }
+        .ck-editor__top {
+            border-radius: 0.5rem 0.5rem 0 0 !important;
+        }
+    </style>
+    @endpush
+
     <div class="space-y-6">
         <!-- AI Generator Tool -->
         <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-6 shadow-sm">
             <h3 class="text-lg font-medium text-indigo-900 mb-2">AI Blog Generator</h3>
             <p class="text-sm text-indigo-700 mb-4">Enter a topic and let AI generate a high-quality, SEO-optimized blog post for you.</p>
             
-            <div class="flex gap-4">
-                <input type="text" id="ai_topic" class="flex-1 rounded-md border-indigo-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="e.g., Road Construction Trends in India 2024">
-                <button type="button" id="generate_btn" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                    <span id="btn_text">Generate with AI</span>
-                    <svg id="loading_spinner" class="hidden animate-spin ml-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                </button>
+            <div class="space-y-4">
+                <div class="flex gap-4">
+                    <input type="text" id="ai_topic" class="flex-1 rounded-md border-indigo-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="e.g., Road Construction Trends in India 2024">
+                    <button type="button" id="generate_btn" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        <span id="btn_text">Generate with AI</span>
+                        <svg id="loading_spinner" class="hidden animate-spin ml-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-indigo-900">Key Features (Bullet Points)</label>
+                        <textarea id="ai_features" rows="3" class="w-full rounded-md border-indigo-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="Feature 1&#10;Feature 2&#10;Feature 3"></textarea>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-indigo-900">Specific Topics to Cover</label>
+                        <textarea id="ai_specific_topics" rows="3" class="w-full rounded-md border-indigo-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="Topic 1, Topic 2, Topic 3"></textarea>
+                    </div>
+                </div>
             </div>
             <div id="ai_message" class="mt-2 text-sm hidden"></div>
         </div>
@@ -67,7 +93,7 @@
 
                 <div class="space-y-2">
                     <x-input-label for="content" :value="__('Content (HTML)')" />
-                    <textarea id="content" name="content" rows="15" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>{{ old('content') }}</textarea>
+                    <textarea id="content" name="content" rows="15" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ old('content') }}</textarea>
                     <x-input-error class="mt-2" :messages="$errors->get('content')" />
                 </div>
 
@@ -110,8 +136,33 @@
 
     @push('scripts')
     <script>
+        let blogEditor;
+
+        // Initialize CKEditor
+        ClassicEditor
+            .create(document.querySelector('#content'), {
+                toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
+            })
+            .then(editor => {
+                blogEditor = editor;
+                
+                // Ensure content is synced when form is submitted
+                const form = document.querySelector('form');
+                form.addEventListener('submit', (e) => {
+                    // Manual sync just in case
+                    const data = blogEditor.getData();
+                    document.querySelector('#content').value = data;
+                });
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
         document.getElementById('generate_btn').addEventListener('click', async function() {
             const topic = document.getElementById('ai_topic').value;
+            const features = document.getElementById('ai_features').value;
+            const specific_topics = document.getElementById('ai_specific_topics').value;
+
             if (!topic) {
                 alert('Please enter a topic');
                 return;
@@ -127,7 +178,7 @@
             spinner.classList.remove('hidden');
             message.classList.remove('hidden');
             message.className = 'mt-2 text-sm text-indigo-600';
-            message.innerText = 'AI is writing your masterpiece... This may take a minute.';
+            message.innerText = 'AI is writing your masterpiece with formatting... This may take a minute.';
 
             try {
                 const response = await fetch('{{ route("admin.blogs.generate") }}', {
@@ -136,21 +187,35 @@
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
-                    body: JSON.stringify({ topic })
+                    body: JSON.stringify({ 
+                        topic,
+                        features,
+                        specific_topics
+                    })
                 });
 
                 const data = await response.json();
 
                 if (response.ok) {
+                    document.getElementById('ai_features').value = data.features;
+                    document.getElementById('ai_specific_topics').value = data.specific_topics;
+                    
                     document.getElementById('title').value = data.title;
                     document.getElementById('slug').value = data.slug;
-                    document.getElementById('content').value = data.content;
+                    
+                    // Set CKEditor content
+                    if (blogEditor) {
+                        blogEditor.setData(data.content);
+                    } else {
+                        document.getElementById('content').value = data.content;
+                    }
+
                     document.getElementById('meta_title').value = data.meta_title;
                     document.getElementById('meta_description').value = data.meta_description;
                     document.getElementById('keywords').value = data.keywords;
                     
                     message.className = 'mt-2 text-sm text-emerald-600';
-                    message.innerText = 'Content generated successfully! Review and save.';
+                    message.innerText = 'Content generated successfully with bullet points and topics! Review and save.';
                 } else {
                     throw new Error(data.error || 'Failed to generate content');
                 }

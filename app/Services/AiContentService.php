@@ -15,78 +15,56 @@ class AiContentService
         $this->model = config('services.ai.model', 'gpt-4o');
     }
 
-    public function generateBlogPost(string $topic): array
+    public function generateBlogPost(string $topic, string $features = '', string $specific_topics = ''): array
     {
-        // Returning high-quality, highly-structured proper blog content
+        // Generate features and topics if not provided
+        if (empty($features)) {
+            $features = "Advanced Construction Technology\nSustainability & Eco-Friendly Materials\nSmart Infrastructure Integration\nCost-Efficient Project Management";
+        }
+
+        if (empty($specific_topics)) {
+            $specific_topics = "Future of Infrastructure, Innovative Building Materials, Digital Transformation in Construction";
+        }
+
+        $featuresList = $features ? explode("\n", $features) : [];
+        $topicsList = $specific_topics ? explode(",", $specific_topics) : [];
+
+        $content = "
+            <div align='justify' style='margin-bottom: 20px;'>
+                India is undergoing a massive transformation in " . strtolower($topic) . ", shaping the foundation of a stronger and more connected nation. From strategic planning to modern execution, the country is investing heavily in projects that drive economic growth and improve everyday life. Infrastructure is no longer just about construction—it is about creating systems that empower industries, support communities, and enable long-term sustainability.
+            </div>
+
+            <h3 align='justify' style='font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: rgb(51, 51, 51); font-weight: bold; margin-bottom: 15px;'>How it Works ?</h3>
+            <p align='justify' style='margin-bottom: 20px;'>
+                Modern " . strtolower($topic) . " works by integrating advanced engineering with sustainable practices. For decades, the focus was on traditional methods, but now we are moving towards a vivid expression of modern scientific inquiry and exposition. By using Building Information Modeling (BIM) and real-time monitoring, projects are executed with higher precision and lower waste.
+            </p>
+
+            <h3 align='justify' style='font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: rgb(51, 51, 51); font-weight: bold; margin-bottom: 15px;'>Key Features and Highlights</h3>
+            <p align='justify' style='margin-bottom: 20px;'>
+                The major highlights of our modern projects include digital integration, green construction practices, and improved supply chain systems. These elements ensure that every project contributes optimally to the overall goals of efficiency and scalability.
+            </p>
+
+            <h3 align='justify' style='font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: rgb(51, 51, 51); font-weight: bold; margin-bottom: 15px;'>Top Reasons to Choose Us</h3>
+            <div align='justify' style='margin-bottom: 20px;'>
+                Building the future requires a spiritual connection between our planet and the infrastructure we create. Our approach ensures durability, worker safety, and compliance with international regulations. We tackle challenges such as land acquisition and regulatory hurdles through innovation and strategic planning.
+            </div>
+
+            <p align='justify' style='margin-bottom: 10px;'>
+                By embracing innovation and focusing on sustainability, we are not just building infrastructure—we are building a future that is strong, resilient, and globally competitive.
+            </p>
+        ";
+
         return [
-            'title' => "The Evolution of Infrastructure in India: A Comprehensive Guide to PWD Projects and National Growth",
-            'slug' => str()->slug("The Evolution of Infrastructure in India A Comprehensive Guide to PWD Projects and National Growth"),
-            'content' => "
-                <p class='lead'>India is currently witnessing an unprecedented era of infrastructure development. From sprawling expressways to state-of-the-art smart cities, the landscape of the nation is being reshaped by the combined efforts of the Public Works Department (PWD) and professional private construction firms.</p>
-
-                <h2>1. The Strategic Importance of Infrastructure</h2>
-                <p>Infrastructure is the physical framework upon which a nation's economy is built. In India, it is the primary catalyst for <strong>poverty reduction, industrial growth, and social integration</strong>. The government's focus on infrastructure development—through initiatives like the Gati Shakti National Master Plan—aims to provide multimodal connectivity to various economic zones across the country.</p>
-                
-                <blockquote>
-                    \"Infrastructure is not just about concrete and steel; it's about connecting dreams to reality and people to opportunities.\"
-                </blockquote>
-
-                <h2>2. Understanding the Public Works Department (PWD)</h2>
-                <p>The PWD has traditionally been the custodian of public assets in India. Its mandate covers the entire lifecycle of a project—from conceptualization and design to construction and long-term maintenance.</p>
-                
-                <h3>A. Digital Transformation in PWD</h3>
-                <p>In recent years, the PWD has undergone a significant digital transformation. Key changes include:</p>
-                <ul>
-                    <li><strong>e-Tendering:</strong> Ensuring transparency and fair competition.</li>
-                    <li><strong>Online Monitoring:</strong> Real-time tracking of project milestones.</li>
-                    <li><strong>Advanced GIS:</strong> Geographic Information Systems for better planning.</li>
-                </ul>
-
-                <h2>3. Modern Road Construction: Connecting the Nation</h2>
-                <p>Road construction is the literal lifeline of the Indian economy. The National Highways Authority of India (NHAI) and state PWDs have accelerated the pace of highway construction to record levels. Modern roads are no longer just about asphalt and concrete; they integrate advanced civil engineering techniques.</p>
-                
-                <div class='bg-slate-50 p-6 rounded-xl border-l-4 border-orange-500 my-8'>
-                    <h4 class='text-orange-600 font-bold mb-2'>Industry Insight:</h4>
-                    <p class='mb-0'>The integration of sustainable materials, such as recycled plastics in bitumen, is increasing the lifespan of Indian roads by up to 30% while reducing environmental impact.</p>
-                </div>
-
-                <h2>4. Building for the Future: Residential and Commercial</h2>
-                <p>Beyond roads, the construction of institutional and residential buildings is a major pillar of India's infrastructure. Government-led initiatives like the <em>Pradhan Mantri Awas Yojana (PMAY)</em> have opened vast opportunities for contractors.</p>
-                
-                <p>These projects demand a unique blend of:</p>
-                <ol>
-                    <li>Traditional durability and strength.</li>
-                    <li>Modern architectural flexibility.</li>
-                    <li>Energy efficiency and sustainable design.</li>
-                </ol>
-
-                <h2>5. Why Choose Professional Expertise?</h2>
-                <p>In an industry as complex as construction, the choice of a partner can make or break a project. Professional firms offer distinct advantages:</p>
-                <ul>
-                    <li><strong>Technical Expertise:</strong> Access to the latest civil engineering software and machinery.</li>
-                    <li><strong>Compliance:</strong> Strict adherence to ISO standards and government safety protocols.</li>
-                    <li><strong>Transparency:</strong> Clear budgeting and robust financial management.</li>
-                </ul>
-
-                <hr />
-
-                <h2>Conclusion: Partnering for Progress</h2>
-                <p>As India moves towards becoming a $5 trillion economy, the infrastructure sector will continue to be its primary engine. By choosing the right construction partner, investors and government departments can ensure that their projects not only stand the test of time but also contribute significantly to the nation's growth.</p>
-                
-                <p><strong>Are you looking for an expert partner for your next PWD or private construction project? Contact us today for a detailed consultation.</strong></p>
-            ",
-            'meta_title' => "Expert Construction & Infrastructure Development in India | PWD Projects",
-            'meta_description' => "Discover how professional construction services and PWD projects are transforming India's infrastructure landscape. Expert insights on roads, buildings, and national growth.",
-            'keywords' => "construction, PWD projects India, infrastructure development, road construction, civil engineering",
-            'tags' => ['Construction', 'Infrastructure', 'PWD', 'India'],
-            'faq' => [
-                ['question' => 'What is the role of PWD in India?', 'answer' => 'The Public Works Department (PWD) is responsible for the design, construction, and maintenance of public infrastructure like roads, bridges, and government buildings.'],
-                ['question' => 'How can I bid for PWD projects?', 'answer' => 'Contractors must register with the relevant state PWD and participate in the e-tendering process through official government portals.']
-            ],
-            'internal_linking_suggestions' => [
-                ['text' => 'Our Construction Services', 'url' => '/services'],
-                ['text' => 'Portfolio of PWD Projects', 'url' => '/projects-portfolio']
-            ]
+            'title' => ucfirst($topic),
+            'slug' => str()->slug($topic),
+            'content' => $content,
+            'features' => $features,
+            'specific_topics' => $specific_topics,
+            'meta_title' => ucfirst($topic) . " | Atom Forge Construction",
+            'meta_description' => "Insights and updates on " . $topic . ". Discover key features and professional expertise in modern infrastructure.",
+            'keywords' => str_replace(' ', ', ', $topic) . ", construction, infrastructure",
+            'tags' => ['Construction', 'Infrastructure'],
+            'faq' => [],
         ];
     }
 }

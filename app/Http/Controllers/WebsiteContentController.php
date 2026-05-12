@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\WebsiteContent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -63,7 +64,7 @@ class WebsiteContentController extends Controller implements HasMiddleware
         // Handle file uploads
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $key => $file) {
-                $path = $file->store('website-content', 'public');
+                $path = Storage::disk('public')->putFile('website-content', $file);
                 $url = asset('storage/'.$path);
                 WebsiteContent::where('key', $key)->update(['value' => $url]);
             }

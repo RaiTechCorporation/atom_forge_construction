@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\FundRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class InvestorDashboardController extends Controller
 {
@@ -130,7 +131,7 @@ class InvestorDashboardController extends Controller
         ]);
 
         if ($request->hasFile('receipt_proof')) {
-            $path = $request->file('receipt_proof')->store('receipt_proofs', 'public');
+            $path = Storage::disk('public')->putFile('receipt_proofs', $request->file('receipt_proof'));
             $validated['receipt_proof'] = $path;
         }
 

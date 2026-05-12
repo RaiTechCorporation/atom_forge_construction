@@ -16,7 +16,7 @@
             <div class="flex justify-between items-start mb-12">
                 <div>
                     <div class="flex items-center gap-3 mb-4">
-                        <img src="{{ asset('images/Atom Forge Logo.png For White Background.png') }}" alt="Logo" class="w-12 h-12 object-contain">
+                        <img src="{{ asset('images/cropped-Atom-Forge-Logo.png-For-White-Background.png') }}" alt="Logo" class="w-12 h-12 object-contain">
                         <span class="font-black text-xl text-slate-900 tracking-tighter uppercase italic">
                             Atom<span class="text-indigo-600">Forge</span>
                         </span>

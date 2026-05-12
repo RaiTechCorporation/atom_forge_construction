@@ -17,7 +17,9 @@
 
         <!-- Scripts -->
         @viteReactRefresh
-        @vite(['resources/js/app.jsx'])
+        @vite(['resources/css/app.css', 'resources/js/app.jsx'])
+        
+        @stack('styles')
         
         <style>
             [x-cloak] { display: none !important; }
@@ -84,6 +86,71 @@
                 from { transform: rotate(0deg); }
                 to { transform: rotate(360deg); }
             }
+
+            /* Blog Details Specific Design */
+            .blog-details-box {
+                background: #fff;
+                border: 1px solid rgba(0,0,0,0.05);
+                border-radius: 15px;
+                overflow: hidden;
+            }
+            .blog-details-box .details {
+                padding: 30px;
+            }
+            .blog-details-box .blog-title {
+                font-size: 28px;
+                font-weight: 700;
+                color: #1a1a1a;
+                margin-bottom: 20px;
+                line-height: 1.3;
+            }
+            .post-meta {
+                list-style: none;
+                padding: 0;
+                margin: 0 0 25px;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 15px;
+            }
+            .post-meta li a {
+                color: #666;
+                font-size: 14px;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .post-meta li a i {
+                color: #EE5A24;
+            }
+            .social-links {
+                list-style: none;
+                padding: 20px 30px;
+                margin: 0;
+                display: flex;
+                gap: 10px;
+                border-top: 1px solid #eee;
+                background: #f9f9f9;
+            }
+            .social-links li a {
+                width: 35px;
+                height: 35px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                color: #fff;
+                font-size: 14px;
+                transition: all 0.3s;
+            }
+            .social-links li a.facebook { background: #3b5998; }
+            .social-links li a.twitter { background: #1da1f2; }
+            .social-links li a.linkedin { background: #0077b5; }
+            .social-links li a.pinterest { background: #bd081c; }
+            .social-links li a.plus { background: #EE5A24; }
+            .social-links li a:hover { opacity: 0.8; transform: translateY(-2px); }
         </style>
     </head>
     <body class="antialiased text-slate-900 bg-white selection:bg-orange-600 selection:text-white" x-data="{ mobileMenuOpen: false }">
@@ -94,7 +161,7 @@
                     <div class="flex justify-between h-20">
                         <div class="flex items-center">
                             <a href="{{ route('home') }}" class="group flex items-center gap-3">
-                                <img src="{{ asset('images/Atom Forge Logo.png For White Background.png') }}" alt="Atom Forge Logo" class="h-12 lg:h-14 xl:h-16 w-auto">
+                                <img src="{{ asset('images/cropped-Atom-Forge-Logo.png-For-White-Background.png') }}" alt="Atom Forge Logo" class="h-12 lg:h-14 xl:h-16 w-auto">
                                 <div class="flex flex-col justify-center -space-y-0.5">
                                     <span class="font-bold text-lg lg:text-xl xl:text-2xl text-black tracking-tight whitespace-nowrap leading-tight">
                                         Atom Forge 
@@ -106,14 +173,14 @@
                             </a>
 
                             <!-- Desktop Navigation Links -->
-                            <div class="hidden md:flex md:ml-6 lg:ml-8 xl:ml-12 md:space-x-1 lg:space-x-2 xl:space-x-4">
-                                <a href="{{ route('home') }}" class="px-1.5 lg:px-2 xl:px-3 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold transition-all duration-200 {{ request()->routeIs('home') ? 'nav-link-active' : 'text-gray-700 hover:text-orange-construction' }}">
+                            <div class="hidden md:flex md:ml-4 lg:ml-8 xl:ml-12 md:space-x-0.5 lg:space-x-1 xl:space-x-2">
+                                <a href="{{ route('home') }}" class="px-1 lg:px-1.5 xl:px-2 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold transition-all duration-200 {{ request()->routeIs('home') ? 'nav-link-active' : 'text-gray-700 hover:text-orange-construction' }}">
                                     Home
                                 </a>
 
                                 <!-- Services Dropdown -->
                                 <div class="relative" @mouseenter="servicesOpen = true" @mouseleave="servicesOpen = false">
-                                    <button class="flex items-center gap-0.5 lg:gap-1 px-1.5 lg:px-2 xl:px-3 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold text-gray-700 hover:text-orange-construction transition-all duration-200 {{ request()->routeIs('services') ? 'nav-link-active' : '' }}">
+                                    <button class="flex items-center gap-0.5 lg:gap-1 px-1 lg:px-1.5 xl:px-2 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold text-gray-700 hover:text-orange-construction transition-all duration-200 {{ request()->routeIs('services') ? 'nav-link-active' : '' }}">
                                         Services
                                         <svg class="w-3.5 h-3.5 lg:w-4 lg:h-4 transition-transform duration-200" :class="servicesOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                     </button>
@@ -124,22 +191,25 @@
                                          class="absolute left-0 mt-0 w-48 bg-white border border-gray-100 shadow-lg rounded-xl py-2 z-[110]"
                                          x-cloak>
                                         <a href="{{ route('services') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-construction">All Services</a>
-                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-construction">Building Construction</a>
-                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-construction">House Renovation</a>
-                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-construction">Architecture Design</a>
+                                        <a href="{{ route('services.residential') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-construction">Residential Construction</a>
+                                        <a href="{{ route('services.commercial') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-construction">Commercial Development</a>
+                                        <a href="{{ route('services.industrial') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-construction">Industrial Infrastructure</a>
+                                        <a href="{{ route('services.interior') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-construction">Custom Interior Design</a>
+                                        <a href="{{ route('services.sustainable') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-construction">Sustainable Building</a>
+                                        <a href="{{ route('services.management') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-construction">Project Management</a>
                                     </div>
                                 </div>
 
-                                <a href="{{ route('projects') }}" class="px-1.5 lg:px-2 xl:px-3 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold transition-all duration-200 {{ request()->routeIs('projects') ? 'nav-link-active' : 'text-gray-700 hover:text-orange-construction' }}">
+                                <a href="{{ route('projects') }}" class="px-1 lg:px-1.5 xl:px-2 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold transition-all duration-200 {{ request()->routeIs('projects') ? 'nav-link-active' : 'text-gray-700 hover:text-orange-construction' }}">
                                     Projects
                                 </a>
-                                <a href="#" class="px-1.5 lg:px-2 xl:px-3 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold text-gray-700 hover:text-orange-construction transition-all duration-200">
+                                <a href="{{ route('blogs.index') }}" class="px-1 lg:px-1.5 xl:px-2 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold text-gray-700 hover:text-orange-construction transition-all duration-200">
                                     Blog
                                 </a>
-                                <a href="{{ route('faq') }}" class="px-1.5 lg:px-2 xl:px-3 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold transition-all duration-200 {{ request()->routeIs('faq') ? 'nav-link-active' : 'text-gray-700 hover:text-orange-construction' }}">
+                                <a href="{{ route('faq') }}" class="px-1 lg:px-1.5 xl:px-2 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold transition-all duration-200 {{ request()->routeIs('faq') ? 'nav-link-active' : 'text-gray-700 hover:text-orange-construction' }}">
                                     FAQ
                                 </a>
-                                <div class="flex items-center px-1 lg:px-1 xl:px-2">
+                                <div class="flex items-center px-1 lg:px-1.5 xl:px-2">
                                     <a href="{{ route('public.invest') }}" class="web3-glass group hover:scale-105 scale-[0.8] lg:scale-90 xl:scale-100 origin-left">
                                         <div class="web3-glass-content">
                                             <div class="relative w-2 h-2 rounded-full bg-orange-construction animate-pulse"></div>
@@ -150,7 +220,7 @@
 
                                 <!-- Pages Dropdown -->
                                 <div class="relative" @mouseenter="pagesOpen = true" @mouseleave="pagesOpen = false">
-                                    <button class="flex items-center gap-0.5 lg:gap-1 px-1.5 lg:px-2 xl:px-3 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold text-gray-700 hover:text-orange-construction transition-all duration-200 {{ request()->routeIs('about') ? 'nav-link-active' : '' }}">
+                                    <button class="flex items-center gap-0.5 lg:gap-1 px-1 lg:px-1.5 xl:px-2 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold text-gray-700 hover:text-orange-construction transition-all duration-200 {{ request()->routeIs('about') || request()->routeIs('team') || request()->routeIs('testimonials') ? 'nav-link-active' : '' }}">
                                         Pages
                                         <svg class="w-3.5 h-3.5 lg:w-4 lg:h-4 transition-transform duration-200" :class="pagesOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                     </button>
@@ -160,13 +230,13 @@
                                          x-transition:enter-end="opacity-100 scale-100"
                                          class="absolute left-0 mt-0 w-48 bg-white border border-gray-100 shadow-lg rounded-xl py-2 z-[110]"
                                          x-cloak>
-                                        <a href="{{ route('about') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-construction">About Us</a>
-                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-construction">Team</a>
-                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-construction">Testimonials</a>
+                                        <a href="{{ route('about') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-construction {{ request()->routeIs('about') ? 'text-orange-construction' : '' }}">About Us</a>
+                                        <a href="{{ route('team') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-construction {{ request()->routeIs('team') ? 'text-orange-construction' : '' }}">Team</a>
+                                        <a href="{{ route('testimonials') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-construction {{ request()->routeIs('testimonials') ? 'text-orange-construction' : '' }}">Testimonials</a>
                                     </div>
                                 </div>
 
-                                <a href="{{ route('contact') }}" class="px-1.5 lg:px-2 xl:px-3 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold transition-all duration-200 {{ request()->routeIs('contact') ? 'nav-link-active' : 'text-gray-700 hover:text-orange-construction' }}">
+                                <a href="{{ route('contact') }}" class="px-1 lg:px-1.5 xl:px-2 py-2 text-[13px] lg:text-[14px] xl:text-[15px] font-semibold transition-all duration-200 {{ request()->routeIs('contact') ? 'nav-link-active' : 'text-gray-700 hover:text-orange-construction' }}">
                                     Contact
                                 </a>
                             </div>
@@ -217,15 +287,18 @@
                             </button>
                             <div x-show="open" class="pl-8 space-y-1" x-cloak>
                                 <a href="{{ route('services') }}" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">All Services</a>
-                                <a href="#" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">Building Construction</a>
-                                <a href="#" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">House Renovation</a>
-                                <a href="#" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">Architecture Design</a>
+                                <a href="{{ route('services.residential') }}" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">Residential Construction</a>
+                                <a href="{{ route('services.commercial') }}" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">Commercial Development</a>
+                                <a href="{{ route('services.industrial') }}" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">Industrial Infrastructure</a>
+                                <a href="{{ route('services.interior') }}" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">Custom Interior Design</a>
+                                <a href="{{ route('services.sustainable') }}" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">Sustainable Building</a>
+                                <a href="{{ route('services.management') }}" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">Project Management</a>
                             </div>
                         </div>
                         <a href="{{ route('projects') }}" class="block px-4 py-3 text-base font-bold text-gray-700 hover:text-orange-construction hover:bg-orange-50 rounded-xl transition-all">
                             Projects
                         </a>
-                        <a href="#" class="block px-4 py-3 text-base font-bold text-gray-700 hover:text-orange-construction hover:bg-orange-50 rounded-xl transition-all">
+                        <a href="{{ route('blogs.index') }}" class="block px-4 py-3 text-base font-bold text-gray-700 hover:text-orange-construction hover:bg-orange-50 rounded-xl transition-all">
                             Blog
                         </a>
                         <a href="{{ route('faq') }}" class="block px-4 py-3 text-base font-bold text-gray-700 hover:text-orange-construction hover:bg-orange-50 rounded-xl transition-all">
@@ -239,15 +312,15 @@
                                 </div>
                             </a>
                         </div>
-                        <div x-data="{ open: false }">
-                            <button @click="open = !open" class="flex items-center justify-between w-full px-4 py-3 text-base font-bold text-gray-700 hover:text-orange-construction hover:bg-orange-50 rounded-xl transition-all">
+                        <div x-data="{ open: {{ request()->routeIs('about') || request()->routeIs('team') || request()->routeIs('testimonials') ? 'true' : 'false' }} }">
+                            <button @click="open = !open" class="flex items-center justify-between w-full px-4 py-3 text-base font-bold {{ request()->routeIs('about') || request()->routeIs('team') || request()->routeIs('testimonials') ? 'text-orange-construction bg-orange-50' : 'text-gray-700 hover:text-orange-construction hover:bg-orange-50' }} rounded-xl transition-all">
                                 Pages
                                 <svg class="w-4 h-4 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </button>
                             <div x-show="open" class="pl-8 space-y-1" x-cloak>
-                                <a href="{{ route('about') }}" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">About Us</a>
-                                <a href="#" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">Team</a>
-                                <a href="#" class="block px-4 py-2 text-sm font-semibold text-gray-600 hover:text-orange-construction">Testimonials</a>
+                                <a href="{{ route('about') }}" class="block px-4 py-2 text-sm font-semibold {{ request()->routeIs('about') ? 'text-orange-construction' : 'text-gray-600 hover:text-orange-construction' }}">About Us</a>
+                                <a href="{{ route('team') }}" class="block px-4 py-2 text-sm font-semibold {{ request()->routeIs('team') ? 'text-orange-construction' : 'text-gray-600 hover:text-orange-construction' }}">Team</a>
+                                <a href="{{ route('testimonials') }}" class="block px-4 py-2 text-sm font-semibold {{ request()->routeIs('testimonials') ? 'text-orange-construction' : 'text-gray-600 hover:text-orange-construction' }}">Testimonials</a>
                             </div>
                         </div>
                         <a href="{{ route('contact') }}" class="block px-4 py-3 text-base font-bold text-gray-700 hover:text-orange-construction hover:bg-orange-50 rounded-xl transition-all">
@@ -301,15 +374,17 @@
                             <ul class="space-y-6 text-[15px]">
                                 <li class="flex items-start gap-4">
                                     <i class="fa-solid fa-location-dot text-orange-construction mt-1 text-lg"></i>
-                                    <span>{{ $content['contact_address'] ?? '3584 Hickory Heights Drive, USA' }}</span>
+                                    <a href="https://www.google.com/maps/place/Atom+Forge+Construction/@26.732891,83.3862048,164m/data=!3m1!1e3!4m22!1m15!4m14!1m6!1m2!1s0x399143be04f92235:0x5bd0ddd9ec36db2a!2sAtom+Forge+Construction,+HIG+II,+Gautam+Vihar+Vistar,+Taramandal,+Gorakhpur,+Uttar+Pradesh+273014!2m2!1d83.3862029!2d26.7327535!1m6!1m2!1s0x399143be04f92235:0x5bd0ddd9ec36db2a!2sAtom+Forge+Construction,+HIG+II,+Gautam+Vihar+Vistar,+Taramandal,+Gorakhpur,+Uttar+Pradesh+273014!2m2!1d83.3862029!2d26.7327535!3m5!1s0x399143be04f92235:0x5bd0ddd9ec36db2a!8m2!3d26.7327535!4d83.3862029!16s%2Fg%2F11yrsbgfwj" target="_blank" class="hover:text-orange-construction transition-colors">
+                                        {{ $content['contact_address'] ?? 'HIG II, Gautam Vihar Vistar, Taramandal, Gorakhpur, Uttar Pradesh 273014' }}
+                                    </a>
                                 </li>
                                 <li class="flex items-center gap-4">
                                     <i class="fa-solid fa-phone text-orange-construction text-lg"></i>
-                                    <span>{{ $content['contact_phone'] ?? '+1 (555) 000-0000' }}</span>
+                                    <span>{{ $content['contact_phone'] ?? '+91 8318754257' }}</span>
                                 </li>
                                 <li class="flex items-center gap-4">
-                                    <i class="fa-solid fa-envelope text-orange-construction text-lg"></i>
-                                    <a href="mailto:{{ $content['contact_email'] ?? 'admin@geniusocean.com' }}" class="hover:text-orange-construction transition-colors">{{ $content['contact_email'] ?? 'admin@geniusocean.com' }}</a>
+                                    <i class="fa-brands fa-whatsapp text-orange-construction text-lg"></i>
+                                    <a href="https://wa.me/918318754257" target="_blank" class="hover:text-orange-construction transition-colors">+91 8318754257</a>
                                 </li>
                             </ul>
                         </div>
@@ -354,5 +429,21 @@
                 </div>
             </footer>
         </div>
+
+        <!-- Floating Quick Call Button -->
+        <a href="tel:+918318754257" class="fixed bottom-40 right-8 z-[100] bg-[#EE5A24] text-white w-14 h-14 rounded-full shadow-2xl hover:bg-orange-600 transition-all transform hover:scale-110 flex items-center justify-center group" title="Call Us Now">
+            <i class="fa-solid fa-phone text-xl"></i>
+            <span class="absolute right-full mr-4 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Call Us Now</span>
+        </a>
+
+        <!-- Floating WhatsApp Support -->
+        <a href="https://wa.me/918318754257" target="_blank" class="fixed bottom-24 right-8 z-[100] bg-emerald-500 text-white w-14 h-14 rounded-full shadow-2xl hover:bg-emerald-600 transition-all transform hover:scale-110 flex items-center justify-center group" title="Chat with us on WhatsApp">
+            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.484 8.412-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.309 1.656zm6.29-4.143c1.589.943 3.147 1.44 4.744 1.441 5.401 0 9.798-4.396 9.802-9.797 0-2.618-1.02-5.08-2.871-6.932-1.85-1.852-4.311-2.873-6.93-2.873-5.401 0-9.798 4.397-9.802 9.799 0 1.9.54 3.42 1.581 4.966l-.1.173-1.013 3.7.126.033 3.663-.957zm11.532-6.536c-.234-.117-1.385-.683-1.599-.761-.215-.078-.371-.117-.527.117-.156.234-.605.761-.742.918-.137.156-.273.176-.508.059-.234-.117-.988-.364-1.882-1.161-.695-.62-1.165-1.385-1.301-1.619-.137-.234-.015-.361.103-.477.106-.105.234-.273.351-.41.117-.137.156-.234.234-.391.078-.156.039-.293-.019-.41-.059-.117-.527-1.27-.723-1.738-.191-.462-.387-.399-.527-.406-.136-.007-.293-.009-.449-.009-.156 0-.41.059-.625.293-.215.234-.82.801-.82 1.953s.84 2.266.957 2.422c.117.156 1.653 2.523 4.004 3.538.559.241.996.386 1.337.494.56.178 1.069.153 1.472.093.449-.066 1.385-.566 1.581-1.113.195-.547.195-1.016.137-1.113-.058-.097-.214-.156-.448-.273z"></path>
+            </svg>
+            <span class="absolute right-full mr-4 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">WhatsApp Support</span>
+        </a>
+
+        @stack('scripts')
     </body>
 </html>

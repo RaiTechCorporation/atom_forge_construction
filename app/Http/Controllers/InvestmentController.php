@@ -42,12 +42,12 @@ class InvestmentController extends Controller
         ]);
 
         if ($request->hasFile('agreement')) {
-            $path = $request->file('agreement')->store('agreements', 'public');
+            $path = Storage::disk('public')->putFile('agreements', $request->file('agreement'));
             $validated['agreement_file'] = $path;
         }
 
         if ($request->hasFile('payment_proof')) {
-            $path = $request->file('payment_proof')->store('payment_proofs', 'public');
+            $path = Storage::disk('public')->putFile('payment_proofs', $request->file('payment_proof'));
             $validated['payment_proof'] = $path;
         }
 
@@ -68,6 +68,10 @@ class InvestmentController extends Controller
 
     public function destroy(Investment $investment)
     {
+        if (auth()->user()->isSiteSupervisor()) {
+            return redirect()->route('investments.index')->with('error', 'Site Supervisors are not allowed to delete investment records.');
+        }
+
         if ($investment->agreement_file) {
             Storage::disk('public')->delete($investment->agreement_file);
         }

@@ -454,15 +454,22 @@
                         </div>
 
                         <!-- Media Gallery Section -->
-                        @if(($project->site_media && count($project->site_media) > 0) || ($project->progress_photos && count($project->progress_photos) > 0))
+                        @if(($project->site_media && count($project->site_media) > 0) || ($project->progress_photos && count($project->progress_photos) > 0) || $project->labourWorkProgress->count() > 0)
                             <div class="mt-12 pt-8 border-t border-slate-50">
                                 <span class="block text-[9px] font-black text-slate-400 uppercase tracking-[0.15em] mb-5">Visual Media Gallery</span>
                                 <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4">
                                     @foreach(array_merge($project->site_media ?? [], $project->progress_photos ?? []) as $media)
                                         <div class="aspect-square bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 group relative">
                                             @if(Str::endsWith($media, ['.mp4', '.mov', '.avi']))
-                                                <div class="w-full h-full flex items-center justify-center bg-slate-900 text-white">
-                                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+                                                <div class="w-full h-full bg-slate-900 overflow-hidden relative">
+                                                    <video class="w-full h-full object-cover">
+                                                        <source src="{{ asset('storage/' . $media) }}" type="video/mp4">
+                                                    </video>
+                                                    <div class="absolute inset-0 flex items-center justify-center">
+                                                        <div class="w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center">
+                                                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             @else
                                                 <img src="{{ asset('storage/' . $media) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
@@ -471,6 +478,51 @@
                                                 <a href="{{ asset('storage/' . $media) }}" target="_blank" class="p-2 bg-white rounded-full text-indigo-600 shadow-xl">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                                 </a>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
+                                    {{-- Daily Work Progress Media --}}
+                                    @foreach($project->labourWorkProgress as $progress)
+                                        <div class="aspect-square bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 group relative">
+                                            @php
+                                                $fileExists = Storage::disk('public')->exists($progress->file_path);
+                                            @endphp
+
+                                            @if(!$fileExists)
+                                                <div class="w-full h-full bg-slate-100 flex flex-col items-center justify-center p-4 text-center">
+                                                    <svg class="w-6 h-6 text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 9.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                    <span class="text-[7px] font-black text-slate-400 uppercase tracking-widest leading-tight">Media Missing</span>
+                                                </div>
+                                            @elseif($progress->file_type === 'video')
+                                                <div class="w-full h-full bg-slate-900 overflow-hidden relative">
+                                                    <video class="w-full h-full object-cover">
+                                                        <source src="{{ asset('storage/' . $progress->file_path) }}" type="video/mp4">
+                                                    </video>
+                                                    <div class="absolute inset-0 flex items-center justify-center">
+                                                        <div class="w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center">
+                                                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <img src="{{ asset('storage/' . $progress->file_path) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                            @endif
+                                            
+                                            <!-- Site Manager & Date Overlay -->
+                                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-3">
+                                                <p class="text-[7px] font-black text-white uppercase tracking-widest mb-0.5 truncate">{{ $progress->siteManager?->name ?? 'Site Manager' }}</p>
+                                                <p class="text-[6px] font-bold text-indigo-300 uppercase tracking-[0.2em] mb-2">{{ \Carbon\Carbon::parse($progress->date)->format('d M, Y') }}</p>
+                                                <div class="flex items-center gap-2">
+                                                    <a href="{{ asset('storage/' . $progress->file_path) }}" target="_blank" class="p-1.5 bg-white/20 hover:bg-white/40 text-white rounded-lg transition-colors backdrop-blur-md">
+                                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                                    </a>
+                                                    @if($progress->latitude && $progress->longitude)
+                                                        <a href="https://www.google.com/maps/search/?api=1&query={{ $progress->latitude }},{{ $progress->longitude }}" target="_blank" class="p-1.5 bg-indigo-500/20 hover:bg-indigo-500/40 text-white rounded-lg transition-colors backdrop-blur-md">
+                                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                                        </a>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                     @endforeach

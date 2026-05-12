@@ -14,6 +14,8 @@
                     <div class="px-2.5 py-1 bg-slate-50 border border-slate-100 rounded-lg text-[10px] font-black uppercase tracking-widest text-slate-400">
                         @if(request()->routeIs('investor.*'))
                             Investor Panel
+                        @elseif(Auth::user()->isSiteSupervisor())
+                            Supervisor Portal
                         @elseif(Auth::user()->isAdmin())
                             Administration
                         @else
@@ -46,6 +48,8 @@
                                             Investor
                                         @elseif(Auth::user()->isSuperAdmin())
                                             Super Admin
+                                        @elseif(Auth::user()->isSiteSupervisor())
+                                            Site Supervisor
                                         @elseif(Auth::user()->isAdminStaff())
                                             Staff
                                         @else
@@ -55,7 +59,7 @@
                                 </div>
                                 <div class="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center text-white font-black text-xs ring-4 ring-white shadow-lg shadow-slate-900/10 group-hover:bg-indigo-600 transition-colors overflow-hidden">
                                     @if(Auth::user()->profile_picture)
-                                        <img src="{{ Storage::url(Auth::user()->profile_picture) }}" alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
+                                        <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}" alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
                                     @else
                                         {{ substr(Auth::user()->name, 0, 1) }}
                                     @endif
@@ -69,7 +73,7 @@
                                     {{ __('Profile Settings') }}
                                 </x-dropdown-link>
 
-                                @if(!auth()->user()->investor)
+                                @if(!auth()->user()->investor && !auth()->user()->isSiteSupervisor())
                                     <x-dropdown-link :href="route('investor.register.create')" class="rounded-md text-emerald-600 hover:bg-emerald-50 font-bold">
                                         {{ __('Become an Investor') }}
                                     </x-dropdown-link>

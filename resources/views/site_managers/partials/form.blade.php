@@ -14,7 +14,7 @@
                 <div class="relative">
                     <div class="w-32 h-32 rounded-2xl bg-slate-50 border-2 border-slate-200 overflow-hidden flex items-center justify-center shadow-inner">
                         <img id="photo_preview" 
-                            src="{{ isset($siteManager) && $siteManager->photo_path ? Storage::url($siteManager->photo_path) : 'https://ui-avatars.com/api/?name=Manager&background=6366f1&color=fff&size=128' }}" 
+                            src="{{ isset($siteManager) && $siteManager->photo_path ? asset('storage/' . $siteManager->photo_path) : 'https://ui-avatars.com/api/?name=Manager&background=6366f1&color=fff&size=128' }}" 
                             class="w-full h-full object-cover" 
                             alt="Preview">
                     </div>
@@ -392,7 +392,7 @@
                         <input type="file" id="certificate_10th_path" name="certificate_10th_path" 
                             class="mt-0 block w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all">
                         @if(isset($siteManager) && $siteManager->certificate_10th_path)
-                            <a href="{{ Storage::url($siteManager->certificate_10th_path) }}" target="_blank" class="mt-2 inline-flex items-center text-[10px] font-bold text-indigo-600 hover:text-indigo-500">
+                            <a href="{{ asset('storage/' . $siteManager->certificate_10th_path) }}" target="_blank" class="mt-2 inline-flex items-center text-[10px] font-bold text-indigo-600 hover:text-indigo-500">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                 View 10th Certificate
                             </a>
@@ -426,7 +426,7 @@
                         <input type="file" id="certificate_12th_path" name="certificate_12th_path" 
                             class="mt-0 block w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all">
                         @if(isset($siteManager) && $siteManager->certificate_12th_path)
-                            <a href="{{ Storage::url($siteManager->certificate_12th_path) }}" target="_blank" class="mt-2 inline-flex items-center text-[10px] font-bold text-indigo-600 hover:text-indigo-500">
+                            <a href="{{ asset('storage/' . $siteManager->certificate_12th_path) }}" target="_blank" class="mt-2 inline-flex items-center text-[10px] font-bold text-indigo-600 hover:text-indigo-500">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                 View 12th Certificate
                             </a>
@@ -460,7 +460,7 @@
                         <input type="file" id="graduation_certificate_path" name="graduation_certificate_path" 
                             class="mt-0 block w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all">
                         @if(isset($siteManager) && $siteManager->graduation_certificate_path)
-                            <a href="{{ Storage::url($siteManager->graduation_certificate_path) }}" target="_blank" class="mt-2 inline-flex items-center text-[10px] font-bold text-indigo-600 hover:text-indigo-500">
+                            <a href="{{ asset('storage/' . $siteManager->graduation_certificate_path) }}" target="_blank" class="mt-2 inline-flex items-center text-[10px] font-bold text-indigo-600 hover:text-indigo-500">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                 View Graduation Certificate
                             </a>
@@ -475,7 +475,7 @@
                     <input type="file" id="skilled_certificate_path" name="skilled_certificate_path" 
                         class="mt-0 block w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all">
                     @if(isset($siteManager) && $siteManager->skilled_certificate_path)
-                        <a href="{{ Storage::url($siteManager->skilled_certificate_path) }}" target="_blank" class="mt-2 inline-flex items-center text-[10px] font-bold text-indigo-600 hover:text-indigo-500">
+                        <a href="{{ asset('storage/' . $siteManager->skilled_certificate_path) }}" target="_blank" class="mt-2 inline-flex items-center text-[10px] font-bold text-indigo-600 hover:text-indigo-500">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                             View Skilled Certificate
                         </a>
@@ -503,7 +503,7 @@
                     <input type="file" id="id_proof_path" name="id_proof_path" 
                         class="mt-0 block w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all">
                     @if(isset($siteManager) && $siteManager->id_proof_path)
-                        <a href="{{ Storage::url($siteManager->id_proof_path) }}" target="_blank" class="mt-2 inline-flex items-center text-[10px] font-bold text-indigo-600 hover:text-indigo-500">
+                        <a href="{{ asset('storage/' . $siteManager->id_proof_path) }}" target="_blank" class="mt-2 inline-flex items-center text-[10px] font-bold text-indigo-600 hover:text-indigo-500">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                             View Current ID Proof
                         </a>
@@ -517,7 +517,7 @@
                     <input type="file" id="pan_proof_path" name="pan_proof_path" 
                         class="mt-0 block w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all">
                     @if(isset($siteManager) && $siteManager->pan_proof_path)
-                        <a href="{{ Storage::url($siteManager->pan_proof_path) }}" target="_blank" class="mt-2 inline-flex items-center text-[10px] font-bold text-indigo-600 hover:text-indigo-500">
+                        <a href="{{ asset('storage/' . $siteManager->pan_proof_path) }}" target="_blank" class="mt-2 inline-flex items-center text-[10px] font-bold text-indigo-600 hover:text-indigo-500">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                             View Current PAN Proof
                         </a>

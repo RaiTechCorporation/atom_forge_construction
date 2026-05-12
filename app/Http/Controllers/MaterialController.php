@@ -114,6 +114,11 @@ class MaterialController extends Controller implements HasMiddleware
      */
     public function destroy(Material $material)
     {
+        if (auth()->user()->isSiteSupervisor()) {
+            return redirect()->route('materials.index')
+                ->with('error', 'Site Supervisors are not allowed to delete material records.');
+        }
+
         $material->delete();
 
         return redirect()->route('materials.index')

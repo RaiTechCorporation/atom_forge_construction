@@ -48,9 +48,13 @@
                                 </td>
                                 <td class="px-6 py-6">
                                     <div class="flex flex-col">
-                                        <a href="{{ route('projects.show', $update->project) }}" class="text-sm font-bold text-slate-900 hover:text-indigo-600 transition-colors">
-                                            {{ $update->project->name }}
-                                        </a>
+                                        @if($update->project)
+                                            <a href="{{ route('projects.show', $update->project) }}" class="text-sm font-bold text-slate-900 hover:text-indigo-600 transition-colors">
+                                                {{ $update->project->name }}
+                                            </a>
+                                        @else
+                                            <span class="text-sm font-bold text-slate-400">Project Deleted</span>
+                                        @endif
                                     </div>
                                 </td>
                                 <td class="px-6 py-6 text-sm text-slate-600 max-w-xs truncate">

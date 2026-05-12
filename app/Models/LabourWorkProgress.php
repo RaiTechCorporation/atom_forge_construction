@@ -12,17 +12,19 @@ class LabourWorkProgress extends Model
     protected $table = 'labour_work_progress';
 
     protected $fillable = [
-        'labour_id',
+        'site_manager_id',
         'project_id',
         'date',
         'shift',
         'file_path',
         'file_type',
+        'latitude',
+        'longitude',
     ];
 
-    public function labour()
+    public function siteManager()
     {
-        return $this->belongsTo(Labour::class);
+        return $this->belongsTo(SiteManager::class, 'site_manager_id');
     }
 
     public function project()

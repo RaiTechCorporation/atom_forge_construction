@@ -18,7 +18,7 @@
                 <div class="space-y-6">
                     <div class="flex items-center gap-4">
                         <div class="w-16 h-16 bg-slate-900 rounded-3xl flex items-center justify-center text-white shadow-2xl">
-                            <img src="{{ asset('images/Atom Forge Logo.png For White Background.png') }}" alt="Logo" class="w-10 h-10 object-contain invert">
+                            <img src="{{ asset('images/cropped-Atom-Forge-Logo.png-For-White-Background.png') }}" alt="Logo" class="w-10 h-10 object-contain invert">
                         </div>
                         <div>
                             <span class="font-black text-2xl text-slate-900 tracking-tighter uppercase italic block leading-none">

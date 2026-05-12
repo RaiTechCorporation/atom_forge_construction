@@ -5,13 +5,19 @@
             <div class="bg-slate-900 px-10 py-12 text-white relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
                 <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-                    <div>
-                        <h1 class="text-3xl font-black italic tracking-tighter uppercase">Payslip</h1>
-                        <p class="text-indigo-400 font-bold uppercase tracking-widest text-xs mt-1">{{ \Carbon\Carbon::parse($payout->month)->format('F Y') }}</p>
+                    <div class="flex items-center gap-6">
+                        <div class="w-16 h-16 bg-white p-2 rounded-2xl shadow-xl flex items-center justify-center">
+                            <img src="{{ asset('images/cropped-Atom-Forge-Logo.png-For-White-Background.png') }}" alt="Logo" class="w-full h-full object-contain">
+                        </div>
+                        <div>
+                            <h1 class="text-3xl font-black italic tracking-tighter uppercase leading-none">Payslip</h1>
+                            <p class="text-indigo-400 font-bold uppercase tracking-widest text-[10px] mt-2">{{ \Carbon\Carbon::parse($payout->month)->format('F Y') }}</p>
+                        </div>
                     </div>
                     <div class="text-left md:text-right">
-                        <h2 class="text-xl font-bold italic tracking-tight uppercase">Atom Forge Construction</h2>
-                        <p class="text-slate-400 text-xs font-medium mt-1">Industrial Estate, Site No. 42</p>
+                        <h2 class="text-xl font-black italic tracking-tight uppercase leading-none">Atom Forge Construction</h2>
+                        <p class="text-indigo-400/80 text-[10px] font-black uppercase tracking-[0.2em] mt-2 italic">Building the Future, Forging Excellence</p>
+                        <p class="text-slate-400 text-xs font-medium mt-3">Industrial Estate, Site No. 42</p>
                         <p class="text-slate-400 text-xs font-medium">Bangalore, Karnataka - 560001</p>
                     </div>
                 </div>

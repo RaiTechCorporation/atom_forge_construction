@@ -10,6 +10,14 @@
                 </p>
             </div>
             <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                <a href="{{ route('site-managers.export') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold rounded-xl transition-all shadow-sm text-xs">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Export
+                </a>
+                <button type="button" onclick="document.getElementById('import-form-container').classList.toggle('hidden')" class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold rounded-xl transition-all shadow-sm text-xs">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                    Import
+                </button>
                 <a href="{{ route('site-managers.attendance') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-600/20 text-xs">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
                     Manager Attendance
@@ -32,6 +40,21 @@
             </div>
         @endif
 
+        <!-- Import Form -->
+        <div id="import-form-container" class="hidden bg-white p-6 rounded-2xl border border-slate-200 shadow-sm animate-fade-in">
+            <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4">Import Site Manager Data</h3>
+            <form action="{{ route('site-managers.import') }}" method="POST" enctype="multipart/form-data" class="flex items-center gap-4">
+                @csrf
+                <div class="flex-1">
+                    <input type="file" name="file" accept=".xlsx,.xls,.csv" required class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer">
+                </div>
+                <button type="submit" class="px-6 py-2 bg-indigo-600 text-white font-bold rounded-xl text-xs uppercase tracking-widest hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-600/20">
+                    Upload & Import
+                </button>
+            </form>
+            <p class="mt-2 text-[10px] text-slate-400 font-bold uppercase tracking-widest italic">Supported formats: XLSX, XLS, CSV. Ensure headers match the export format.</p>
+        </div>
+
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-slate-200">
@@ -52,7 +75,7 @@
                                     <div class="flex items-center gap-3">
                                         <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-bold uppercase text-base border border-indigo-100 shrink-0">
                                             @if($manager->photo_path)
-                                                <img src="{{ Storage::url($manager->photo_path) }}" alt="{{ $manager->name }}" class="w-full h-full object-cover rounded-xl">
+                                                <img src="{{ asset('storage/' . $manager->photo_path) }}" alt="{{ $manager->name }}" class="w-full h-full object-cover rounded-xl">
                                             @else
                                                 {{ substr($manager->name, 0, 1) }}
                                             @endif

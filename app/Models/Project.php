@@ -169,6 +169,11 @@ class Project extends Model
         return $this->hasMany(ProjectPaymentPhase::class);
     }
 
+    public function labourWorkProgress()
+    {
+        return $this->hasMany(LabourWorkProgress::class);
+    }
+
     protected function totalPaid(): Attribute
     {
         return Attribute::make(

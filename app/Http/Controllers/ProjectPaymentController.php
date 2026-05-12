@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\ProjectPayment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectPaymentController extends Controller
 {
@@ -34,7 +35,7 @@ class ProjectPaymentController extends Controller
         ]);
 
         if ($request->hasFile('proof_image')) {
-            $path = $request->file('proof_image')->store('payments/proofs', 'public');
+            $path = Storage::disk('public')->putFile('payments/proofs', $request->file('proof_image'));
             $validated['proof_image'] = $path;
         }
 
@@ -74,6 +75,13 @@ class ProjectPaymentController extends Controller
 
     public function destroy(ProjectPayment $projectPayment)
     {
+        if (auth()->user()->isSiteSupervisor()) {
+            return redirect()->back()->with('error', 'Site Supervisors are not allowed to delete project payment records.');
+        }
+
+        if ($projectPayment->proof_image) {
+            Storage::disk('public')->delete($projectPayment->proof_image);
+        }
         $projectPayment->delete();
         return redirect()->back()->with('success', 'Payment record deleted successfully.');
     }

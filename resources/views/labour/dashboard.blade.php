@@ -206,7 +206,7 @@
                                 <div class="flex items-center gap-4">
                                     <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center font-black text-sm border border-indigo-100 group-hover:bg-indigo-600 group-hover:text-white transition-all">
                                         @if($record['photo'])
-                                            <img src="{{ Storage::url($record['photo']) }}" alt="{{ $record['name'] }}" class="w-full h-full object-cover rounded-2xl">
+                                            <img src="{{ asset('storage/' . $record['photo']) }}" alt="{{ $record['name'] }}" class="w-full h-full object-cover rounded-2xl">
                                         @else
                                             {{ substr($record['name'], 0, 1) }}
                                         @endif

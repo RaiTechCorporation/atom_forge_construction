@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller implements HasMiddleware
 {
@@ -73,7 +74,7 @@ class ProjectController extends Controller implements HasMiddleware
             if ($request->hasFile($field)) {
                 $paths = [];
                 foreach ($request->file($field) as $file) {
-                    $path = $file->store('projects/documents', 'public');
+                    $path = Storage::disk('public')->putFile('projects/documents', $file);
                     $paths[] = $path;
                 }
                 $validated[$field] = $paths;
@@ -99,7 +100,7 @@ class ProjectController extends Controller implements HasMiddleware
     {
         $this->authorizeProjectAccess($project);
 
-        $project->load(['expenses', 'attendances.labour', 'materialTransactions.material', 'investments.investor', 'payouts.investor', 'payments', 'paymentPhases']);
+        $project->load(['expenses', 'attendances.labour', 'materialTransactions.material', 'investments.investor', 'payouts.investor', 'payments', 'paymentPhases', 'labourWorkProgress.siteManager']);
 
         $totalExpenses = $project->expenses->sum('amount');
         $totalInvested = $project->investments()->where('status', 'approved')->sum('investment_amount');
@@ -141,7 +142,7 @@ class ProjectController extends Controller implements HasMiddleware
             if ($request->hasFile($field)) {
                 $paths = $project->$field ?? [];
                 foreach ($request->file($field) as $file) {
-                    $path = $file->store('projects/documents', 'public');
+                    $path = Storage::disk('public')->putFile('projects/documents', $file);
                     $paths[] = $path;
                 }
                 $validated[$field] = $paths;
@@ -167,6 +168,31 @@ class ProjectController extends Controller implements HasMiddleware
     public function destroy(Project $project)
     {
         $this->authorizeProjectAccess($project);
+
+        if (auth()->user()->isSiteSupervisor()) {
+            return redirect()->route('projects.index')
+                ->with('error', 'Site Supervisors are not allowed to delete projects.');
+        }
+
+        $fileFields = [
+            'design_documents',
+            'contracts_agreements',
+            'permits_licenses',
+            'safety_documents',
+            'blueprints_layouts',
+            'site_media',
+            'progress_photos',
+            'inspection_reports',
+        ];
+
+        foreach ($fileFields as $field) {
+            if ($project->$field && is_array($project->$field)) {
+                foreach ($project->$field as $path) {
+                    Storage::disk('public')->delete($path);
+                }
+            }
+        }
+
         $project->delete();
 
         return redirect()->route('projects.index')

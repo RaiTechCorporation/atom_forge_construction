@@ -48,6 +48,20 @@ class PublicController extends Controller
         return view('public.contact', compact('content'));
     }
 
+    public function team()
+    {
+        $content = $this->getContent();
+
+        return view('public.team', compact('content'));
+    }
+
+    public function testimonials()
+    {
+        $content = $this->getContent();
+
+        return view('public.testimonials', compact('content'));
+    }
+
     public function privacy()
     {
         $content = $this->getContent();
@@ -74,5 +88,41 @@ class PublicController extends Controller
         $content = $this->getContent();
 
         return view('public.invest', compact('content'));
+    }
+
+    public function residentialConstruction()
+    {
+        $content = $this->getContent();
+        return view('public.services.residential', compact('content'));
+    }
+
+    public function commercialDevelopment()
+    {
+        $content = $this->getContent();
+        return view('public.services.commercial', compact('content'));
+    }
+
+    public function industrialInfrastructure()
+    {
+        $content = $this->getContent();
+        return view('public.services.industrial', compact('content'));
+    }
+
+    public function interiorDesign()
+    {
+        $content = $this->getContent();
+        return view('public.services.interior', compact('content'));
+    }
+
+    public function sustainableBuilding()
+    {
+        $content = $this->getContent();
+        return view('public.services.sustainable', compact('content'));
+    }
+
+    public function projectManagement()
+    {
+        $content = $this->getContent();
+        return view('public.services.management', compact('content'));
     }
 }

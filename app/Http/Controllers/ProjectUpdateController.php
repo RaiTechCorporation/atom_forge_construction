@@ -49,7 +49,7 @@ class ProjectUpdateController extends Controller implements HasMiddleware
         $imagePaths = [];
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $imagePaths[] = $image->store('project_updates', 'public');
+                $imagePaths[] = Storage::disk('public')->putFile('project_updates', $image);
             }
         }
 
@@ -62,6 +62,10 @@ class ProjectUpdateController extends Controller implements HasMiddleware
 
     public function destroy(ProjectUpdate $projectUpdate)
     {
+        if (auth()->user()->isSiteSupervisor()) {
+            return redirect()->route('project-updates.index')->with('error', 'Site Supervisors are not allowed to delete project updates.');
+        }
+
         if ($projectUpdate->images) {
             foreach ($projectUpdate->images as $image) {
                 Storage::disk('public')->delete($image);

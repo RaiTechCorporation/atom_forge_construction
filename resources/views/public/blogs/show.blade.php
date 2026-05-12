@@ -5,7 +5,7 @@
     <!-- Article Header -->
     <header class="relative py-24 bg-slate-900 overflow-hidden">
         <div class="absolute inset-0 opacity-30">
-            <img src="{{ $post->featured_image ?? 'https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80' }}" alt="Background" class="w-full h-full object-cover">
+            <img src="{{ $post->featured_image ?? 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80' }}" alt="Background" class="w-full h-full object-cover">
         </div>
         <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div class="flex justify-center mb-6">
@@ -38,38 +38,74 @@
         <div class="flex flex-col lg:flex-row gap-16">
             <!-- Main Content -->
             <div class="lg:w-2/3">
-                @if($post->featured_video_file)
-                    <div class="mb-12 rounded-3xl overflow-hidden shadow-2xl aspect-video bg-black">
-                        <video class="w-full h-full" controls>
-                            <source src="{{ $post->featured_video_file }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
+                <div class="blog-box blog-details-box">
+                    @if($post->featured_image)
+                    <div class="blog-images">
+                        <div class="img">
+                            <img src="{{ $post->featured_image }}" class="w-full" alt="{{ $post->title }}">
+                        </div>
                     </div>
-                @elseif($post->featured_video_url)
-                    <div class="mb-12 rounded-3xl overflow-hidden shadow-2xl aspect-video bg-black">
-                        @php
-                            $videoId = '';
-                            if (preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i', $post->featured_video_url, $match)) {
-                                $videoId = $match[1];
-                            }
-                        @endphp
-                        @if($videoId)
-                            <iframe class="w-full h-full" src="https://www.youtube.com/embed/{{ $videoId }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                        @else
-                            <video class="w-full h-full" controls>
-                                <source src="{{ $post->featured_video_url }}" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                        @endif
-                    </div>
-                @endif
+                    @endif
 
-                <div class="prose prose-lg prose-slate max-w-none 
-                    prose-headings:text-slate-900 prose-headings:font-bold 
-                    prose-p:text-gray-600 prose-p:leading-relaxed
-                    prose-a:text-orange-construction prose-a:no-underline hover:prose-a:underline
-                    prose-img:rounded-3xl prose-img:shadow-2xl">
-                    {!! $post->content !!}
+                    <div class="details">
+                        <h4 class="blog-title">
+                            {{ $post->title }}
+                        </h4>
+                        <ul class="post-meta">
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fas fa-calendar"></i>
+                                    {{ $post->created_at->format('d M, Y') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fas fa-eye"></i>
+                                    {{ rand(100, 500) }} View(s)
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fas fa-comments"></i>
+                                    Source : Atom Forge
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="content pt-1">
+                            {!! $post->content !!}
+                        </div>
+                    </div>
+
+                    <div class="social-link">
+                        <ul class="social-links">
+                            <li>
+                                <a class="facebook" href="#" target="_blank">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="twitter" href="#" target="_blank">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="linkedin" href="#" target="_blank">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="pinterest" href="#" target="_blank">
+                                    <i class="fab fa-pinterest"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="plus" href="#">
+                                    <i class="fas fa-plus"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
                 @if($post->faq)
@@ -115,7 +151,7 @@
                 <!-- CTA Card -->
                 <div class="bg-slate-900 p-8 rounded-3xl relative overflow-hidden group">
                     <div class="absolute inset-0 opacity-10">
-                        <img src="https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80" alt="Background" class="w-full h-full object-cover">
+                        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80" alt="Background" class="w-full h-full object-cover">
                     </div>
                     <div class="relative z-10 text-center">
                         <h3 class="text-2xl font-bold text-white mb-4">Have a Project in Mind?</h3>

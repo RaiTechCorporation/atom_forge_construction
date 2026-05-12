@@ -5,6 +5,19 @@
         </h2>
     </x-slot>
 
+    @push('styles')
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+    <style>
+        .ck-editor__editable {
+            min-height: 400px;
+            border-radius: 0 0 0.5rem 0.5rem !important;
+        }
+        .ck-editor__top {
+            border-radius: 0.5rem 0.5rem 0 0 !important;
+        }
+    </style>
+    @endpush
+
     <div class="space-y-6">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <form action="{{ route('admin.blogs.update', $post->id) }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
@@ -57,7 +70,7 @@
 
                 <div class="space-y-2">
                     <x-input-label for="content" :value="__('Content (HTML)')" />
-                    <textarea id="content" name="content" rows="15" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>{{ old('content', $post->content) }}</textarea>
+                    <textarea id="content" name="content" rows="15" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ old('content', $post->content) }}</textarea>
                     <x-input-error class="mt-2" :messages="$errors->get('content')" />
                 </div>
 
@@ -98,4 +111,22 @@
             </form>
         </div>
     </div>
+    @push('scripts')
+    <script>
+        // Initialize CKEditor
+        ClassicEditor
+            .create(document.querySelector('#content'), {
+                toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
+            })
+            .then(editor => {
+                const form = document.querySelector('form');
+                form.addEventListener('submit', (e) => {
+                    document.querySelector('#content').value = editor.getData();
+                });
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+    @endpush
 </x-app-layout>

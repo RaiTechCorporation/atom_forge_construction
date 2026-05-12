@@ -23,7 +23,7 @@
                 <div class="relative">
                     <div class="w-20 h-20 rounded-2xl bg-indigo-600 overflow-hidden border-4 border-white shadow-xl">
                         @if($labour->photo_path)
-                            <img src="{{ Storage::url($labour->photo_path) }}" alt="{{ $labour->name }}" class="w-full h-full object-cover">
+                            <img src="{{ asset('storage/' . $labour->photo_path) }}" alt="{{ $labour->name }}" class="w-full h-full object-cover">
                         @else
                             <div class="w-full h-full flex items-center justify-center text-white text-2xl font-black">
                                 {{ substr($labour->name, 0, 1) }}
@@ -53,6 +53,15 @@
                 </div>
             </div>
             <div class="flex items-center gap-3">
+                <form action="{{ route('labour.download-pdf', $labour) }}" method="GET" class="inline">
+                    <input type="hidden" name="month" value="{{ $selectedMonth }}">
+                    <input type="hidden" name="year" value="{{ $selectedYear }}">
+                    <button type="submit" 
+                        class="group inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 border-2 border-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-700 hover:border-indigo-700 transition-all duration-300 shadow-lg shadow-indigo-100">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path></svg>
+                        {{ __('Download PDF') }}
+                    </button>
+                </form>
                 <a href="{{ route('labour.edit', $labour) }}" 
                     class="group inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-slate-200 text-slate-700 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all duration-300 shadow-sm">
                     <svg class="w-4 h-4 transition-transform group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
@@ -85,19 +94,19 @@
                         <svg class="w-20 h-20 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                     </div>
                     <div class="relative z-10">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">{{ __('Current Financial Standing') }}</p>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">{{ __('Current Financial Standing') }} (Filtered)</p>
                         <div class="space-y-4">
                             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                                 <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{{ __('Total Earned') }}</span>
-                                <span class="text-sm font-black text-white italic">₹{{ number_format($labour->total_earned, 2) }}</span>
+                                <span class="text-sm font-black text-white italic">₹{{ number_format($rangeAnalytics['total_earned'], 2) }}</span>
                             </div>
                             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                                 <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{{ __('Total Paid') }}</span>
-                                <span class="text-sm font-black text-emerald-400 italic">₹{{ number_format($labour->total_paid, 2) }}</span>
+                                <span class="text-sm font-black text-emerald-400 italic">₹{{ number_format($rangeAnalytics['total_paid'], 2) }}</span>
                             </div>
                             <div class="flex items-center justify-between pt-1">
                                 <span class="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em]">{{ __('Balance Due') }}</span>
-                                <span class="text-xl font-black text-white italic">₹{{ number_format($labour->balance_due, 2) }}</span>
+                                <span class="text-xl font-black text-white italic">₹{{ number_format($rangeAnalytics['balance_due'], 2) }}</span>
                             </div>
                         </div>
                     </div>
@@ -113,11 +122,11 @@
                         <div>
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ __('Day Work (Regular)') }}</span>
-                                <span class="text-xs font-black text-slate-900 italic">₹{{ number_format($labour->total_regular_earned, 2) }}</span>
+                                <span class="text-xs font-black text-slate-900 italic">₹{{ number_format($rangeAnalytics['total_regular_earned'], 2) }}</span>
                             </div>
                             <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
                                 @php 
-                                    $regPercent = $labour->total_earned > 0 ? ($labour->total_regular_earned / $labour->total_earned) * 100 : 0;
+                                    $regPercent = $rangeAnalytics['total_earned'] > 0 ? ($rangeAnalytics['total_regular_earned'] / $rangeAnalytics['total_earned']) * 100 : 0;
                                 @endphp
                                 <div class="bg-indigo-500 h-full transition-all duration-500" style="width: {{ $regPercent }}%"></div>
                             </div>
@@ -125,26 +134,26 @@
                         <div>
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ __('Hour Work (Overtime)') }}</span>
-                                <span class="text-xs font-black text-slate-900 italic">₹{{ number_format($labour->total_overtime_earned, 2) }}</span>
+                                <span class="text-xs font-black text-slate-900 italic">₹{{ number_format($rangeAnalytics['total_overtime_earned'], 2) }}</span>
                             </div>
                             <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
                                 @php 
-                                    $otPercent = $labour->total_earned > 0 ? ($labour->total_overtime_earned / $labour->total_earned) * 100 : 0;
+                                    $otPercent = $rangeAnalytics['total_earned'] > 0 ? ($rangeAnalytics['total_overtime_earned'] / $rangeAnalytics['total_earned']) * 100 : 0;
                                 @endphp
                                 <div class="bg-amber-500 h-full transition-all duration-500" style="width: {{ $otPercent }}%"></div>
                             </div>
                         </div>
                         <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
-                            <span class="text-[10px] font-black text-slate-900 uppercase tracking-widest">{{ __('Day Work (Regular) + Hour Work (Overtime)') }}</span>
-                            <span class="text-sm font-black text-slate-900 italic">₹{{ number_format($labour->total_regular_earned + $labour->total_overtime_earned, 2) }}</span>
+                            <span class="text-[10px] font-black text-slate-900 uppercase tracking-widest">{{ __('Regular + Overtime') }}</span>
+                            <span class="text-sm font-black text-slate-900 italic">₹{{ number_format($rangeAnalytics['total_earned'], 2) }}</span>
                         </div>
                         <div class="flex items-center justify-between text-slate-400">
-                            <span class="text-[9px] font-bold uppercase tracking-widest">{{ __('Minus: Already Paid amount') }}</span>
-                            <span class="text-xs font-bold italic">-₹{{ number_format($labour->total_paid, 2) }}</span>
+                            <span class="text-[9px] font-bold uppercase tracking-widest">{{ __('Already Paid') }}</span>
+                            <span class="text-xs font-bold italic">-₹{{ number_format($rangeAnalytics['total_paid'], 2) }}</span>
                         </div>
                         <div class="pt-2 border-t-2 border-indigo-600 border-dashed flex items-center justify-between">
-                            <span class="text-[10px] font-black text-indigo-600 uppercase tracking-widest">{{ __('Total Due Amount') }}</span>
-                            <span class="text-base font-black text-rose-600 italic">₹{{ number_format(($labour->total_regular_earned + $labour->total_overtime_earned) - $labour->total_paid, 2) }}</span>
+                            <span class="text-[10px] font-black text-indigo-600 uppercase tracking-widest">{{ __('Total Due') }}</span>
+                            <span class="text-base font-black text-rose-600 italic">₹{{ number_format($rangeAnalytics['balance_due'], 2) }}</span>
                         </div>
                     </div>
                 </div>
@@ -158,8 +167,8 @@
                         <span class="text-[10px] font-black text-amber-600 bg-amber-50 px-3 py-1 rounded-lg uppercase tracking-[0.2em]">{{ __('Activity') }}</span>
                     </div>
                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">{{ __('Total Attendance') }}</p>
-                    <h4 class="text-2xl font-black text-slate-900 italic">{{ $labour->attendances->where('status', 'present')->unique('date')->count() }} <span class="text-sm font-bold text-slate-400 not-italic uppercase tracking-widest ml-1">{{ __('Days') }}</span></h4>
-                    <div class="mt-2 text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ $labour->attendances->sum('overtime_hours') }} {{ __('Total OT Hours') }}</div>
+                    <h4 class="text-2xl font-black text-slate-900 italic">{{ $rangeAnalytics['present_days'] }} <span class="text-sm font-bold text-slate-400 not-italic uppercase tracking-widest ml-1">{{ __('Days') }}</span></h4>
+                    <div class="mt-2 text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ $rangeAnalytics['total_ot_hours'] }} {{ __('Total OT Hours') }}</div>
                 </div>
             </div>
 
@@ -201,14 +210,14 @@
                         </div>
                         <div class="p-8 space-y-4">
                             @if($labour->id_proof_path)
-                            <a href="{{ Storage::url($labour->id_proof_path) }}" target="_blank" class="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-indigo-200 hover:bg-white transition-all group">
+                            <a href="{{ asset('storage/' . $labour->id_proof_path) }}" target="_blank" class="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-indigo-200 hover:bg-white transition-all group">
                                 <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ __('Aadhaar Card') }}</span>
                                 <svg class="w-4 h-4 text-slate-300 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                             </a>
                             @endif
 
                             @if($labour->pan_proof_path)
-                            <a href="{{ Storage::url($labour->pan_proof_path) }}" target="_blank" class="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-indigo-200 hover:bg-white transition-all group">
+                            <a href="{{ asset('storage/' . $labour->pan_proof_path) }}" target="_blank" class="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-indigo-200 hover:bg-white transition-all group">
                                 <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ __('PAN Card') }}</span>
                                 <svg class="w-4 h-4 text-slate-300 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                             </a>
@@ -477,7 +486,15 @@
                                             {{ number_format($summary->total_ot_hours, 1) }} Hrs
                                         </td>
                                         <td class="px-8 py-5 text-sm font-black text-emerald-600 text-right italic">
-                                            ₹{{ number_format($summary->total_payout, 2) }}
+                                            <div class="flex items-center justify-end gap-2">
+                                                ₹{{ number_format($summary->total_payout, 2) }}
+                                                @if(auth()->user()->role !== 'site_supervisor')
+                                                    <button type="button" onclick="scrollToTransactions()" 
+                                                        class="p-1 text-slate-300 hover:text-indigo-600 transition-all" title="{{ __('Modify Payouts') }}">
+                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                                    </button>
+                                                @endif
+                                            </div>
                                         </td>
                                     </tr>
                                     @empty
@@ -492,6 +509,59 @@
                         </div>
                     </div>
 
+                    <!-- Record Payment Card -->
+                    <div class="bg-white rounded-3xl border-2 border-indigo-100 shadow-sm overflow-hidden mb-8">
+                        <div class="px-8 py-6 bg-indigo-50/50 border-b border-indigo-100">
+                            <h3 class="text-xs font-black text-indigo-900 uppercase tracking-[0.2em] flex items-center gap-2">
+                                <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                {{ __('Record New Payment') }}
+                            </h3>
+                        </div>
+                        <div class="p-8">
+                            <form action="{{ route('labour.payment.store', $labour) }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 items-end">
+                                @csrf
+                                <div class="lg:col-span-1">
+                                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 ml-1">{{ __('Date') }}</label>
+                                    <input type="date" name="date" value="{{ date('Y-m-d') }}" 
+                                        class="w-full px-4 py-2.5 bg-slate-50 border-2 border-slate-100 rounded-xl text-sm font-bold focus:border-indigo-600 focus:ring-0 transition-all"
+                                        {{ auth()->user()->role === 'site_supervisor' ? 'readonly' : '' }} required>
+                                </div>
+                                <div class="lg:col-span-1">
+                                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 ml-1">{{ __('Project') }}</label>
+                                    <select name="project_id" class="w-full px-4 py-2.5 bg-slate-50 border-2 border-slate-100 rounded-xl text-sm font-bold focus:border-indigo-600 focus:ring-0 transition-all appearance-none cursor-pointer" required>
+                                        <option value="">{{ __('Select Project') }}</option>
+                                        @foreach($projects as $project)
+                                            <option value="{{ $project->id }}" {{ $labour->project_id == $project->id ? 'selected' : '' }}>{{ $project->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="lg:col-span-1">
+                                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 ml-1">{{ __('Shift') }}</label>
+                                    <select name="shift" class="w-full px-4 py-2.5 bg-slate-50 border-2 border-slate-100 rounded-xl text-sm font-bold focus:border-indigo-600 focus:ring-0 transition-all appearance-none cursor-pointer" required>
+                                        <option value="1st Shift">1st Shift</option>
+                                        <option value="2nd Shift">2nd Shift</option>
+                                        <option value="Overtime">Overtime</option>
+                                    </select>
+                                </div>
+                                <div class="lg:col-span-1">
+                                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 ml-1">{{ __('Amount (₹)') }}</label>
+                                    <input type="number" name="amount" step="0.01" min="0" placeholder="0.00" 
+                                        class="w-full px-4 py-2.5 bg-slate-50 border-2 border-slate-100 rounded-xl text-sm font-bold text-emerald-600 focus:border-emerald-600 focus:ring-0 transition-all" required>
+                                </div>
+                                <div class="lg:col-span-1">
+                                    <button type="submit" class="w-full px-6 py-3 bg-indigo-600 text-white rounded-xl font-black text-xs uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20">
+                                        {{ __('Save Payment') }}
+                                    </button>
+                                </div>
+                                <div class="md:col-span-2 lg:col-span-5">
+                                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 ml-1">{{ __('Remark') }}</label>
+                                    <input type="text" name="remark" placeholder="Enter payment remark (e.g. Weekly Wage, Advance, etc.)" 
+                                        class="w-full px-4 py-2.5 bg-slate-50 border-2 border-slate-100 rounded-xl text-sm font-bold focus:border-indigo-600 focus:ring-0 transition-all">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
                     <!-- Payment History Card -->
                     <div class="bg-white rounded-3xl border-2 border-slate-100 shadow-sm overflow-hidden">
                         <div class="px-8 py-6 bg-slate-50 border-b border-slate-100">
@@ -501,10 +571,15 @@
                                     {{ __('Financial Transactions') }}
                                 </h3>
                                 <div class="flex items-center gap-2">
-                                    <a href="{{ route('labour.report', [$labour->id, 'start_date' => $startDate, 'end_date' => $endDate]) }}" 
+                                    <a href="{{ route('labour.report.pdf', [$labour->id, 'start_date' => $startDate, 'end_date' => $endDate]) }}" 
+                                        class="inline-flex items-center gap-2 px-4 py-2 bg-rose-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-700 transition-all shadow-lg shadow-rose-600/20">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                        {{ __('Download PDF') }}
+                                    </a>
+                                    <a href="{{ route('labour.report.excel', [$labour->id, 'start_date' => $startDate, 'end_date' => $endDate]) }}" 
                                         class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                        {{ __('Download Report') }}
+                                        {{ __('Download Excel') }}
                                     </a>
                                 </div>
                             </div>
@@ -526,7 +601,7 @@
                             </form>
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left">
+                            <table id="payouts-table" class="w-full text-left">
                                 <thead class="bg-slate-50/50">
                                     <tr>
                                         <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ __('Date') }}</th>
@@ -534,6 +609,9 @@
                                         <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">{{ __('OT Hours') }}</th>
                                         <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">{{ __('Recorded By') }}</th>
                                         <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">{{ __('Payout') }}</th>
+                                        @if(auth()->user()->role !== 'site_supervisor')
+                                            <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">{{ __('Actions') }}</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-100">
@@ -560,10 +638,28 @@
                                         <td class="px-8 py-5 text-sm font-black text-emerald-600 text-right italic">
                                             ₹{{ number_format($payment->payment_amount, 2) }}
                                         </td>
+                                        @if(auth()->user()->role !== 'site_supervisor')
+                                            <td class="px-8 py-5 text-right">
+                                                <div class="flex justify-end items-center gap-2">
+                                                    <button type="button" 
+                                                        onclick="openEditPaymentModal({{ $payment->id }}, {{ $payment->payment_amount }}, '{{ $payment->remark }}')"
+                                                        class="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                                    </button>
+                                                    <form action="{{ route('labour.payment.destroy', $payment->id) }}" method="POST" class="inline" onsubmit="return confirm('Remove this payment record?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        @endif
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="4" class="px-8 py-12 text-center">
+                                        <td colspan="{{ auth()->user()->role !== 'site_supervisor' ? '6' : '5' }}" class="px-8 py-12 text-center">
                                             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">{{ __('No Payouts found for selected range') }}</p>
                                         </td>
                                     </tr>
@@ -572,7 +668,7 @@
                                 @if($attendances->where('payment_amount', '>', 0)->count() > 0)
                                 <tfoot class="bg-emerald-50/50">
                                     <tr>
-                                        <td colspan="4" class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">{{ __('Total for Range:') }}</td>
+                                        <td colspan="{{ auth()->user()->role !== 'site_supervisor' ? '5' : '4' }}" class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">{{ __('Total for Range:') }}</td>
                                         <td class="px-8 py-4 text-sm font-black text-emerald-700 text-right">₹{{ number_format($totalPaidInRange, 2) }}</td>
                                     </tr>
                                 </tfoot>
@@ -580,6 +676,81 @@
                             </table>
                         </div>
                     </div>
+
+                    <!-- Edit Payment Modal -->
+                    <div id="editPaymentModal" class="fixed inset-0 z-[100] hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                            <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" aria-hidden="true" onclick="closeEditPaymentModal()"></div>
+                            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                            <div class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-slate-100">
+                                <form id="editPaymentForm" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="bg-white px-8 pt-8 pb-6">
+                                        <div class="flex items-center justify-between mb-6">
+                                            <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight" id="modal-title">
+                                                {{ __('Edit Payment Record') }}
+                                            </h3>
+                                            <button type="button" onclick="closeEditPaymentModal()" class="text-slate-400 hover:text-slate-600 transition-colors">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                            </button>
+                                        </div>
+                                        <div class="space-y-6">
+                                            <div>
+                                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 ml-1">{{ __('Payment Amount (₹)') }}</label>
+                                                <input type="number" name="payment_amount" id="edit_payment_amount" step="0.01" min="0" required
+                                                    class="w-full px-5 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl text-base font-black text-emerald-600 focus:border-emerald-600 focus:ring-0 transition-all">
+                                            </div>
+                                            <div>
+                                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 ml-1">{{ __('Remark') }}</label>
+                                                <input type="text" name="remark" id="edit_payment_remark" 
+                                                    class="w-full px-5 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl text-sm font-bold text-slate-900 focus:border-indigo-600 focus:ring-0 transition-all">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-slate-50 px-8 py-6 flex flex-row-reverse gap-3">
+                                        <button type="submit" class="inline-flex justify-center px-6 py-3 border border-transparent text-xs font-black uppercase tracking-widest rounded-2xl text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all shadow-lg shadow-indigo-600/20">
+                                            {{ __('Update Payment') }}
+                                        </button>
+                                        <button type="button" onclick="closeEditPaymentModal()" class="inline-flex justify-center px-6 py-3 border-2 border-slate-200 text-xs font-black uppercase tracking-widest rounded-2xl text-slate-600 bg-white hover:bg-slate-100 focus:outline-none transition-all">
+                                            {{ __('Cancel') }}
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    @push('scripts')
+                    <script>
+                        function openEditPaymentModal(id, amount, remark) {
+                            const modal = document.getElementById('editPaymentModal');
+                            const form = document.getElementById('editPaymentForm');
+                            const amountInput = document.getElementById('edit_payment_amount');
+                            const remarkInput = document.getElementById('edit_payment_remark');
+                            
+                            form.action = `/labour/payment/${id}`;
+                            amountInput.value = amount;
+                            remarkInput.value = remark || '';
+                            
+                            modal.classList.remove('hidden');
+                            document.body.classList.add('overflow-hidden');
+                        }
+
+                        function closeEditPaymentModal() {
+                            const modal = document.getElementById('editPaymentModal');
+                            modal.classList.add('hidden');
+                            document.body.classList.remove('overflow-hidden');
+                        }
+
+                        function scrollToTransactions() {
+                            const table = document.getElementById('payouts-table');
+                            if (table) {
+                                table.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        }
+                    </script>
+                    @endpush
 
                     <!-- Remarks Card -->
                     @if($labour->remarks)
