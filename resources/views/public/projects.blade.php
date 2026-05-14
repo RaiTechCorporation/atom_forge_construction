@@ -46,50 +46,66 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                 @php
-                    $projects = [
-                        [
-                            'title' => 'Skyline Towers',
-                            'type' => 'Commercial',
-                            'desc' => 'A multi-story commercial complex built with modern amenities and energy-efficient designs.',
-                            'loc' => 'City Center, USA',
-                            'img' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab'
-                        ],
-                        [
-                            'title' => 'Sunset Villa',
-                            'type' => 'Residential',
-                            'desc' => 'A luxury residential project combining elegant architecture with sustainable living features.',
-                            'loc' => 'South Extension, USA',
-                            'img' => 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750'
-                        ],
-                        [
-                            'title' => 'Greenwood Interiors',
-                            'type' => 'Interiors',
-                            'desc' => 'A full interior design project for a premium workspace, focusing on productivity and comfort.',
-                            'loc' => 'Tech Park, USA',
-                            'img' => 'https://images.unsplash.com/photo-1600585154340-be6199f7a09f'
-                        ],
-                        [
-                            'title' => 'Blue Ridge Apartments',
-                            'type' => 'Residential',
-                            'desc' => 'Modern apartment project with world-class facilities and high-quality construction materials.',
-                            'loc' => 'Outer Ring Road, USA',
-                            'img' => 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750'
-                        ],
-                        [
-                            'title' => 'Industrial Logistics Hub',
-                            'type' => 'Commercial',
-                            'desc' => 'An expansive logistics and manufacturing facility designed for maximum operational efficiency.',
-                            'loc' => 'Industrial Area, USA',
-                            'img' => 'https://images.unsplash.com/photo-1503387762-592deb58ef4e'
-                        ],
-                        [
-                            'title' => 'Zen Workspace',
-                            'type' => 'Interiors',
-                            'desc' => 'Minimalist office interior design project that combines Zen philosophy with modern workplace needs.',
-                            'loc' => 'Hitec City, USA',
-                            'img' => 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6'
-                        ],
-                    ];
+                    $projects = [];
+                    for ($i = 1; $i <= 10; $i++) {
+                        if (isset($content["project_{$i}_name"])) {
+                            $projects[] = [
+                                'title' => $content["project_{$i}_name"],
+                                'type' => $content["project_{$i}_type"] ?? 'All',
+                                'desc' => $content["project_{$i}_description"] ?? '',
+                                'loc' => $content["project_{$i}_location"] ?? '',
+                                'img' => $content["project_{$i}_image"] ?? 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750'
+                            ];
+                        }
+                    }
+
+                    // Fallback if no projects defined in CMS
+                    if (empty($projects)) {
+                        $projects = [
+                            [
+                                'title' => 'Skyline Towers',
+                                'type' => 'Commercial',
+                                'desc' => 'A multi-story commercial complex built with modern amenities and energy-efficient designs.',
+                                'loc' => 'City Center, USA',
+                                'img' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab'
+                            ],
+                            [
+                                'title' => 'Sunset Villa',
+                                'type' => 'Residential',
+                                'desc' => 'A luxury residential project combining elegant architecture with sustainable living features.',
+                                'loc' => 'South Extension, USA',
+                                'img' => 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750'
+                            ],
+                            [
+                                'title' => 'Greenwood Interiors',
+                                'type' => 'Interiors',
+                                'desc' => 'A full interior design project for a premium workspace, focusing on productivity and comfort.',
+                                'loc' => 'Tech Park, USA',
+                                'img' => 'https://images.unsplash.com/photo-1600585154340-be6199f7a09f'
+                            ],
+                            [
+                                'title' => 'Blue Ridge Apartments',
+                                'type' => 'Residential',
+                                'desc' => 'Modern apartment project with world-class facilities and high-quality construction materials.',
+                                'loc' => 'Outer Ring Road, USA',
+                                'img' => 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750'
+                            ],
+                            [
+                                'title' => 'Industrial Logistics Hub',
+                                'type' => 'Commercial',
+                                'desc' => 'An expansive logistics and manufacturing facility designed for maximum operational efficiency.',
+                                'loc' => 'Industrial Area, USA',
+                                'img' => 'https://images.unsplash.com/photo-1503387762-592deb58ef4e'
+                            ],
+                            [
+                                'title' => 'Zen Workspace',
+                                'type' => 'Interiors',
+                                'desc' => 'Minimalist office interior design project that combines Zen philosophy with modern workplace needs.',
+                                'loc' => 'Hitec City, USA',
+                                'img' => 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6'
+                            ],
+                        ];
+                    }
                 @endphp
 
                 @foreach($projects as $p)

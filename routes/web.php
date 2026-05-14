@@ -6,8 +6,10 @@ use App\Http\Controllers\ConstructionPlanController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmailConfigurationController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FundRequestController;
 use App\Http\Controllers\GroupEmailController;
+use App\Http\Controllers\HomeSectionController;
 use App\Http\Controllers\InvestmentController;
 use App\Http\Controllers\InvestorController;
 use App\Http\Controllers\InvestorDashboardController;
@@ -24,7 +26,10 @@ use App\Http\Controllers\ProjectUpdateController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SiteManagerController;
+use App\Http\Controllers\TeamMemberController;
+use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\WebsiteContentController;
@@ -147,6 +152,30 @@ Route::middleware(['auth', 'two-factor'])->group(function () {
     // Website Content Management (CMS)
     Route::get('/website-content', [WebsiteContentController::class, 'index'])->name('website-content.index');
     Route::patch('/website-content/update-all', [WebsiteContentController::class, 'update'])->name('website-content.update-all');
+    Route::post('/website-content/add-project', [WebsiteContentController::class, 'addProject'])->name('website-content.add-project');
+    Route::resource('home-sections', HomeSectionController::class);
+    Route::resource('admin/services', ServiceController::class)->names([
+        'index' => 'admin.services.index',
+        'create' => 'admin.services.create',
+        'store' => 'admin.services.store',
+        'show' => 'admin.services.show',
+        'edit' => 'admin.services.edit',
+        'update' => 'admin.services.update',
+        'destroy' => 'admin.services.destroy',
+    ])->parameters([
+        'services' => 'service',
+    ]);
+    Route::resource('admin/testimonials', TestimonialController::class)->names([
+        'index' => 'testimonials.index',
+        'create' => 'testimonials.create',
+        'store' => 'testimonials.store',
+        'show' => 'testimonials.show',
+        'edit' => 'testimonials.edit',
+        'update' => 'testimonials.update',
+        'destroy' => 'testimonials.destroy',
+    ])->parameters([
+        'testimonials' => 'testimonial',
+    ]);
 
     // Pricing Plans Management
     Route::resource('construction-plans', ConstructionPlanController::class);
@@ -173,7 +202,31 @@ Route::middleware(['auth', 'two-factor'])->group(function () {
     ]);
     Route::post('/admin/blogs/generate', [BlogController::class, 'generate'])->name('admin.blogs.generate');
 
-    // Investor Management
+    // Team Management
+    Route::resource('admin/team-members', TeamMemberController::class)->names([
+        'index' => 'team-members.index',
+        'create' => 'team-members.create',
+        'store' => 'team-members.store',
+        'show' => 'team-members.show',
+        'edit' => 'team-members.edit',
+        'update' => 'team-members.update',
+        'destroy' => 'team-members.destroy',
+    ])->parameters([
+        'team-members' => 'team_member',
+    ]);
+
+    Route::resource('admin/faqs', FaqController::class)->names([
+        'index' => 'faqs.index',
+        'create' => 'faqs.create',
+        'store' => 'faqs.store',
+        'show' => 'faqs.show',
+        'edit' => 'faqs.edit',
+        'update' => 'faqs.update',
+        'destroy' => 'faqs.destroy',
+    ])->parameters([
+        'faqs' => 'faq',
+    ]);
+
     Route::resource('investors', InvestorController::class);
     Route::get('fund-requests', [FundRequestController::class, 'index'])->name('fund-requests.index');
     // We'll use traditional paths since resource might be too much for just index/approve/reject

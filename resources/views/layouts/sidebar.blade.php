@@ -35,7 +35,6 @@
                     @php
                         $links = [
                             ['name' => 'Dashboard', 'route' => 'dashboard', 'icon' => 'grid'],
-                            ['name' => 'Blog Management', 'route' => 'admin.blogs.index', 'icon' => 'news'],
                         ];
                     @endphp
 
@@ -541,38 +540,69 @@
 
                     @if(auth()->user()->hasPermission('view-media'))
                     @unless(auth()->user()->isSiteSupervisor())
-                    <!-- Web Intelligence (CMS) Group -->
-                    <div x-data="{ cmsOpen: {{ request()->routeIs('website-content.*') ? 'true' : 'false' }} }" class="mt-1">
-                        <button @click="cmsOpen = !cmsOpen" 
-                                class="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all {{ request()->routeIs('website-content.*') ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
-                            <div class="flex items-center gap-3">
-                                <span class="{{ request()->routeIs('website-content.*') ? 'text-white' : 'text-slate-600' }}">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                                </span>
-                                {{ __('CMS') }}
+                    <div class="mt-8">
+                        <span class="px-4 text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 block">Website Control</span>
+                        @php
+                            $isCmsRoute = request()->routeIs('website-content.*') || 
+                                         request()->routeIs('team-members.*') || 
+                                         request()->routeIs('testimonials.*') || 
+                                         request()->routeIs('home-sections.*') || 
+                                         request()->routeIs('faqs.*') ||
+                                         request()->routeIs('admin.blogs.*');
+                        @endphp
+                        <!-- Web Intelligence (CMS) Group -->
+                        <div x-data="{ cmsOpen: {{ $isCmsRoute ? 'true' : 'false' }} }" class="mt-1">
+                            <button @click="cmsOpen = !cmsOpen" 
+                                    class="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all {{ $isCmsRoute ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
+                                <div class="flex items-center gap-3">
+                                    <span class="{{ $isCmsRoute ? 'text-white' : 'text-slate-500 group-hover:text-slate-200' }}">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                                    </span>
+                                    {{ __('CMS') }}
+                                </div>
+                                <svg :class="cmsOpen ? 'rotate-180' : ''" class="w-3.5 h-3.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            
+                            <div x-show="cmsOpen" x-cloak x-transition class="mt-2 ml-4 space-y-1 border-l border-slate-800/50 pl-4">
+                                @php
+                                    $cmsItems = [
+                                        ['name' => 'All Sections', 'group' => ''],
+                                        ['name' => 'Home Sections', 'route' => 'home-sections.index'],
+                                        ['name' => 'Blogs', 'route' => 'admin.blogs.index'],
+                                        ['name' => 'Testimonials', 'route' => 'testimonials.index'],
+                                        ['name' => 'Team', 'route' => 'team-members.index'],
+                                        ['name' => 'FAQ', 'route' => 'faqs.index'],
+                                        ['name' => 'Home Hero', 'group' => 'home'],
+                                        ['name' => 'Statistics', 'group' => 'statistics'],
+                                        ['name' => 'Services', 'route' => 'admin.services.index'],
+                                        ['name' => 'Services Header', 'group' => 'services'],
+                                        ['name' => 'Projects', 'group' => 'projects'],
+                                        ['name' => 'About', 'group' => 'about'],
+                                        ['name' => 'Contact Info', 'group' => 'contact'],
+                                        ['name' => 'Legal', 'group' => 'legal'],
+                                    ];
+                                @endphp
+                                @foreach($cmsItems as $cms)
+                                    @php
+                                        $url = isset($cms['route']) ? route($cms['route']) : route('website-content.index', $cms['group'] ? ['group' => $cms['group']] : []);
+                                        if (isset($cms['route'])) {
+                                            $isActive = request()->routeIs($cms['route']) || 
+                                                       (str_contains($cms['route'], 'team-members') && request()->routeIs('team-members.*')) || 
+                                                       (str_contains($cms['route'], 'testimonials') && request()->routeIs('testimonials.*')) ||
+                                                       (str_contains($cms['route'], 'home-sections') && request()->routeIs('home-sections.*')) ||
+                                                       (str_contains($cms['route'], 'faqs') && request()->routeIs('faqs.*')) ||
+                                                       (str_contains($cms['route'], 'services') && request()->routeIs('admin.services.*')) ||
+                                                       (str_contains($cms['route'], 'blogs') && request()->routeIs('admin.blogs.*'));
+                                        } else {
+                                            $isActive = request()->get('group') == $cms['group'] && request()->routeIs('website-content.index');
+                                        }
+                                    @endphp
+                                    <a href="{{ $url }}" 
+                                       class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ $isActive ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
+                                        {{ __($cms['name']) }}
+                                    </a>
+                                @endforeach
                             </div>
-                            <svg :class="cmsOpen ? 'rotate-180' : ''" class="w-3.5 h-3.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        
-                        <div x-show="cmsOpen" x-cloak x-transition class="mt-2 ml-4 space-y-1 border-l border-slate-800/50 pl-4">
-                            @php
-                                $cmsItems = [
-                                    ['name' => 'All Sections', 'group' => ''],
-                                    ['name' => 'Header', 'group' => 'header'],
-                                    ['name' => 'Footer', 'group' => 'footer'],
-                                    ['name' => 'Home', 'group' => 'home'],
-                                    ['name' => 'Services', 'group' => 'services'],
-                                    ['name' => 'Projects', 'group' => 'projects'],
-                                    ['name' => 'About', 'group' => 'about'],
-                                    ['name' => 'Contact', 'group' => 'contact'],
-                                ];
-                            @endphp
-                            @foreach($cmsItems as $cms)
-                                <a href="{{ route('website-content.index', $cms['group'] ? ['group' => $cms['group']] : []) }}" 
-                                   class="block px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all {{ request()->get('group') == $cms['group'] && request()->routeIs('website-content.index') ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-500 hover:text-white hover:bg-white/5' }}">
-                                    {{ __($cms['name']) }}
-                                </a>
-                            @endforeach
                         </div>
                     </div>
                     @endunless

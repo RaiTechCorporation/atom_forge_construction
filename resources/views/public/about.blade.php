@@ -26,7 +26,7 @@
                 <div class="relative">
                     <div class="absolute -inset-10 bg-orange-primary/5 rounded-full blur-3xl -z-10 animate-pulse"></div>
                     <div class="rounded-[3rem] overflow-hidden shadow-2xl border border-slate-100 aspect-square">
-                        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200" alt="Construction Planning" class="w-full h-full object-cover">
+                        <img src="{{ $content['about_who_we_are_image'] ?? 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200' }}" alt="Construction Planning" class="w-full h-full object-cover">
                     </div>
                 </div>
                 <div>
@@ -35,7 +35,7 @@
                         {{ $content['about_who_we_are_title'] ?? 'Who We Are' }}
                     </h2>
                     <div class="prose prose-slate max-w-none text-slate-500 font-medium text-lg leading-relaxed space-y-6">
-                        {!! nl2br(e($content['about_who_we_are_content'] ?? "Atom Forge Construction was built on the idea that great structures start with strong foundations—both in design and in trust. We specialize in transforming concepts into reality through innovative construction practices, skilled expertise, and a relentless focus on quality.\n\nEvery project we undertake reflects our passion for building not just spaces, but lasting value. Our commitment to excellence, safety, and timely delivery makes us a trusted partner in every stage of construction.")) !!}
+                        {!! nl2br(e($content['about_who_we_are_content'] ?? "Atom Forge Construction is a premier firm dedicated to delivering high-quality residential, commercial, and interior projects. We've built a reputation for excellence through our commitment to integrity and innovation.\n\nWe believe every project is a partnership. We work closely with our clients to understand their vision and translate it into reality, ensuring every detail is handled with care and precision.")) !!}
                     </div>
                 </div>
             </div>
@@ -47,8 +47,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-20">
                 <span class="text-orange-primary font-bold uppercase tracking-widest text-xs mb-4 block">Our DNA</span>
-                <h2 class="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Core Values That Drive Us</h2>
-                <p class="text-slate-500 font-medium text-lg leading-relaxed">Our foundation is built on principles that ensure we deliver excellence in every square foot we build.</p>
+                <h2 class="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">{{ $content['about_values_title'] ?? 'Core Values That Drive Us' }}</h2>
+                <p class="text-slate-500 font-medium text-lg leading-relaxed">{{ $content['about_values_subtitle'] ?? 'Our foundation is built on principles that ensure we deliver excellence in every square foot we build.' }}</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">

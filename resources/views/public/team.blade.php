@@ -23,10 +23,11 @@
     <section class="py-24 bg-white overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-                <!-- Team Member 1 -->
+                @foreach($teamMembers as $member)
+                <!-- Team Member {{ $member->id }} -->
                 <div class="group">
                     <div class="relative mb-6 rounded-[2.5rem] overflow-hidden aspect-[4/5] bg-slate-100 shadow-sm transition-all duration-500 group-hover:shadow-2xl group-hover:-translate-y-2 border border-slate-100">
-                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800" alt="Team Member" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100">
+                        <img src="{{ $member->image_url ?? 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800' }}" alt="{{ $member->name }}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                         <div class="absolute bottom-8 left-8 right-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 opacity-0 group-hover:opacity-100">
                             <div class="flex gap-4">
@@ -40,57 +41,12 @@
                         </div>
                     </div>
                     <div class="text-center">
-                        <h3 class="text-2xl font-bold text-slate-900 mb-1 tracking-tight">Rajesh Sharma</h3>
-                        <p class="text-orange-primary font-bold uppercase tracking-widest text-[10px] mb-4">Founder & Managing Director</p>
-                        <p class="text-slate-500 font-medium leading-relaxed">Visionary leader with 20+ years of experience in construction and architectural innovation.</p>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-1 tracking-tight">{{ $member->name }}</h3>
+                        <p class="text-orange-primary font-bold uppercase tracking-widest text-[10px] mb-4">{{ $member->role }}</p>
+                        <p class="text-slate-500 font-medium leading-relaxed">{{ $member->bio }}</p>
                     </div>
                 </div>
-
-                <!-- Team Member 2 -->
-                <div class="group">
-                    <div class="relative mb-6 rounded-[2.5rem] overflow-hidden aspect-[4/5] bg-slate-100 shadow-sm transition-all duration-500 group-hover:shadow-2xl group-hover:-translate-y-2 border border-slate-100">
-                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800" alt="Team Member" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        <div class="absolute bottom-8 left-8 right-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 opacity-0 group-hover:opacity-100">
-                            <div class="flex gap-4">
-                                <a href="#" class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-orange-primary hover:text-white transition-colors">
-                                    <i class="fab fa-linkedin-in"></i>
-                                </a>
-                                <a href="#" class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-orange-primary hover:text-white transition-colors">
-                                    <i class="fab fa-twitter"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <h3 class="text-2xl font-bold text-slate-900 mb-1 tracking-tight">Priya Verma</h3>
-                        <p class="text-orange-primary font-bold uppercase tracking-widest text-[10px] mb-4">Chief Operations Officer</p>
-                        <p class="text-slate-500 font-medium leading-relaxed">Expert in operational excellence and project management, ensuring seamless delivery of large-scale projects.</p>
-                    </div>
-                </div>
-
-                <!-- Team Member 3 -->
-                <div class="group">
-                    <div class="relative mb-6 rounded-[2.5rem] overflow-hidden aspect-[4/5] bg-slate-100 shadow-sm transition-all duration-500 group-hover:shadow-2xl group-hover:-translate-y-2 border border-slate-100">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=800" alt="Team Member" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        <div class="absolute bottom-8 left-8 right-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 opacity-0 group-hover:opacity-100">
-                            <div class="flex gap-4">
-                                <a href="#" class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-orange-primary hover:text-white transition-colors">
-                                    <i class="fab fa-linkedin-in"></i>
-                                </a>
-                                <a href="#" class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-orange-primary hover:text-white transition-colors">
-                                    <i class="fab fa-twitter"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <h3 class="text-2xl font-bold text-slate-900 mb-1 tracking-tight">Vikram Singh</h3>
-                        <p class="text-orange-primary font-bold uppercase tracking-widest text-[10px] mb-4">Lead Structural Engineer</p>
-                        <p class="text-slate-500 font-medium leading-relaxed">Specialized in high-performance structures and sustainable engineering solutions.</p>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>

@@ -174,6 +174,11 @@ class Project extends Model
         return $this->hasMany(LabourWorkProgress::class);
     }
 
+    public function siteManager()
+    {
+        return $this->hasOne(SiteManager::class);
+    }
+
     protected function totalPaid(): Attribute
     {
         return Attribute::make(

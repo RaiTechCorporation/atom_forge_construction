@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
+use App\Models\Attendance;
+use App\Models\SiteManager;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class ProjectController extends Controller implements HasMiddleware
 {
@@ -96,18 +100,62 @@ class ProjectController extends Controller implements HasMiddleware
     /**
      * Display the specified resource.
      */
-    public function show(Project $project)
+    public function show(Request $request, Project $project)
     {
         $this->authorizeProjectAccess($project);
 
-        $project->load(['expenses', 'attendances.labour', 'materialTransactions.material', 'investments.investor', 'payouts.investor', 'payments', 'paymentPhases', 'labourWorkProgress.siteManager']);
+        $project->load(['expenses', 'materialTransactions.material', 'investments.investor', 'payouts.investor', 'payments', 'paymentPhases', 'labourWorkProgress.siteManager']);
+
+        // Filtering logic for attendance
+        $filter = $request->get('filter', 'day'); // default to today
+        $startDate = null;
+        $endDate = null;
+
+        if ($filter == 'day') {
+            $startDate = Carbon::today();
+            $endDate = Carbon::today();
+        } elseif ($filter == 'week') {
+            $startDate = Carbon::now()->startOfWeek();
+            $endDate = Carbon::now()->endOfWeek();
+        } elseif ($filter == 'month') {
+            $startDate = Carbon::now()->startOfMonth();
+            $endDate = Carbon::now()->endOfMonth();
+        } elseif ($filter == 'custom') {
+            $startDate = $request->get('start_date') ? Carbon::parse($request->get('start_date')) : Carbon::today();
+            $endDate = $request->get('end_date') ? Carbon::parse($request->get('end_date')) : Carbon::today();
+        }
+
+        $attendanceQuery = Attendance::where('project_id', $project->id)
+            ->with('labour');
+
+        if ($startDate && $endDate) {
+            $attendanceQuery->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()]);
+        }
+
+        $attendances = $attendanceQuery->latest('date')->get();
+        $totalWorkingLabours = $attendances->where('status', 'Present')->unique('labour_id')->count();
+        
+        // Site Supervisor
+        $siteSupervisor = SiteManager::where('project_id', $project->id)->first();
 
         $totalExpenses = $project->expenses->sum('amount');
         $totalInvested = $project->investments()->where('status', 'approved')->sum('investment_amount');
         $budgetRemaining = $project->total_budget - $totalExpenses;
         $totalPayouts = $project->payouts()->where('status', 'approved')->sum('amount_paid');
 
-        return view('projects.show', compact('project', 'totalExpenses', 'budgetRemaining', 'totalInvested', 'totalPayouts'));
+        return view('projects.show', compact(
+            'project', 
+            'totalExpenses', 
+            'budgetRemaining', 
+            'totalInvested', 
+            'totalPayouts',
+            'attendances',
+            'totalWorkingLabours',
+            'siteSupervisor',
+            'filter',
+            'startDate',
+            'endDate'
+        ));
     }
 
     /**

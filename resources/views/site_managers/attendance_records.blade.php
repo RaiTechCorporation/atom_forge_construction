@@ -95,17 +95,17 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
-                                    @if($record->status == 'Present')
+                                    @if(strtolower($record->status) == 'present')
                                         <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 uppercase tracking-wider">
                                             {{ __('Present') }}
                                         </span>
-                                    @elseif($record->status == 'Half Day')
+                                    @elseif(strtolower($record->status) == 'half day')
                                         <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 uppercase tracking-wider">
                                             {{ __('Half Day') }}
                                         </span>
                                     @else
                                         <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-700 uppercase tracking-wider">
-                                            {{ __('Absent') }}
+                                            {{ __($record->status) }}
                                         </span>
                                     @endif
                                 </td>

@@ -65,6 +65,139 @@
             </div>
         </div>
 
+        <!-- Daily Working Data Section -->
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden mb-8">
+            <div class="px-8 py-5 border-b border-slate-100 bg-slate-50/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-emerald-600/20">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest">Workforce Intelligence</h3>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Daily Labour & Supervisor Metrics</p>
+                    </div>
+                </div>
+
+                <!-- Date Filters -->
+                <form action="{{ route('projects.show', $project) }}" method="GET" class="flex flex-wrap items-center gap-3">
+                    <select name="filter" onchange="this.form.submit()" class="text-[10px] font-black uppercase tracking-widest border-slate-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500">
+                        <option value="day" {{ $filter == 'day' ? 'selected' : '' }}>Daily</option>
+                        <option value="week" {{ $filter == 'week' ? 'selected' : '' }}>Weekly</option>
+                        <option value="month" {{ $filter == 'month' ? 'selected' : '' }}>Monthly</option>
+                        <option value="custom" {{ $filter == 'custom' ? 'selected' : '' }}>Custom Range</option>
+                    </select>
+
+                    @if($filter == 'custom')
+                        <input type="date" name="start_date" value="{{ $startDate ? $startDate->toDateString() : '' }}" class="text-[10px] font-black uppercase tracking-widest border-slate-200 rounded-lg focus:ring-emerald-500">
+                        <input type="date" name="end_date" value="{{ $endDate ? $endDate->toDateString() : '' }}" class="text-[10px] font-black uppercase tracking-widest border-slate-200 rounded-lg focus:ring-emerald-500">
+                        <button type="submit" class="p-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-500">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </button>
+                    @endif
+                </form>
+            </div>
+
+            <div class="p-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                    <!-- Site Supervisor Info -->
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                        <span class="block text-[9px] font-black text-slate-400 uppercase tracking-[0.15em] mb-4">Site Supervisor</span>
+                        @if($siteSupervisor)
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-white rounded-xl border border-slate-200 flex items-center justify-center overflow-hidden shadow-sm">
+                                    @if($siteSupervisor->photo_path)
+                                        <img src="{{ Storage::url($siteSupervisor->photo_path) }}" class="w-full h-full object-cover">
+                                    @else
+                                        <svg class="w-6 h-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    @endif
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-black text-slate-900 tracking-tight">{{ $siteSupervisor->name }}</h4>
+                                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">{{ $siteSupervisor->manager_unique_id }}</p>
+                                </div>
+                            </div>
+                        @else
+                            <span class="text-xs font-bold text-slate-500">No Supervisor Assigned</span>
+                        @endif
+                    </div>
+
+                    <!-- Total Labours present -->
+                    <div class="bg-indigo-50 p-6 rounded-2xl border border-indigo-100">
+                        <span class="block text-[9px] font-black text-indigo-400 uppercase tracking-[0.15em] mb-4">Active Workforce</span>
+                        <div class="flex items-end gap-2">
+                            <span class="text-3xl font-black text-indigo-700 tracking-tighter">{{ $totalWorkingLabours }}</span>
+                            <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-1.5">Labours Present</span>
+                        </div>
+                    </div>
+
+                    <!-- Date Range Info -->
+                    <div class="bg-emerald-50 p-6 rounded-2xl border border-emerald-100">
+                        <span class="block text-[9px] font-black text-emerald-400 uppercase tracking-[0.15em] mb-4">Reporting Window</span>
+                        <div class="flex flex-col">
+                            <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">
+                                {{ $startDate ? $startDate->format('d M Y') : 'N/A' }}
+                                @if($startDate != $endDate)
+                                    - {{ $endDate ? $endDate->format('d M Y') : 'N/A' }}
+                                @endif
+                            </span>
+                            <span class="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.1em] mt-1 italic">Filtered View: {{ ucfirst($filter) }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Labour List Table -->
+                <div class="mt-8">
+                    <span class="block text-[9px] font-black text-slate-400 uppercase tracking-[0.15em] mb-4">Workforce Logs</span>
+                    <div class="border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-50">
+                                <tr>
+                                    <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Labour Name</th>
+                                    <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Category</th>
+                                    <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Date</th>
+                                    <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
+                                    <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Remark</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                @forelse($attendances as $attendance)
+                                    <tr class="hover:bg-slate-50/50 transition-colors">
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400 text-[10px] font-black">
+                                                    {{ substr($attendance->labour->name, 0, 1) }}
+                                                </div>
+                                                <span class="text-xs font-bold text-slate-900">{{ $attendance->labour->name }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ $attendance->labour->labour_type }}</span>
+                                        </td>
+                                        <td class="px-6 py-4 text-xs font-bold text-slate-600">
+                                            {{ \Carbon\Carbon::parse($attendance->date)->format('d M Y') }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <span class="px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest 
+                                                {{ strtolower($attendance->status) == 'present' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700' }}">
+                                                {{ $attendance->status }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 text-right">
+                                            <span class="text-[10px] font-medium text-slate-400 italic">{{ $attendance->remark ?: '-' }}</span>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="px-6 py-12 text-center text-slate-400 font-bold uppercase tracking-widest text-xs">No workforce data found for this period</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Detail Cards Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             

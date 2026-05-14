@@ -118,60 +118,25 @@
     @php
         $slides = [
             [
-                'subtitle' => 'PRECISE CREATED ONLY FOR YOU',
-                'title_dark' => 'Building',
-                'title_orange' => 'Strength',
-                'description' => 'We deliver reliable, innovative, and high-quality construction solutions designed to stand the test of time.',
-                'image' => 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1920',
+                'subtitle' => $content['hero_slide_1_subtitle'] ?? 'PRECISE CREATED ONLY FOR YOU',
+                'title_dark' => $content['hero_slide_1_title_dark'] ?? 'Building',
+                'title_orange' => $content['hero_slide_1_title_orange'] ?? 'Strength',
+                'description' => $content['hero_slide_1_description'] ?? 'We deliver reliable, innovative, and high-quality construction solutions designed to stand the test of time.',
+                'image' => $content['hero_slide_1_image'] ?? 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1920',
             ],
             [
-                'subtitle' => 'PRECISE CREATED ONLY FOR YOU',
-                'title_dark' => 'Shaping',
-                'title_orange' => 'The Future',
-                'description' => 'At Atom Forge Construction, we don\'t just build structures—we engineer the future with precision and passion.',
-                'image' => 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=1920',
+                'subtitle' => $content['hero_slide_2_subtitle'] ?? 'PRECISE CREATED ONLY FOR YOU',
+                'title_dark' => $content['hero_slide_2_title_dark'] ?? 'Shaping',
+                'title_orange' => $content['hero_slide_2_title_orange'] ?? 'The Future',
+                'description' => $content['hero_slide_2_description'] ?? "At Atom Forge Construction, we don't just build structures—we engineer the future with precision and passion.",
+                'image' => $content['hero_slide_2_image'] ?? 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=1920',
             ],
             [
-                'subtitle' => 'PRECISE CREATED ONLY FOR YOU',
-                'title_dark' => 'Modern',
-                'title_orange' => 'Engineering',
-                'description' => 'Combining cutting-edge technology with precision craftsmanship for superior building solutions.',
-                'image' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1920',
-            ],
-            [
-                'subtitle' => 'PRECISE CREATED ONLY FOR YOU',
-                'title_dark' => 'Smart',
-                'title_orange' => 'Planning',
-                'description' => 'Efficient execution and strategic project management from concept to completion.',
-                'image' => 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=1920',
-            ],
-            [
-                'subtitle' => 'PRECISE CREATED ONLY FOR YOU',
-                'title_dark' => 'Reliable',
-                'title_orange' => 'Partners',
-                'description' => 'A commitment to excellence, safety, and timely delivery in every stage of construction.',
-                'image' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1920',
-            ],
-            [
-                'subtitle' => 'PRECISE CREATED ONLY FOR YOU',
-                'title_dark' => 'Sustainable',
-                'title_orange' => 'Builds',
-                'description' => 'Delivering construction solutions that are scalable, sustainable, and built to last.',
-                'image' => 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1920',
-            ],
-            [
-                'subtitle' => 'PRECISE CREATED ONLY FOR YOU',
-                'title_dark' => 'Excellence',
-                'title_orange' => 'Redefined',
-                'description' => 'Turning your ideas into solid structures with unmatched quality and precision.',
-                'image' => 'https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80&w=1920',
-            ],
-            [
-                'subtitle' => 'PRECISE CREATED ONLY FOR YOU',
-                'title_dark' => 'Potential',
-                'title_orange' => 'Growth',
-                'description' => 'Unlocking massive opportunities in the construction sector with strategic planning.',
-                'image' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1920',
+                'subtitle' => $content['hero_slide_3_subtitle'] ?? 'PRECISE CREATED ONLY FOR YOU',
+                'title_dark' => $content['hero_slide_3_title_dark'] ?? 'Modern',
+                'title_orange' => $content['hero_slide_3_title_orange'] ?? 'Engineering',
+                'description' => $content['hero_slide_3_description'] ?? 'Combining cutting-edge technology with precision craftsmanship for superior building solutions.',
+                'image' => $content['hero_slide_3_image'] ?? 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1920',
             ],
         ];
     @endphp
@@ -278,110 +243,101 @@
         });
     </script>
 
-    <!-- Floating Service Cards -->
+    <!-- Dynamic Home Sections -->
+    @php
+        $cardSections = $homeSections->whereNotNull('icon');
+        $rowSections = $homeSections->whereNull('icon');
+    @endphp
+
+    @if($cardSections->count() > 0)
     <section class="relative z-20 -mt-24 pb-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @php
-                    $featureCards = [
-                        ['title' => 'A Global Network', 'subtitle' => 'International Presence', 'icon' => 'globe', 'delay' => 'delay-100'],
-                        ['title' => 'A Global Network', 'subtitle' => 'Certified Excellence', 'icon' => 'award', 'delay' => 'delay-200'],
-                        ['title' => 'A Global Network', 'icon' => 'building', 'subtitle' => 'Modern Infrastructure', 'delay' => 'delay-300'],
-                        ['title' => 'A Global Network', 'icon' => 'users', 'subtitle' => 'Professional Team', 'delay' => 'delay-400'],
-                        ['title' => 'A Global Network', 'icon' => 'tools', 'subtitle' => 'Latest Technology', 'delay' => 'delay-500'],
-                        ['title' => 'Innovative Solution', 'icon' => 'lightbulb', 'subtitle' => 'Creative Engineering', 'delay' => 'delay-700'],
-                    ];
-                @endphp
-
-                @foreach($featureCards as $card)
-                <div class="bg-white p-12 shadow-xl hover:shadow-2xl rounded-2xl group hover:bg-orange-primary transition-all duration-500 relative animate-fade-up reveal {{ $card['delay'] }} hover:-translate-y-2 border border-gray-50 flex flex-col items-start overflow-hidden">
-                    <!-- Subtle Background Icon for hover -->
+                @foreach($cardSections as $section)
+                <div class="bg-white p-12 shadow-xl hover:shadow-2xl rounded-2xl group hover:bg-orange-primary transition-all duration-500 relative animate-fade-up reveal hover:-translate-y-2 border border-gray-50 flex flex-col items-start overflow-hidden">
                     <div class="absolute -right-8 -bottom-8 opacity-[0.03] group-hover:opacity-10 transition-opacity duration-500">
-                         @if($card['icon'] == 'globe')
-                            <svg class="w-48 h-48 text-black group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                        @elseif($card['icon'] == 'award')
-                            <svg class="w-48 h-48 text-black group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
-                        @elseif($card['icon'] == 'building')
-                            <svg class="w-48 h-48 text-black group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                        @elseif($card['icon'] == 'users')
-                            <svg class="w-48 h-48 text-black group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                        @elseif($card['icon'] == 'tools')
-                            <svg class="w-48 h-48 text-black group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 011-1h1a2 2 0 100-4H7a1 1 0 01-1-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg>
-                        @elseif($card['icon'] == 'lightbulb')
-                            <svg class="w-48 h-48 text-black group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.663 17h4.674a1 1 0 01.992.883l.194 1.488a1 1 0 01-.992 1.129H9.47a1 1 0 01-.992-1.129l.194-1.488a1 1 0 01.992-.883zM12 3a7 7 0 00-7 7c0 1.582.528 3.039 1.414 4.208A7 7 0 0112 14.122a7 7 0 015.586-2.914A7 7 0 0012 3z"></path></svg>
-                        @endif
+                         <i class="fa-solid fa-{{ $section->icon }} text-[12rem] text-black group-hover:text-white"></i>
                     </div>
 
                     <div class="mb-8 p-4 bg-orange-50 group-hover:bg-white/10 rounded-2xl transition-colors duration-500">
-                        @if($card['icon'] == 'globe')
-                            <svg class="w-10 h-10 text-orange-primary group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                        @elseif($card['icon'] == 'award')
-                            <svg class="w-10 h-10 text-orange-primary group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
-                        @elseif($card['icon'] == 'building')
-                            <svg class="w-10 h-10 text-orange-primary group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                        @elseif($card['icon'] == 'users')
-                            <svg class="w-10 h-10 text-orange-primary group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                        @elseif($card['icon'] == 'tools')
-                            <svg class="w-10 h-10 text-orange-primary group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 011-1h1a2 2 0 100-4H7a1 1 0 01-1-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg>
-                        @elseif($card['icon'] == 'lightbulb')
-                            <svg class="w-10 h-10 text-orange-primary group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M9.663 17h4.674a1 1 0 01.992.883l.194 1.488a1 1 0 01-.992 1.129H9.47a1 1 0 01-.992-1.129l.194-1.488a1 1 0 01.992-.883zM12 3a7 7 0 00-7 7c0 1.582.528 3.039 1.414 4.208A7 7 0 0112 14.122a7 7 0 015.586-2.914A7 7 0 0012 3z"></path></svg>
-                        @endif
+                        <i class="fa-solid fa-{{ $section->icon }} text-3xl text-orange-primary group-hover:text-white transition-colors duration-500"></i>
                     </div>
 
                     <div class="space-y-2 mb-12">
                         <h4 class="text-orange-primary group-hover:text-white/80 font-bold uppercase tracking-[0.2em] text-[10px] transition-colors duration-300">
-                            {{ $card['subtitle'] }}
+                            {{ $section->subtitle }}
                         </h4>
                         <h3 class="text-2xl font-black text-slate-900 group-hover:text-white leading-tight transition-colors duration-300">
-                            {{ $card['title'] }}
+                            {{ $section->title }}
                         </h3>
                     </div>
                     
-                    <a href="#" class="w-12 h-12 bg-slate-900 group-hover:bg-white flex items-center justify-center transition-all duration-300 transform group-hover:rotate-45 shadow-lg rounded-xl mt-auto">
+                    @if($section->button_url)
+                    <a href="{{ $section->button_url }}" class="w-12 h-12 bg-slate-900 group-hover:bg-white flex items-center justify-center transition-all duration-300 transform group-hover:rotate-45 shadow-lg rounded-xl mt-auto">
                         <svg class="w-6 h-6 text-white group-hover:text-orange-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </a>
+                    @endif
                 </div>
                 @endforeach
             </div>
         </div>
     </section>
+    @endif
 
-    <!-- About Us Section -->
-    <section class="py-24 bg-white overflow-hidden">
+    @foreach($rowSections as $section)
+    <section class="py-24 bg-white overflow-hidden border-b border-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <!-- Left Column: Image -->
-                <div class="relative">
-                    <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl">
-                        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800" alt="Modern Architecture" class="w-full h-auto">
+                @if($loop->index % 2 != 0)
+                <div class="relative animate-fade-up reveal">
+                    <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl group">
+                        @if($section->image)
+                            <img src="{{ $section->image }}" alt="{{ $section->title }}" class="w-full h-auto transition-transform duration-700 group-hover:scale-105">
+                        @endif
                     </div>
-                    <!-- Decorative element -->
                     <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-orange-primary/10 rounded-2xl -z-0"></div>
-                    <div class="absolute -top-6 -right-6 w-32 h-32 border-4 border-orange-primary/20 rounded-2xl -z-0"></div>
+                    <div class="absolute -top-6 -right-6 w-32 h-32 border-4 border-orange-primary/5 rounded-2xl -z-0"></div>
                 </div>
+                @endif
 
-                <!-- Right Column: Content -->
-                <div>
-                    <span class="text-orange-primary font-bold uppercase tracking-widest text-sm mb-4 block">A Little Bit More</span>
-                    <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-8 leading-tight">About Us</h2>
+                <div class="@if($loop->index % 2 != 0) lg:pl-12 @else lg:pr-12 @endif animate-fade-up reveal delay-200">
+                    @if($section->subtitle)
+                        <span class="text-orange-primary font-bold uppercase tracking-widest text-sm mb-4 block">{{ $section->subtitle }}</span>
+                    @endif
                     
-                    <div class="space-y-6 text-slate-500 font-medium text-lg leading-relaxed mb-10">
-                        <p>
-                            We are a leading construction firm dedicated to delivering excellence in every project we undertake. With decades of experience, our team of experts ensures that your vision is brought to life with precision and care.
-                        </p>
-                        <p>
-                            Our commitment to quality, innovation, and sustainability sets us apart in the industry. We work closely with our clients to provide tailored solutions that meet their unique needs and exceed their expectations.
-                        </p>
-                    </div>
+                    @if($section->title)
+                        <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-8 leading-tight">{{ $section->title }}</h2>
+                    @endif
+                    
+                    @if($section->description)
+                        <div class="space-y-6 text-slate-500 font-medium text-lg leading-relaxed mb-10">
+                            {!! nl2br(e($section->description)) !!}
+                        </div>
+                    @endif
 
-                    <a href="{{ route('about') }}" class="inline-flex items-center gap-3 px-10 py-4 bg-orange-primary text-white font-bold rounded-full hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/30">
-                        Read More
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                    </a>
+                    @if($section->button_text && $section->button_url)
+                        <a href="{{ $section->button_url }}" class="inline-flex items-center gap-3 px-10 py-4 bg-orange-primary text-white font-bold rounded-full hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/30 group">
+                            {{ $section->button_text }}
+                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </a>
+                    @endif
                 </div>
+
+                @if($loop->index % 2 == 0)
+                <div class="relative animate-fade-up reveal">
+                    <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl group">
+                        @if($section->image)
+                            <img src="{{ $section->image }}" alt="{{ $section->title }}" class="w-full h-auto transition-transform duration-700 group-hover:scale-105">
+                        @endif
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-orange-primary/10 rounded-2xl -z-0"></div>
+                    <div class="absolute -top-6 -left-6 w-32 h-32 border-4 border-orange-primary/5 rounded-2xl -z-0"></div>
+                </div>
+                @endif
             </div>
         </div>
     </section>
+    @endforeach
 
     <!-- Statistical / Milestone Section -->
     <section class="py-24 bg-orange-primary relative overflow-hidden">
@@ -402,26 +358,26 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
                 <!-- Winning Awards -->
                 <div class="text-center">
-                    <div class="text-5xl md:text-6xl font-black text-white mb-4">10</div>
-                    <div class="text-orange-100 font-bold uppercase tracking-widest text-sm">Winning Awards</div>
+                    <div class="text-5xl md:text-6xl font-black text-white mb-4">{{ $content['stat_1_value'] ?? '10' }}</div>
+                    <div class="text-orange-100 font-bold uppercase tracking-widest text-sm">{{ $content['stat_1_label'] ?? 'Winning Awards' }}</div>
                 </div>
 
                 <!-- Satisfied Clients -->
                 <div class="text-center">
-                    <div class="text-5xl md:text-6xl font-black text-white mb-4">1230</div>
-                    <div class="text-orange-100 font-bold uppercase tracking-widest text-sm">Satisfied Clients</div>
+                    <div class="text-5xl md:text-6xl font-black text-white mb-4">{{ $content['stat_2_value'] ?? '1230' }}</div>
+                    <div class="text-orange-100 font-bold uppercase tracking-widest text-sm">{{ $content['stat_2_label'] ?? 'Satisfied Clients' }}</div>
                 </div>
 
                 <!-- Best Projects -->
                 <div class="text-center">
-                    <div class="text-5xl md:text-6xl font-black text-white mb-4">360</div>
-                    <div class="text-orange-100 font-bold uppercase tracking-widest text-sm">Best Projects</div>
+                    <div class="text-5xl md:text-6xl font-black text-white mb-4">{{ $content['stat_3_value'] ?? '360' }}</div>
+                    <div class="text-orange-100 font-bold uppercase tracking-widest text-sm">{{ $content['stat_3_label'] ?? 'Best Projects' }}</div>
                 </div>
 
                 <!-- Years Served -->
                 <div class="text-center">
-                    <div class="text-5xl md:text-6xl font-black text-white mb-4">15+</div>
-                    <div class="text-orange-100 font-bold uppercase tracking-widest text-sm">Years Served</div>
+                    <div class="text-5xl md:text-6xl font-black text-white mb-4">{{ $content['stat_4_value'] ?? '15+' }}</div>
+                    <div class="text-orange-100 font-bold uppercase tracking-widest text-sm">{{ $content['stat_4_label'] ?? 'Years Served' }}</div>
                 </div>
             </div>
         </div>
@@ -431,9 +387,9 @@
     <section class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <span class="text-orange-primary font-bold uppercase tracking-widest text-sm mb-4 block">THE BEST SERVICES</span>
-                <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-6">Innovative Building Solutions</h2>
-                <p class="text-slate-500 max-w-2xl mx-auto">We combine modern engineering, precision craftsmanship, and reliable project management to turn ideas into solid structures, from residential projects to large-scale commercial developments.</p>
+                <span class="text-orange-primary font-bold uppercase tracking-widest text-sm mb-4 block">{{ $content['services_section_tagline'] ?? 'THE BEST SERVICES' }}</span>
+                <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-6">{{ $content['services_section_title'] ?? 'Innovative Building Solutions' }}</h2>
+                <p class="text-slate-500 max-w-2xl mx-auto">{{ $content['services_section_subtitle'] ?? 'We combine modern engineering, precision craftsmanship, and reliable project management to turn ideas into solid structures, from residential projects to large-scale commercial developments.' }}</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -467,21 +423,34 @@
     <section class="py-24 bg-white overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-16">
-                <span class="text-orange-primary font-bold uppercase tracking-widest text-sm mb-4 block">CASE STUDIES</span>
-                <h2 class="text-4xl md:text-5xl font-black text-slate-900 leading-tight">Latest Projects</h2>
+                <span class="text-orange-primary font-bold uppercase tracking-widest text-sm mb-4 block">{{ $content['projects_section_tagline'] ?? 'CASE STUDIES' }}</span>
+                <h2 class="text-4xl md:text-5xl font-black text-slate-900 leading-tight">{{ $content['projects_section_title'] ?? 'Latest Projects' }}</h2>
             </div>
 
             <div class="relative">
                 <div class="swiper projects-swiper !overflow-visible">
                     <div class="swiper-wrapper">
                         @php
-                            $projects = [
-                                ['name' => 'Building Construction', 'image' => 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800'],
-                                ['name' => 'Interior Design', 'image' => 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=800'],
-                                ['name' => 'Bridge Engineering', 'image' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800'],
-                                ['name' => 'Urban Planning', 'image' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800'],
-                                ['name' => 'Modern Architecture', 'image' => 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800'],
-                            ];
+                            $projects = [];
+                            for ($i = 1; $i <= 5; $i++) {
+                                if (isset($content["project_{$i}_name"])) {
+                                    $projects[] = [
+                                        'name' => $content["project_{$i}_name"],
+                                        'image' => $content["project_{$i}_image"] ?? 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800'
+                                    ];
+                                }
+                            }
+                            
+                            // Fallback if no projects defined in CMS
+                            if (empty($projects)) {
+                                $projects = [
+                                    ['name' => 'Building Construction', 'image' => 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800'],
+                                    ['name' => 'Interior Design', 'image' => 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=800'],
+                                    ['name' => 'Bridge Engineering', 'image' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800'],
+                                    ['name' => 'Urban Planning', 'image' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800'],
+                                    ['name' => 'Modern Architecture', 'image' => 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800'],
+                                ];
+                            }
                         @endphp
 
                         @foreach($projects as $project)
@@ -521,18 +490,18 @@
     <section class="relative py-32 bg-slate-900 overflow-hidden">
         <!-- Industrial Background Image with Overlay -->
         <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=1920" alt="Industrial Background" class="w-full h-full object-cover opacity-30">
+            <img src="{{ $content['video_section_bg_image'] ?? 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=1920' }}" alt="Industrial Background" class="w-full h-full object-cover opacity-30">
             <div class="absolute inset-0 bg-slate-900/60"></div>
         </div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <h2 class="text-4xl md:text-5xl font-black text-white mb-6">Our Video Presentation</h2>
+            <h2 class="text-4xl md:text-5xl font-black text-white mb-6">{{ $content['video_section_title'] ?? 'Our Video Presentation' }}</h2>
             <p class="text-slate-300 max-w-2xl mx-auto mb-12 text-lg">
-                Experience our commitment to excellence and innovation through our detailed project showcases and behind-the-scenes look at our construction process.
+                {{ $content['video_section_subtitle'] ?? 'Experience our commitment to excellence and innovation through our detailed project showcases and behind-the-scenes look at our construction process.' }}
             </p>
 
             <div class="flex justify-center">
-                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="w-24 h-24 bg-orange-primary rounded-full flex items-center justify-center text-white text-3xl shadow-2xl shadow-orange-500/50 hover:scale-110 transition-transform duration-300 group">
+                <a href="{{ $content['video_section_url'] ?? 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' }}" target="_blank" class="w-24 h-24 bg-orange-primary rounded-full flex items-center justify-center text-white text-3xl shadow-2xl shadow-orange-500/50 hover:scale-110 transition-transform duration-300 group">
                     <i class="fa-solid fa-play ml-1"></i>
                     
                     <!-- Pulsing effect -->
@@ -550,9 +519,9 @@
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center max-w-3xl mx-auto mb-20">
-                <span class="text-orange-primary font-bold uppercase tracking-widest text-xs mb-4 block">Values</span>
-                <h2 class="text-4xl font-extrabold text-white mb-6 tracking-tight">Why Choose Atom Forge?</h2>
-                <p class="text-slate-400 font-medium text-lg">At Atom Forge Construction, we don’t just build structures—we engineer the future. Leveraging cutting-edge technology, smart planning, and efficient execution, we deliver solutions that are built to last.</p>
+                <span class="text-orange-primary font-bold uppercase tracking-widest text-xs mb-4 block">{{ $content['why_choose_tagline'] ?? 'Values' }}</span>
+                <h2 class="text-4xl font-extrabold text-white mb-6 tracking-tight">{{ $content['why_choose_title'] ?? 'Why Choose Atom Forge?' }}</h2>
+                <p class="text-slate-400 font-medium text-lg">{{ $content['why_choose_subtitle'] ?? 'At Atom Forge Construction, we don’t just build structures—we engineer the future. Leveraging cutting-edge technology, smart planning, and efficient execution, we deliver solutions that are built to last.' }}</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
@@ -592,8 +561,8 @@
     <section class="py-24 bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <span class="text-orange-primary font-bold uppercase tracking-widest text-sm mb-4 block">Choose the best for yourself</span>
-                <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-6">Choose Plans & Pricing</h2>
+                <span class="text-orange-primary font-bold uppercase tracking-widest text-sm mb-4 block">{{ $content['plans_subtitle'] ?? 'Choose the best for yourself' }}</span>
+                <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-6">{{ $content['plans_tagline'] ?? 'Choose Plans & Pricing' }}</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -641,35 +610,46 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                @php
-                    $team = [
-                        ['name' => 'Ervin Kim', 'role' => 'CEO of Apple', 'image' => 'https://i.pravatar.cc/300?u=1'],
-                        ['name' => 'Jane Doe', 'role' => 'Lead Architect', 'image' => 'https://i.pravatar.cc/300?u=2'],
-                        ['name' => 'John Smith', 'role' => 'Civil Engineer', 'image' => 'https://i.pravatar.cc/300?u=3'],
-                        ['name' => 'Sarah Wilson', 'role' => 'Project Manager', 'image' => 'https://i.pravatar.cc/300?u=4'],
-                    ];
-                @endphp
-
-                @foreach($team as $member)
+                @forelse($teamMembers as $member)
                 <div class="group">
                     <div class="relative overflow-hidden rounded-2xl mb-6 aspect-square shadow-lg">
-                        <img src="{{ $member['image'] }}" alt="{{ $member['name'] }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <img src="{{ $member->image }}" alt="{{ $member->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                         
                         <!-- Social Icons Overlay -->
                         <div class="absolute inset-x-0 bottom-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 bg-gradient-to-t from-orange-primary to-orange-primary/80">
                             <div class="flex justify-center gap-4 text-white">
-                                <a href="#" class="hover:text-slate-900 transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
-                                <a href="#" class="hover:text-slate-900 transition-colors"><i class="fa-brands fa-twitter"></i></a>
-                                <a href="#" class="hover:text-slate-900 transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
+                                @if($member->facebook) <a href="{{ $member->facebook }}" class="hover:text-slate-900 transition-colors"><i class="fa-brands fa-facebook-f"></i></a> @endif
+                                @if($member->twitter) <a href="{{ $member->twitter }}" class="hover:text-slate-900 transition-colors"><i class="fa-brands fa-twitter"></i></a> @endif
+                                @if($member->linkedin) <a href="{{ $member->linkedin }}" class="hover:text-slate-900 transition-colors"><i class="fa-brands fa-linkedin-in"></i></a> @endif
                             </div>
                         </div>
                     </div>
                     <div class="text-center">
-                        <h3 class="text-xl font-bold text-slate-900 mb-1">{{ $member['name'] }}</h3>
-                        <p class="text-orange-primary font-medium text-sm">{{ $member['role'] }}</p>
+                        <h3 class="text-xl font-bold text-slate-900 mb-1">{{ $member->name }}</h3>
+                        <p class="text-orange-primary font-medium text-sm">{{ $member->designation }}</p>
                     </div>
                 </div>
-                @endforeach
+                @empty
+                    @php
+                        $fallbackTeam = [
+                            ['name' => 'Ervin Kim', 'role' => 'CEO of Apple', 'image' => 'https://i.pravatar.cc/300?u=1'],
+                            ['name' => 'Jane Doe', 'role' => 'Lead Architect', 'image' => 'https://i.pravatar.cc/300?u=2'],
+                            ['name' => 'John Smith', 'role' => 'Civil Engineer', 'image' => 'https://i.pravatar.cc/300?u=3'],
+                            ['name' => 'Sarah Wilson', 'role' => 'Project Manager', 'image' => 'https://i.pravatar.cc/300?u=4'],
+                        ];
+                    @endphp
+                    @foreach($fallbackTeam as $member)
+                    <div class="group">
+                        <div class="relative overflow-hidden rounded-2xl mb-6 aspect-square shadow-lg">
+                            <img src="{{ $member['image'] }}" alt="{{ $member['name'] }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-xl font-bold text-slate-900 mb-1">{{ $member['name'] }}</h3>
+                            <p class="text-orange-primary font-medium text-sm">{{ $member['role'] }}</p>
+                        </div>
+                    </div>
+                    @endforeach
+                @endforelse
             </div>
         </div>
     </section>
@@ -685,27 +665,7 @@
             <div class="max-w-4xl mx-auto">
                 <div class="swiper testimonials-swiper">
                     <div class="swiper-wrapper">
-                        @php
-                            $testimonials = [
-                                [
-                                    'quote' => 'That conviction is where the process of change really begins. The architecture of your life is built on the foundation of your choices.',
-                                    'author' => 'Jhon Smith',
-                                    'designation' => 'CEO & Founder'
-                                ],
-                                [
-                                    'quote' => 'Exceptional quality and professional service. They transformed our vision into reality with precision and care.',
-                                    'author' => 'Sarah Johnson',
-                                    'designation' => 'Operations Director'
-                                ],
-                                [
-                                    'quote' => 'Reliable, innovative, and dedicated. Atom Forge is truly a leader in the construction industry.',
-                                    'author' => 'Michael Chen',
-                                    'designation' => 'Property Developer'
-                                ]
-                            ];
-                        @endphp
-
-                        @foreach($testimonials as $testimonial)
+                        @forelse($testimonials as $testimonial)
                         <div class="swiper-slide">
                             <div class="text-center px-4">
                                 <div class="mb-8 text-orange-primary/20">
@@ -714,15 +674,54 @@
                                     </svg>
                                 </div>
                                 <blockquote class="text-2xl md:text-3xl font-medium text-slate-700 mb-10 leading-relaxed italic">
-                                    "{{ $testimonial['quote'] }}"
+                                    "{{ $testimonial->quote }}"
                                 </blockquote>
                                 <div class="flex flex-col items-center">
-                                    <h4 class="text-xl font-bold text-slate-900 mb-1">{{ $testimonial['author'] }}</h4>
-                                    <p class="text-orange-primary font-medium">{{ $testimonial['designation'] }}</p>
+                                    <h4 class="text-xl font-bold text-slate-900 mb-1">{{ $testimonial->author }}</h4>
+                                    <p class="text-orange-primary font-medium">{{ $testimonial->location }}</p>
                                 </div>
                             </div>
                         </div>
-                        @endforeach
+                        @empty
+                            @php
+                                $fallbackTestimonials = [
+                                    [
+                                        'quote' => 'That conviction is where the process of change really begins. The architecture of your life is built on the foundation of your choices.',
+                                        'author' => 'Jhon Smith',
+                                        'location' => 'CEO & Founder'
+                                    ],
+                                    [
+                                        'quote' => 'Exceptional quality and professional service. They transformed our vision into reality with precision and care.',
+                                        'author' => 'Sarah Johnson',
+                                        'location' => 'Operations Director'
+                                    ],
+                                    [
+                                        'quote' => 'Reliable, innovative, and dedicated. Atom Forge is truly a leader in the construction industry.',
+                                        'author' => 'Michael Chen',
+                                        'location' => 'Property Developer'
+                                    ]
+                                ];
+                            @endphp
+
+                            @foreach($fallbackTestimonials as $testimonial)
+                            <div class="swiper-slide">
+                                <div class="text-center px-4">
+                                    <div class="mb-8 text-orange-primary/20">
+                                        <svg class="w-20 h-20 mx-auto fill-current" viewBox="0 0 24 24">
+                                            <path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H16.017C15.4647 8 15.017 8.44772 15.017 9V12C15.017 12.5523 14.5693 13 14.017 13H13.017V21H14.017ZM6.01708 21L6.01708 18C6.01708 16.8954 6.91251 16 8.01708 16H11.0171C11.5694 16 12.0171 15.5523 12.0171 15V9C12.0171 8.44772 11.5694 8 11.0171 8H8.01708C7.4648 8 7.01708 8.44772 7.01708 9V12C7.01708 12.5523 6.56937 13 6.01708 13H5.01708V21H6.01708Z" />
+                                        </svg>
+                                    </div>
+                                    <blockquote class="text-2xl md:text-3xl font-medium text-slate-700 mb-10 leading-relaxed italic">
+                                        "{{ $testimonial['quote'] }}"
+                                    </blockquote>
+                                    <div class="flex flex-col items-center">
+                                        <h4 class="text-xl font-bold text-slate-900 mb-1">{{ $testimonial['author'] }}</h4>
+                                        <p class="text-orange-primary font-medium">{{ $testimonial['location'] }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        @endforelse
                     </div>
                     
                     <!-- Pagination -->
@@ -737,64 +736,130 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-16">
                 <span class="text-orange-primary font-bold uppercase tracking-widest text-sm mb-4 block">Latest Blog</span>
-                <h2 class="text-4xl md:text-5xl font-black text-slate-900 leading-tight">LOREM IPSUM DOLOR</h2>
+                <h2 class="text-4xl md:text-5xl font-black text-slate-900 leading-tight">Blogs</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @php
-                    $blogs = [
-                        [
-                            'image' => 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=800',
-                            'date' => '02 Jan, 2019',
-                            'views' => '276',
-                            'title' => 'How to design effective arts?',
-                            'excerpt' => 'Discover the key principles of industrial design that lead to more efficient and aesthetic projects.'
-                        ],
-                        [
-                            'image' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800',
-                            'date' => '15 Jan, 2019',
-                            'views' => '412',
-                            'title' => 'Modern Architecture Trends',
-                            'excerpt' => 'Exploring the fusion of sustainability and luxury in contemporary urban architecture.'
-                        ],
-                        [
-                            'image' => 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800',
-                            'date' => '28 Jan, 2019',
-                            'views' => '189',
-                            'title' => 'Efficient Workspace Design',
-                            'excerpt' => 'How the right office environment can boost productivity and employee well-being.'
-                        ]
-                    ];
-                @endphp
-
-                @foreach($blogs as $blog)
+                @forelse($blogs as $blog)
                 <div class="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300">
                     <div class="relative overflow-hidden aspect-[16/10]">
-                        <img src="{{ $blog['image'] }}" alt="{{ $blog['title'] }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <img src="{{ $blog->featured_image ?? 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=800' }}" alt="{{ $blog->title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                         <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-all duration-500"></div>
                     </div>
                     <div class="p-8">
                         <div class="flex items-center gap-6 mb-6 text-sm font-medium text-slate-400">
                             <span class="flex items-center gap-2">
                                 <i class="fa-regular fa-calendar text-orange-primary"></i>
-                                {{ $blog['date'] }}
+                                {{ $blog->created_at->format('d M, Y') }}
                             </span>
                             <span class="flex items-center gap-2">
                                 <i class="fa-regular fa-eye text-orange-primary"></i>
-                                {{ $blog['views'] }}
+                                {{ rand(100, 500) }} <!-- Placeholder for views if not in DB -->
                             </span>
                         </div>
                         <h3 class="text-2xl font-bold text-slate-900 mb-4 group-hover:text-orange-primary transition-colors">
-                            <a href="{{ route('blogs.index') }}">{{ $blog['title'] }}</a>
+                            <a href="{{ route('blogs.show', $blog->slug) }}">{{ $blog->title }}</a>
                         </h3>
                         <p class="text-slate-500 mb-8 line-clamp-2">
-                            {{ $blog['excerpt'] }}
+                            {{ Str::limit(strip_tags($blog->content), 120) }}
                         </p>
-                        <a href="{{ route('blogs.index') }}" class="inline-flex items-center gap-2 text-orange-primary font-bold group/link">
+                        <a href="{{ route('blogs.show', $blog->slug) }}" class="inline-flex items-center gap-2 text-orange-primary font-bold group/link">
                             Read More
                             <i class="fa-solid fa-chevron-right text-[10px] transition-transform group-hover/link:translate-x-1"></i>
                         </a>
                     </div>
+                </div>
+                @empty
+                    @php
+                        $placeholderBlogs = [
+                            [
+                                'image' => 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=800',
+                                'date' => '02 Jan, 2019',
+                                'views' => '276',
+                                'title' => 'How to design effective arts?',
+                                'excerpt' => 'Discover the key principles of industrial design that lead to more efficient and aesthetic projects.'
+                            ],
+                            [
+                                'image' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800',
+                                'date' => '15 Jan, 2019',
+                                'views' => '412',
+                                'title' => 'Modern Architecture Trends',
+                                'excerpt' => 'Exploring the fusion of sustainability and luxury in contemporary urban architecture.'
+                            ],
+                            [
+                                'image' => 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800',
+                                'date' => '28 Jan, 2019',
+                                'views' => '189',
+                                'title' => 'Efficient Workspace Design',
+                                'excerpt' => 'How the right office environment can boost productivity and employee well-being.'
+                            ]
+                        ];
+                    @endphp
+                    @foreach($placeholderBlogs as $blog)
+                    <div class="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300">
+                        <div class="relative overflow-hidden aspect-[16/10]">
+                            <img src="{{ $blog['image'] }}" alt="{{ $blog['title'] }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-all duration-500"></div>
+                        </div>
+                        <div class="p-8">
+                            <div class="flex items-center gap-6 mb-6 text-sm font-medium text-slate-400">
+                                <span class="flex items-center gap-2">
+                                    <i class="fa-regular fa-calendar text-orange-primary"></i>
+                                    {{ $blog['date'] }}
+                                </span>
+                                <span class="flex items-center gap-2">
+                                    <i class="fa-regular fa-eye text-orange-primary"></i>
+                                    {{ $blog['views'] }}
+                                </span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-slate-900 mb-4 group-hover:text-orange-primary transition-colors">
+                                <a href="{{ route('blogs.index') }}">{{ $blog['title'] }}</a>
+                            </h3>
+                            <p class="text-slate-500 mb-8 line-clamp-2">
+                                {{ $blog['excerpt'] }}
+                            </p>
+                            <a href="{{ route('blogs.index') }}" class="inline-flex items-center gap-2 text-orange-primary font-bold group/link">
+                                Read More
+                                <i class="fa-solid fa-chevron-right text-[10px] transition-transform group-hover/link:translate-x-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                    @endforeach
+                @endforelse
+            </div>
+        </div>
+    </section>
+
+    <!-- Government Project Work Section -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-orange-primary font-bold uppercase tracking-widest text-sm mb-4 block">PUBLIC WORKS DEPARTMENT</span>
+                <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-6">Government Project Work</h2>
+                <p class="text-slate-500 max-w-2xl mx-auto text-lg">We specialize in various categories of public works, delivering high-quality infrastructure for government projects with precision and excellence.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                @php
+                    $govCategories = [
+                        ['title' => 'Building works', 'icon' => 'building'],
+                        ['title' => 'Bridge works', 'icon' => 'archway'],
+                        ['title' => 'Road works', 'icon' => 'road'],
+                        ['title' => 'Sanitation and water supply works', 'icon' => 'droplet'],
+                        ['title' => 'Electrical works', 'icon' => 'bolt'],
+                        ['title' => 'Mechanical works', 'icon' => 'gears'],
+                    ];
+                @endphp
+
+                @foreach($govCategories as $category)
+                <div class="p-8 border border-gray-100 rounded-xl hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 bg-orange-primary/10 rounded-lg flex items-center justify-center text-orange-primary group-hover:bg-orange-primary group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-{{ $category['icon'] }} text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900">{{ $category['title'] }}</h3>
+                    </div>
+                    <p class="text-slate-500">Executing {{ strtolower($category['title']) }} with precision and strict adherence to PWD standards and quality benchmarks.</p>
                 </div>
                 @endforeach
             </div>

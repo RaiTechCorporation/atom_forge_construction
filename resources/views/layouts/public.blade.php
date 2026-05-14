@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Atom Forge Construction') }} | Excellence in Building</title>
+        <title>{{ $content['site_name'] ?? config('app.name', 'Atom Forge Construction') }} | Excellence in Building</title>
 
         <!-- Fonts: Inter for both body and headings for clean SaaS feel -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -161,10 +161,14 @@
                     <div class="flex justify-between h-20">
                         <div class="flex items-center">
                             <a href="{{ route('home') }}" class="group flex items-center gap-3">
-                                <img src="{{ asset('images/cropped-Atom-Forge-Logo.png-For-White-Background.png') }}" alt="Atom Forge Logo" class="h-12 lg:h-14 xl:h-16 w-auto">
+                                @if(isset($content['header_logo_url']) && $content['header_logo_url'])
+                                    <img src="{{ $content['header_logo_url'] }}" alt="{{ $content['site_name'] ?? 'Atom Forge' }} Logo" style="height: {{ $content['header_logo_height'] ?? '64' }}px" class="w-auto">
+                                @else
+                                    <img src="{{ asset('images/cropped-Atom-Forge-Logo.png-For-White-Background.png') }}" alt="Atom Forge Logo" class="h-12 lg:h-14 xl:h-16 w-auto">
+                                @endif
                                 <div class="flex flex-col justify-center -space-y-0.5">
                                     <span class="font-bold text-lg lg:text-xl xl:text-2xl text-black tracking-tight whitespace-nowrap leading-tight">
-                                        Atom Forge 
+                                        {{ $content['site_name'] ?? 'Atom Forge' }} 
                                     </span>
                                     <span class="font-bold text-[10px] lg:text-xs xl:text-sm text-orange-construction tracking-[0.2em] uppercase leading-tight">
                                         Construction
@@ -250,8 +254,8 @@
                                     <a href="{{ route('login') }}" class="text-[13px] lg:text-sm font-semibold text-gray-600 hover:text-orange-construction transition-colors whitespace-nowrap">Sign In</a>
                                 @endauth
                                 <div class="hidden md:flex">
-                                    <a href="{{ route('contact') }}" class="inline-flex items-center px-3 lg:px-4 xl:px-6 py-2 xl:py-3 text-[13px] lg:text-[14px] xl:text-[15px] font-bold text-white transition-all bg-orange-construction rounded-full hover:bg-orange-600 shadow-md shadow-orange-500/20 whitespace-nowrap">
-                                        Request a Quote
+                                    <a href="{{ $content['header_cta_link'] ?? route('contact') }}" class="inline-flex items-center px-3 lg:px-4 xl:px-6 py-2 xl:py-3 text-[13px] lg:text-[14px] xl:text-[15px] font-bold text-white transition-all bg-orange-construction rounded-full hover:bg-orange-600 shadow-md shadow-orange-500/20 whitespace-nowrap">
+                                        {{ $content['header_cta_text'] ?? 'Request a Quote' }}
                                     </a>
                                 </div>
                             </div>
@@ -333,8 +337,8 @@
                             @else
                                 <a href="{{ route('login') }}" class="text-center py-3 text-gray-600 font-bold hover:bg-gray-50 rounded-xl">Sign In</a>
                             @endauth
-                            <a href="{{ route('contact') }}" class="block w-full text-center py-4 bg-orange-construction text-white font-bold rounded-xl shadow-lg shadow-orange-500/10">
-                                Request a Quote
+                            <a href="{{ $content['header_cta_link'] ?? route('contact') }}" class="block w-full text-center py-4 bg-orange-construction text-white font-bold rounded-xl shadow-lg shadow-orange-500/10">
+                                {{ $content['header_cta_text'] ?? 'Request a Quote' }}
                             </a>
                         </div>
                     </div>
@@ -353,10 +357,14 @@
                         <!-- Column 1 (Branding) -->
                         <div class="space-y-8">
                             <a href="{{ route('home') }}" class="flex items-center gap-3">
-                                <img src="{{ asset('images/Atom Forge Logo.png For White Background.png') }}" alt="Atom Forge Logo" class="h-16 w-auto brightness-0 invert">
+                                @if(isset($content['header_logo_url']) && $content['header_logo_url'])
+                                    <img src="{{ $content['header_logo_url'] }}" alt="{{ $content['site_name'] ?? 'Atom Forge' }} Logo" class="h-16 w-auto brightness-0 invert">
+                                @else
+                                    <img src="{{ asset('images/Atom Forge Logo.png For White Background.png') }}" alt="Atom Forge Logo" class="h-16 w-auto brightness-0 invert">
+                                @endif
                                 <div class="flex flex-col justify-center -space-y-1">
                                     <span class="font-bold text-2xl text-white tracking-tight leading-tight">
-                                        Atom Forge
+                                        {{ $content['site_name'] ?? 'Atom Forge' }}
                                     </span>
                                     <span class="font-bold text-xs text-orange-construction tracking-[0.3em] uppercase leading-tight">
                                         Construction
@@ -422,9 +430,8 @@
                         </div>
                     </div>
                     
-                    <!-- Copyright Bar -->
                     <div class="mt-20 pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-center items-center gap-4 text-xs font-bold uppercase tracking-widest text-slate-500">
-                        <p>COPYRIGHT &copy; {{ date('Y') }}. All Rights Reserved By <a href="{{ route('home') }}" class="text-orange-construction">Atom Forge Construction</a></p>
+                        <p>{{ $content['copyright_text'] ?? '© Atom Forge Construction. All rights reserved.' }} Designed & Developed by <a href="https://raitechcorporation.com/" target="_blank" class="text-orange-construction">Rai Tech Corporation</a></p>
                     </div>
                 </div>
             </footer>

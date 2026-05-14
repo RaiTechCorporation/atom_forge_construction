@@ -51,7 +51,18 @@
                             </div>
                             <div>
                                 <h4 class="text-xl font-bold text-slate-900 mb-2">Phone Number</h4>
-                                <p class="text-slate-500 font-medium leading-relaxed">{{ $content['contact_phone'] ?? '+91 8318754257' }}</p>
+                                <a href="tel:{{ $content['contact_phone'] ?? '+91 8318754257' }}" class="text-slate-500 font-medium leading-relaxed hover:text-orange-primary transition-colors">{{ $content['contact_phone'] ?? '+91 8318754257' }}</a>
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="flex gap-6 group">
+                            <div class="w-14 h-14 shrink-0 bg-orange-50 text-orange-primary rounded-2xl flex items-center justify-center shadow-sm group-hover:bg-orange-primary group-hover:text-white transition-all duration-300">
+                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-slate-900 mb-2">Email Us</h4>
+                                <a href="mailto:{{ $content['contact_email'] ?? 'contact@atomforge.in' }}" class="text-slate-500 font-medium leading-relaxed hover:text-orange-primary transition-colors">{{ $content['contact_email'] ?? 'contact@atomforge.in' }}</a>
                             </div>
                         </div>
 
@@ -62,7 +73,7 @@
                             </div>
                             <div>
                                 <h4 class="text-xl font-bold text-slate-900 mb-2">WhatsApp Us</h4>
-                                <a href="https://wa.me/918318754257" target="_blank" class="text-slate-500 font-medium leading-relaxed hover:text-green-600 transition-colors">+91 8318754257</a>
+                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $content['contact_phone'] ?? '918318754257') }}" target="_blank" class="text-slate-500 font-medium leading-relaxed hover:text-green-600 transition-colors">{{ $content['contact_phone'] ?? '+91 8318754257' }}</a>
                             </div>
                         </div>
                     </div>

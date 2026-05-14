@@ -185,13 +185,13 @@
                                     <span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md text-[10px] font-bold uppercase tracking-widest">{{ $record->shift }}</span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
-                                    @if($record->status == 'present')
+                                    @if(strtolower($record->status) == 'present')
                                         <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 uppercase tracking-wider">
                                             {{ __('Present') }}
                                         </span>
                                     @else
                                         <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-700 uppercase tracking-wider">
-                                            {{ __('Absent') }}
+                                            {{ __($record->status) }}
                                         </span>
                                     @endif
                                 </td>

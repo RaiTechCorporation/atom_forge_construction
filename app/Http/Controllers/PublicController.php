@@ -3,7 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\ConstructionPlan;
+use App\Models\Service;
 use App\Models\WebsiteContent;
+use App\Models\Testimonial;
+use App\Models\TeamMember;
+use App\Models\Faq;
+use App\Models\HomeSection;
+use App\Models\BlogPost;
 
 class PublicController extends Controller
 {
@@ -16,8 +22,12 @@ class PublicController extends Controller
     {
         $content = $this->getContent();
         $plans = ConstructionPlan::where('is_active', true)->get();
+        $testimonials = Testimonial::where('is_active', true)->orderBy('order')->get();
+        $homeSections = HomeSection::where('is_active', true)->orderBy('order')->get();
+        $teamMembers = TeamMember::where('is_active', true)->orderBy('order')->get();
+        $blogs = BlogPost::where('is_published', true)->orderBy('created_at', 'desc')->take(3)->get();
 
-        return view('public.home', compact('content', 'plans'));
+        return view('public.home', compact('content', 'plans', 'testimonials', 'homeSections', 'teamMembers', 'blogs'));
     }
 
     public function about()
@@ -30,8 +40,9 @@ class PublicController extends Controller
     public function services()
     {
         $content = $this->getContent();
+        $services = Service::where('is_active', true)->orderBy('order')->get();
 
-        return view('public.services', compact('content'));
+        return view('public.services', compact('content', 'services'));
     }
 
     public function projects()
@@ -51,15 +62,17 @@ class PublicController extends Controller
     public function team()
     {
         $content = $this->getContent();
+        $teamMembers = TeamMember::where('is_active', true)->orderBy('order')->get();
 
-        return view('public.team', compact('content'));
+        return view('public.team', compact('content', 'teamMembers'));
     }
 
     public function testimonials()
     {
         $content = $this->getContent();
+        $testimonials = Testimonial::where('is_active', true)->orderBy('order')->get();
 
-        return view('public.testimonials', compact('content'));
+        return view('public.testimonials', compact('content', 'testimonials'));
     }
 
     public function privacy()
@@ -79,8 +92,9 @@ class PublicController extends Controller
     public function faq()
     {
         $content = $this->getContent();
+        $faqs = Faq::where('is_active', true)->orderBy('order')->get();
 
-        return view('public.faq', compact('content'));
+        return view('public.faq', compact('content', 'faqs'));
     }
 
     public function invest()

@@ -5,7 +5,7 @@
     <section class="relative pt-24 pb-20 overflow-hidden bg-slate-50 border-b border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100/50 border border-orange-100 text-orange-700 text-xs font-bold uppercase tracking-wider mb-6">
-                Client Success
+                {{ $content['testimonials_tagline'] ?? 'Client Success' }}
             </div>
             <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-6">
                 {{ $content['testimonials_hero_title'] ?? 'What Our Clients Say' }}
@@ -23,7 +23,8 @@
     <section class="py-24 bg-white overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Testimonial 1 -->
+                @forelse($testimonials as $testimonial)
+                <!-- Testimonial -->
                 <div class="bg-slate-50 p-10 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
                     <div class="flex gap-1 text-orange-primary mb-6">
                         <i class="fas fa-star text-sm"></i>
@@ -33,133 +34,67 @@
                         <i class="fas fa-star text-sm"></i>
                     </div>
                     <p class="text-slate-600 font-medium text-lg leading-relaxed mb-8 italic">
-                        "Atom Forge Construction transformed our vision into a stunning reality. Their attention to detail and commitment to quality are truly unmatched in the industry."
+                        "{{ $testimonial->quote }}"
                     </p>
                     <div class="flex items-center gap-4">
                         <div class="w-14 h-14 rounded-2xl bg-slate-200 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200" alt="Client" class="w-full h-full object-cover">
+                            @if($testimonial->image_url)
+                                <img src="{{ $testimonial->image_url }}" alt="{{ $testimonial->author }}" class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            @endif
                         </div>
                         <div>
-                            <h4 class="font-bold text-slate-900">Arjun Mehta</h4>
-                            <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">Homeowner, Mumbai</p>
+                            <h4 class="font-bold text-slate-900">{{ $testimonial->author }}</h4>
+                            <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">{{ $testimonial->location }}</p>
                         </div>
                     </div>
                 </div>
+                @empty
+                    @php
+                        $testimonialCount = 1;
+                        $hasHardcoded = false;
+                    @endphp
+                    @while(isset($content["testimonial_{$testimonialCount}_quote"]))
+                        @php
+                            $quote = $content["testimonial_{$testimonialCount}_quote"];
+                            $author = $content["testimonial_{$testimonialCount}_author"] ?? '';
+                            $location = $content["testimonial_{$testimonialCount}_location"] ?? '';
+                            $image = $content["testimonial_{$testimonialCount}_image"] ?? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200';
+                            $hasHardcoded = true;
+                        @endphp
+                        <div class="bg-slate-50 p-10 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
+                            <div class="flex gap-1 text-orange-primary mb-6">
+                                <i class="fas fa-star text-sm"></i>
+                                <i class="fas fa-star text-sm"></i>
+                                <i class="fas fa-star text-sm"></i>
+                                <i class="fas fa-star text-sm"></i>
+                                <i class="fas fa-star text-sm"></i>
+                            </div>
+                            <p class="text-slate-600 font-medium text-lg leading-relaxed mb-8 italic">
+                                "{{ $quote }}"
+                            </p>
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-2xl bg-slate-200 overflow-hidden">
+                                    <img src="{{ $image }}" alt="{{ $author }}" class="w-full h-full object-cover">
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900">{{ $author }}</h4>
+                                    <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">{{ $location }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        @php $testimonialCount++; @endphp
+                    @endwhile
 
-                <!-- Testimonial 2 -->
-                <div class="bg-slate-50 p-10 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
-                    <div class="flex gap-1 text-orange-primary mb-6">
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                    </div>
-                    <p class="text-slate-600 font-medium text-lg leading-relaxed mb-8 italic">
-                        "The project was delivered on time and within budget. Their professional approach and transparent communication made the entire process stress-free."
-                    </p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-2xl bg-slate-200 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200" alt="Client" class="w-full h-full object-cover">
+                    @if(!$hasHardcoded)
+                        <div class="col-span-full text-center py-12">
+                            <p class="text-slate-500 font-medium">No testimonials available at the moment.</p>
                         </div>
-                        <div>
-                            <h4 class="font-bold text-slate-900">Sneha Kapoor</h4>
-                            <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">CEO, TechSpace</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 3 -->
-                <div class="bg-slate-50 p-10 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
-                    <div class="flex gap-1 text-orange-primary mb-6">
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                    </div>
-                    <p class="text-slate-600 font-medium text-lg leading-relaxed mb-8 italic">
-                        "From structural integrity to aesthetic finishes, everything was perfect. I highly recommend Atom Forge for any high-end construction project."
-                    </p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-2xl bg-slate-200 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200" alt="Client" class="w-full h-full object-cover">
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-slate-900">Vikram Malhotra</h4>
-                            <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">Real Estate Developer</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 4 -->
-                <div class="bg-slate-50 p-10 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
-                    <div class="flex gap-1 text-orange-primary mb-6">
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                    </div>
-                    <p class="text-slate-600 font-medium text-lg leading-relaxed mb-8 italic">
-                        "Exceptional engineering and project management. They handled our complex industrial build with remarkable precision."
-                    </p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-2xl bg-slate-200 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=200" alt="Client" class="w-full h-full object-cover">
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-slate-900">Rahul Singhania</h4>
-                            <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">Director, RS Logistics</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 5 -->
-                <div class="bg-slate-50 p-10 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
-                    <div class="flex gap-1 text-orange-primary mb-6">
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                    </div>
-                    <p class="text-slate-600 font-medium text-lg leading-relaxed mb-8 italic">
-                        "Their design-build approach saved us significant time and resources. A truly innovative construction partner."
-                    </p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-2xl bg-slate-200 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=200" alt="Client" class="w-full h-full object-cover">
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-slate-900">Ananya Iyer</h4>
-                            <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">Architectural Consultant</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 6 -->
-                <div class="bg-slate-50 p-10 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
-                    <div class="flex gap-1 text-orange-primary mb-6">
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                        <i class="fas fa-star text-sm"></i>
-                    </div>
-                    <p class="text-slate-600 font-medium text-lg leading-relaxed mb-8 italic">
-                        "Highly satisfied with the sustainable building practices they incorporated into our new office complex."
-                    </p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-2xl bg-slate-200 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?auto=format&fit=crop&q=80&w=200" alt="Client" class="w-full h-full object-cover">
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-slate-900">David Wilson</h4>
-                            <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">Sustainability Lead, EcoCorp</p>
-                        </div>
-                    </div>
-                </div>
+                    @endif
+                @endforelse
             </div>
         </div>
     </section>

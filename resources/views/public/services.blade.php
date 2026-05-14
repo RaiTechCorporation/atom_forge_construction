@@ -22,89 +22,55 @@
     <!-- Detailed Services List -->
     <section class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-32">
-            <!-- Service 1: Construction -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center">
-                <div class="order-2 md:order-1">
-                    <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mb-8 text-orange-primary">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                    </div>
-                    <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Residential & Commercial Construction</h2>
-                    <p class="text-slate-500 text-lg mb-8 leading-relaxed font-medium">We specialize in building houses, villas, and commercial complexes that stand the test of time. Our construction process is characterized by meticulous planning and high-quality craftsmanship.</p>
-                    <ul class="space-y-4 mb-8">
-                        @foreach(['Foundation and Structure', 'Masonry and Brickwork', 'Electrical and Plumbing', 'Roofing and Finishing'] as $item)
-                        <li class="flex items-center gap-3 text-slate-700 font-semibold">
-                            <div class="w-5 h-5 rounded-full bg-orange-100 flex items-center justify-center text-orange-primary">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+            @foreach($services as $service)
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center">
+                    <div class="{{ $loop->iteration % 2 == 0 ? 'order-2' : 'order-2 md:order-1' }}">
+                        @if($service->icon)
+                            <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mb-8 text-orange-primary">
+                                {!! $service->icon !!}
                             </div>
-                            {{ $item }}
-                        </li>
-                        @endforeach
-                    </ul>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="{{ route('services.residential') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-orange-primary text-white font-bold rounded-xl hover:opacity-90 transition-all text-sm">Residential Construction</a>
-                        <a href="{{ route('services.commercial') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-800 text-white font-bold rounded-xl hover:bg-slate-700 transition-all text-sm">Commercial Development</a>
-                    </div>
-                </div>
-                <div class="order-1 md:order-2 relative">
-                    <div class="absolute -inset-4 bg-orange-primary/5 rounded-[2.5rem] blur-2xl -z-10"></div>
-                    <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=1200" alt="Construction Service" class="rounded-[2rem] shadow-2xl border border-slate-100">
-                </div>
-            </div>
+                        @endif
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">{{ $service->title }}</h2>
+                        <p class="text-slate-500 text-lg mb-8 leading-relaxed font-medium">{{ $service->description }}</p>
+                        
+                        @if($service->features && count($service->features) > 0)
+                            <ul class="space-y-4 mb-8">
+                                @foreach($service->features as $item)
+                                <li class="flex items-center gap-3 text-slate-700 font-semibold">
+                                    <div class="w-5 h-5 rounded-full bg-orange-100 flex items-center justify-center text-orange-primary">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                    </div>
+                                    {{ $item }}
+                                </li>
+                                @endforeach
+                            </ul>
+                        @endif
 
-            <!-- Service 2: Interiors -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center">
-                <div class="relative">
-                    <div class="absolute -inset-4 bg-orange-primary/5 rounded-[2.5rem] blur-2xl -z-10"></div>
-                    <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1200" alt="Interior Service" class="rounded-[2rem] shadow-2xl border border-slate-100">
-                </div>
-                <div>
-                    <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mb-8 text-orange-primary">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        <div class="flex flex-wrap gap-4">
+                            @if($service->button1_text)
+                                <a href="{{ $service->button1_link ? (Route::has($service->button1_link) ? route($service->button1_link) : $service->button1_link) : '#' }}" class="inline-flex items-center gap-2 px-6 py-3 bg-orange-primary text-white font-bold rounded-xl hover:opacity-90 transition-all text-sm">
+                                    {{ $service->button1_text }}
+                                </a>
+                            @endif
+                            @if($service->button2_text)
+                                <a href="{{ $service->button2_link ? (Route::has($service->button2_link) ? route($service->button2_link) : $service->button2_link) : '#' }}" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-800 text-white font-bold rounded-xl hover:bg-slate-700 transition-all text-sm">
+                                    {{ $service->button2_text }}
+                                </a>
+                            @endif
+                        </div>
                     </div>
-                    <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Interior Design & Decoration</h2>
-                    <p class="text-slate-500 text-lg mb-8 leading-relaxed font-medium">Transform your living or working space with our custom interior solutions. We combine functionality with aesthetics to create beautiful and productive environments.</p>
-                    <ul class="space-y-4 mb-8">
-                        @foreach(['Modular Kitchens', 'False Ceiling and Lighting', 'Custom Furniture', 'Wall Decor and Painting'] as $item)
-                        <li class="flex items-center gap-3 text-slate-700 font-semibold">
-                            <div class="w-5 h-5 rounded-full bg-orange-100 flex items-center justify-center text-orange-primary">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                    <div class="{{ $loop->iteration % 2 == 0 ? 'order-1' : 'order-1 md:order-2' }} relative">
+                        <div class="absolute -inset-4 bg-orange-primary/5 rounded-[2.5rem] blur-2xl -z-10"></div>
+                        @if($service->image)
+                            <img src="{{ $service->image }}" alt="{{ $service->title }}" class="rounded-[2rem] shadow-2xl border border-slate-100">
+                        @else
+                            <div class="aspect-video bg-slate-100 rounded-[2rem] flex items-center justify-center text-slate-300">
+                                <svg class="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                             </div>
-                            {{ $item }}
-                        </li>
-                        @endforeach
-                    </ul>
-                    <a href="{{ route('services.interior') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-orange-primary text-white font-bold rounded-xl hover:opacity-90 transition-all text-sm">Explore Interior Design</a>
-                </div>
-            </div>
-
-            <!-- Service 3: Turnkey -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center">
-                <div class="order-2 md:order-1">
-                    <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mb-8 text-orange-primary">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
-                    </div>
-                    <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">End-to-End Turnkey Projects</h2>
-                    <p class="text-slate-500 text-lg mb-8 leading-relaxed font-medium">Leveraging cutting-edge technology and smart planning, we deliver construction solutions that are scalable, sustainable, and built to last. Our team ensures precision and perfection in every turnkey project.</p>
-                    <ul class="space-y-4 mb-8">
-                        @foreach(['Design and Planning', 'Project Management', 'Material Procurement', 'Final Handover'] as $item)
-                        <li class="flex items-center gap-3 text-slate-700 font-semibold">
-                            <div class="w-5 h-5 rounded-full bg-orange-100 flex items-center justify-center text-orange-primary">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                            </div>
-                            {{ $item }}
-                        </li>
-                        @endforeach
-                    </ul>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="{{ route('services.management') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-orange-primary text-white font-bold rounded-xl hover:opacity-90 transition-all text-sm">Project Management</a>
-                        <a href="{{ route('services.sustainable') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-800 text-white font-bold rounded-xl hover:bg-slate-700 transition-all text-sm">Sustainable Building</a>
+                        @endif
                     </div>
                 </div>
-                <div class="order-1 md:order-2 relative">
-                    <div class="absolute -inset-4 bg-orange-primary/5 rounded-[2.5rem] blur-2xl -z-10"></div>
-                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200" alt="Turnkey Projects" class="rounded-[2rem] shadow-2xl border border-slate-100">
-                </div>
-            </div>
+            @endforeach
         </div>
     </section>
 

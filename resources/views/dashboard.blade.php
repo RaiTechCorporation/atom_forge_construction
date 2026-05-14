@@ -205,6 +205,228 @@
             </div>
         </div>
         @elseif(auth()->user()->isAdmin())
+        <!-- Admin Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-8 h-8 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-10V4m0 10V4m0 10l1.293 1.293a1 1 0 010 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414L10 14m4 0l-4 4-4-4"></path></svg>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900">{{ $totalProjects }}</h3>
+                <p class="text-slate-500 text-xs font-medium">{{ __('Total Projects') }}</p>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-8 h-8 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900">{{ $totalLabours }}</h3>
+                <p class="text-slate-500 text-xs font-medium">{{ __('Total Labours') }}</p>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900">{{ $totalInvestors }}</h3>
+                <p class="text-slate-500 text-xs font-medium">{{ __('Total Investors') }}</p>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-8 h-8 bg-amber-50 text-amber-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900">₹{{ number_format($totalInvestments) }}</h3>
+                <p class="text-slate-500 text-xs font-medium">{{ __('Total Investments') }}</p>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-8 h-8 bg-rose-50 text-rose-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900">₹{{ number_format($totalExpenses) }}</h3>
+                <p class="text-slate-500 text-xs font-medium">{{ __('Total Expenses') }}</p>
+            </div>
+        </div>
+
+        <!-- Workforce Intelligence Section -->
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden mb-8">
+            <div class="px-8 py-5 border-b border-slate-100 bg-slate-50/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-emerald-600/20">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest">Global Workforce Intelligence</h3>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Cross-Project Labour Metrics</p>
+                    </div>
+                </div>
+
+                <!-- Date Filters -->
+                <form action="{{ route('dashboard') }}" method="GET" class="flex flex-wrap items-center gap-3">
+                    <select name="project_id" onchange="this.form.submit()" class="text-[10px] font-black uppercase tracking-widest border-slate-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 min-w-[150px]">
+                        <option value="">{{ __('All Projects') }}</option>
+                        @foreach($allProjects as $proj)
+                            <option value="{{ $proj->id }}" {{ $projectId == $proj->id ? 'selected' : '' }}>{{ $proj->name }}</option>
+                        @endforeach
+                    </select>
+
+                    <select name="filter" onchange="this.form.submit()" class="text-[10px] font-black uppercase tracking-widest border-slate-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500">
+                        <option value="day" {{ $filter == 'day' ? 'selected' : '' }}>Daily</option>
+                        <option value="week" {{ $filter == 'week' ? 'selected' : '' }}>Weekly</option>
+                        <option value="month" {{ $filter == 'month' ? 'selected' : '' }}>Monthly</option>
+                        <option value="custom" {{ $filter == 'custom' ? 'selected' : '' }}>Custom Range</option>
+                    </select>
+
+                    @if($filter == 'custom')
+                        <input type="date" name="start_date" value="{{ $startDate ? $startDate->toDateString() : '' }}" class="text-[10px] font-black uppercase tracking-widest border-slate-200 rounded-lg focus:ring-emerald-500">
+                        <input type="date" name="end_date" value="{{ $endDate ? $endDate->toDateString() : '' }}" class="text-[10px] font-black uppercase tracking-widest border-slate-200 rounded-lg focus:ring-emerald-500">
+                        <button type="submit" class="p-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-500">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </button>
+                    @endif
+                </form>
+            </div>
+
+            <div class="p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <!-- Total Labours present -->
+                    <div class="bg-indigo-50 p-6 rounded-2xl border border-indigo-100">
+                        <span class="block text-[9px] font-black text-indigo-400 uppercase tracking-[0.15em] mb-4">Active System Workforce</span>
+                        <div class="flex items-end gap-2">
+                            <span class="text-3xl font-black text-indigo-700 tracking-tighter">{{ $totalWorkingLabours }}</span>
+                            <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-1.5">Unique Labours Present</span>
+                        </div>
+                    </div>
+
+                    <!-- Date Range Info -->
+                    <div class="bg-emerald-50 p-6 rounded-2xl border border-emerald-100">
+                        <span class="block text-[9px] font-black text-emerald-400 uppercase tracking-[0.15em] mb-4">Reporting Window</span>
+                        <div class="flex flex-col">
+                            <span class="text-xs font-black text-emerald-700 uppercase tracking-widest">
+                                {{ $startDate ? $startDate->format('d M Y') : 'N/A' }}
+                                @if($startDate != $endDate)
+                                    - {{ $endDate ? $endDate->format('d M Y') : 'N/A' }}
+                                @endif
+                            </span>
+                            <span class="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.1em] mt-1 italic">Filtered View: {{ ucfirst($filter) }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Global Labour List Table -->
+                <div class="mt-8">
+                    <span class="block text-[9px] font-black text-slate-400 uppercase tracking-[0.15em] mb-4">System-Wide Workforce Logs</span>
+                    <div class="border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-50">
+                                <tr>
+                                    <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Labour Name</th>
+                                    <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Assigned Project</th>
+                                    <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Site Supervisor</th>
+                                    <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Date</th>
+                                    <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                @forelse($attendances as $attendance)
+                                    <tr class="hover:bg-slate-50/50 transition-colors">
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400 text-[10px] font-black">
+                                                    {{ substr($attendance->labour->name, 0, 1) }}
+                                                </div>
+                                                <span class="text-xs font-bold text-slate-900">{{ $attendance->labour->name }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <span class="text-[10px] font-black text-indigo-600 uppercase tracking-widest">{{ $attendance->project->name }}</span>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            @if($attendance->project->siteManager)
+                                                <span class="text-xs font-bold text-slate-600">{{ $attendance->project->siteManager->name }}</span>
+                                                <div class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Project Supervisor</div>
+                                            @else
+                                                <span class="text-xs font-bold text-slate-500">{{ $attendance->recorder->name ?? 'System' }}</span>
+                                                <div class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Recorded By</div>
+                                            @endif
+                                        </td>
+                                        <td class="px-6 py-4 text-xs font-bold text-slate-600">
+                                            {{ \Carbon\Carbon::parse($attendance->date)->format('d M Y') }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <span class="px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest 
+                                                {{ strtolower($attendance->status) == 'present' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700' }}">
+                                                {{ $attendance->status }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="px-6 py-12 text-center text-slate-400 font-bold uppercase tracking-widest text-xs">No global workforce data found for this period</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Projects -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm mb-8 overflow-hidden">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+                <h3 class="text-lg font-bold text-slate-900">{{ __('Recent Projects') }}</h3>
+                <a href="{{ route('projects.index') }}" class="text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors">
+                    {{ __('View All') }}
+                </a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-slate-50">
+                            <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">{{ __('Project Name') }}</th>
+                            <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">{{ __('Location') }}</th>
+                            <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">{{ __('Status') }}</th>
+                            <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">{{ __('Timeline') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        @foreach($recentProjects as $project)
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4">
+                                <span class="text-sm font-bold text-slate-900">{{ $project->name }}</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="text-xs font-medium text-slate-600">{{ $project->location }}</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-2.5 py-1 {{ $project->status === 'Ongoing' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }} text-[10px] font-bold uppercase tracking-wider rounded-lg">
+                                    {{ $project->status }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-tight">
+                                    {{ $project->start_date ? $project->start_date->format('M Y') : 'N/A' }} - 
+                                    {{ $project->end_date ? $project->end_date->format('M Y') : 'TBD' }}
+                                </span>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- Quick Actions -->
         <div>
             <div class="flex items-center gap-3 mb-6">

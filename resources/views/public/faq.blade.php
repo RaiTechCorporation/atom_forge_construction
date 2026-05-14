@@ -20,27 +20,22 @@
     <section class="py-24 bg-white" x-data="{ active: null }">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="space-y-4">
-                @php
-                    $faqCount = 1;
-                    while(isset($content["faq_{$faqCount}_question"])) {
-                        $question = $content["faq_{$faqCount}_question"];
-                        $answer = $content["faq_{$faqCount}_answer"] ?? '';
-                @endphp
+                @foreach($faqs as $faq)
                     <div class="border border-slate-200 rounded-2xl overflow-hidden transition-all duration-200"
-                         :class="{ 'ring-2 ring-slate-900 border-transparent': active === {{ $faqCount }} }">
+                         :class="{ 'ring-2 ring-slate-900 border-transparent': active === {{ $faq->id }} }">
                         <button 
-                            @click="active = (active === {{ $faqCount }} ? null : {{ $faqCount }})"
+                            @click="active = (active === {{ $faq->id }} ? null : {{ $faq->id }})"
                             class="w-full flex items-center justify-between p-6 text-left focus:outline-none"
                         >
-                            <span class="text-lg font-bold text-slate-900">{{ $question }}</span>
-                            <span class="ml-4 flex-shrink-0 transition-transform duration-200" :class="{ 'rotate-180': active === {{ $faqCount }} }">
+                            <span class="text-lg font-bold text-slate-900">{{ $faq->question }}</span>
+                            <span class="ml-4 flex-shrink-0 transition-transform duration-200" :class="{ 'rotate-180': active === {{ $faq->id }} }">
                                 <svg class="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </span>
                         </button>
                         <div 
-                            x-show="active === {{ $faqCount }}"
+                            x-show="active === {{ $faq->id }}"
                             x-cloak
                             x-transition:enter="transition ease-out duration-300"
                             x-transition:enter-start="opacity-0 max-h-0"
@@ -51,14 +46,11 @@
                             class="overflow-hidden"
                         >
                             <div class="px-6 pb-6 text-slate-600 leading-relaxed font-medium">
-                                {{ $answer }}
+                                {{ $faq->answer }}
                             </div>
                         </div>
                     </div>
-                @php
-                        $faqCount++;
-                    }
-                @endphp
+                @endforeach
             </div>
 
             <!-- Still Have Questions? -->

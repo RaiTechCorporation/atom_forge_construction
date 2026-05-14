@@ -18,124 +18,190 @@
     </style>
     @endpush
 
-    <div class="space-y-6">
-        <!-- AI Generator Tool -->
-        <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-6 shadow-sm">
-            <h3 class="text-lg font-medium text-indigo-900 mb-2">AI Blog Generator</h3>
-            <p class="text-sm text-indigo-700 mb-4">Enter a topic and let AI generate a high-quality, SEO-optimized blog post for you.</p>
-            
-            <div class="space-y-4">
-                <div class="flex gap-4">
-                    <input type="text" id="ai_topic" class="flex-1 rounded-md border-indigo-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="e.g., Road Construction Trends in India 2024">
-                    <button type="button" id="generate_btn" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                        <span id="btn_text">Generate with AI</span>
-                        <svg id="loading_spinner" class="hidden animate-spin ml-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                    </button>
+    <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column: AI Generator & Content -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- AI Generator Tool -->
+                <div class="bg-gradient-to-br from-indigo-600 to-violet-700 rounded-2xl p-8 shadow-xl text-white overflow-hidden relative">
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
+                    <div class="relative">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            </div>
+                            <h3 class="text-xl font-bold">AI Magic Writer</h3>
+                        </div>
+                        <p class="text-indigo-100 mb-6">Let our AI craft a professional, SEO-optimized construction blog post for you in seconds.</p>
+                        
+                        <div class="space-y-4">
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <input type="text" id="ai_topic" class="flex-1 rounded-xl border-transparent bg-white/10 backdrop-blur-md text-white placeholder-indigo-200 focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all" placeholder="Enter topic (e.g., Smart Cities in India)">
+                                <button type="button" id="generate_btn" class="inline-flex items-center justify-center px-6 py-3 bg-white text-indigo-600 rounded-xl font-bold shadow-lg hover:bg-indigo-50 transition-all active:scale-95 disabled:opacity-50 disabled:scale-100">
+                                    <span id="btn_text">Generate Content</span>
+                                    <svg id="loading_spinner" class="hidden animate-spin ml-2 h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="space-y-1.5">
+                                    <label class="text-xs font-bold uppercase tracking-wider text-indigo-200">Key Points</label>
+                                    <textarea id="ai_features" rows="2" class="w-full rounded-xl border-transparent bg-white/10 backdrop-blur-md text-white placeholder-indigo-200 focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all text-sm" placeholder="List key features..."></textarea>
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-xs font-bold uppercase tracking-wider text-indigo-200">Specific Sub-topics</label>
+                                    <textarea id="ai_specific_topics" rows="2" class="w-full rounded-xl border-transparent bg-white/10 backdrop-blur-md text-white placeholder-indigo-200 focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all text-sm" placeholder="Any specific areas?"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="ai_message" class="mt-4 p-3 rounded-lg text-sm hidden"></div>
+                    </div>
                 </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="space-y-2">
-                        <label class="text-sm font-medium text-indigo-900">Key Features (Bullet Points)</label>
-                        <textarea id="ai_features" rows="3" class="w-full rounded-md border-indigo-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="Feature 1&#10;Feature 2&#10;Feature 3"></textarea>
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-sm font-medium text-indigo-900">Specific Topics to Cover</label>
-                        <textarea id="ai_specific_topics" rows="3" class="w-full rounded-md border-indigo-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="Topic 1, Topic 2, Topic 3"></textarea>
-                    </div>
+
+                <!-- Main Editor -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <form id="blog_form" action="{{ route('admin.blogs.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="p-8 space-y-8">
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Blog Content</label>
+                                    <textarea id="content" name="content" class="hidden">{{ old('content') }}</textarea>
+                                    <x-input-error class="mt-2" :messages="$errors->get('content')" />
+                                </div>
+                            </div>
+                        </div>
                 </div>
             </div>
-            <div id="ai_message" class="mt-2 text-sm hidden"></div>
-        </div>
 
-        <!-- Blog Post Form -->
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <form action="{{ route('admin.blogs.store') }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
-                @csrf
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <x-input-label for="title" :value="__('Title')" />
-                        <x-text-input id="title" name="title" type="text" class="mt-1 block w-full" :value="old('title')" required />
-                        <x-input-error class="mt-2" :messages="$errors->get('title')" />
-                    </div>
-
-                    <div class="space-y-2">
-                        <x-input-label for="slug" :value="__('Slug')" />
-                        <x-text-input id="slug" name="slug" type="text" class="mt-1 block w-full" :value="old('slug')" required />
-                        <x-input-error class="mt-2" :messages="$errors->get('slug')" />
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <x-input-label for="featured_image" :value="__('Featured Image')" />
-                        <input id="featured_image" name="featured_image" type="file" class="mt-1 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
-                        <x-input-error class="mt-2" :messages="$errors->get('featured_image')" />
-                    </div>
-
+            <!-- Right Column: Settings & Media -->
+            <div class="space-y-8">
+                <!-- Status & Title -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-6">
+                    <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-4">General Settings</h3>
+                    
                     <div class="space-y-4">
-                        <div class="space-y-2">
-                            <x-input-label for="featured_video_url" :value="__('Featured Video URL (YouTube/Vimeo)')" />
-                            <x-text-input id="featured_video_url" name="featured_video_url" type="url" class="mt-1 block w-full" :value="old('featured_video_url')" placeholder="https://www.youtube.com/watch?v=..." />
-                            <x-input-error class="mt-2" :messages="$errors->get('featured_video_url')" />
-                        </div>
-
-                        <div class="space-y-2">
-                            <x-input-label for="featured_video_file" :value="__('OR Upload Video File (MP4)')" />
-                            <input id="featured_video_file" name="featured_video_file" type="file" class="mt-1 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
-                            <x-input-error class="mt-2" :messages="$errors->get('featured_video_file')" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="space-y-2">
-                    <x-input-label for="content" :value="__('Content (HTML)')" />
-                    <textarea id="content" name="content" rows="15" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ old('content') }}</textarea>
-                    <x-input-error class="mt-2" :messages="$errors->get('content')" />
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-slate-100 pt-6">
-                    <div class="space-y-4">
-                        <h4 class="font-medium text-slate-900">SEO Settings</h4>
-                        
                         <div>
-                            <x-input-label for="meta_title" :value="__('Meta Title')" />
-                            <x-text-input id="meta_title" name="meta_title" type="text" class="mt-1 block w-full" :value="old('meta_title')" />
+                            <x-input-label for="title" :value="__('Title')" class="text-xs font-bold uppercase text-slate-500" />
+                            <x-text-input id="title" name="title" type="text" class="mt-1 block w-full rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-indigo-500" :value="old('title')" required form="blog_form" />
+                            <x-input-error class="mt-2" :messages="$errors->get('title')" />
                         </div>
 
                         <div>
-                            <x-input-label for="meta_description" :value="__('Meta Description')" />
-                            <textarea id="meta_description" name="meta_description" rows="3" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ old('meta_description') }}</textarea>
+                            <x-input-label for="slug" :value="__('URL Slug')" class="text-xs font-bold uppercase text-slate-500" />
+                            <x-text-input id="slug" name="slug" type="text" class="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 text-slate-500" :value="old('slug')" required form="blog_form" />
+                            <x-input-error class="mt-2" :messages="$errors->get('slug')" />
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <span class="text-sm font-semibold text-slate-700">Publish Immediately</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input name="is_published" type="checkbox" value="1" class="sr-only peer" {{ old('is_published') ? 'checked' : '' }} form="blog_form">
+                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Media -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-6">
+                    <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-4">Featured Media</h3>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <x-input-label for="featured_image" :value="__('Featured Image')" class="text-xs font-bold uppercase text-slate-500" />
+                            <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-slate-300 border-dashed rounded-xl hover:border-indigo-400 transition-colors cursor-pointer group relative overflow-hidden">
+                                <div class="space-y-1 text-center">
+                                    <svg class="mx-auto h-12 w-12 text-slate-400 group-hover:text-indigo-500 transition-colors" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <div class="flex text-sm text-slate-600">
+                                        <label for="featured_image" class="relative cursor-pointer rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none">
+                                            <span>Upload a file</span>
+                                            <input id="featured_image" name="featured_image" type="file" class="sr-only" form="blog_form">
+                                        </label>
+                                    </div>
+                                    <p class="text-xs text-slate-500">PNG, JPG, WEBP up to 2MB</p>
+                                </div>
+                                <img id="image_preview" class="absolute inset-0 w-full h-full object-cover hidden" src="#" alt="Preview">
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <x-input-label for="featured_video_url" :value="__('Video URL')" class="text-xs font-bold uppercase text-slate-500" />
+                                <x-text-input id="featured_video_url" name="featured_video_url" type="url" class="mt-1 block w-full rounded-xl border-slate-200" placeholder="YouTube/Vimeo link" form="blog_form" />
+                            </div>
+                            
+                            <div class="relative">
+                                <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                                    <div class="w-full border-t border-slate-100"></div>
+                                </div>
+                                <div class="relative flex justify-center text-xs uppercase">
+                                    <span class="px-2 bg-white text-slate-400 font-bold tracking-widest">OR</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <x-input-label for="featured_video_file" :value="__('Video File')" class="text-xs font-bold uppercase text-slate-500" />
+                                <input id="featured_video_file" name="featured_video_file" type="file" class="mt-1 block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 transition-all" form="blog_form">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEO -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-6">
+                    <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-4">SEO Metadata</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <x-input-label for="meta_title" :value="__('Meta Title')" class="text-xs font-bold uppercase text-slate-500" />
+                            <x-text-input id="meta_title" name="meta_title" type="text" class="mt-1 block w-full rounded-xl border-slate-200" form="blog_form" />
                         </div>
 
                         <div>
-                            <x-input-label for="keywords" :value="__('Keywords')" />
-                            <x-text-input id="keywords" name="keywords" type="text" class="mt-1 block w-full" :value="old('keywords')" />
+                            <x-input-label for="meta_description" :value="__('Meta Description')" class="text-xs font-bold uppercase text-slate-500" />
+                            <textarea id="meta_description" name="meta_description" rows="3" class="mt-1 block w-full rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-indigo-500" form="blog_form">{{ old('meta_description') }}</textarea>
                         </div>
-                    </div>
 
-                    <div class="space-y-4">
-                        <h4 class="font-medium text-slate-900">Additional Info</h4>
-                        
-                        <div class="flex items-center">
-                            <input id="is_published" name="is_published" type="checkbox" value="1" class="rounded border-slate-300 text-indigo-600 shadow-sm focus:ring-indigo-500" {{ old('is_published') ? 'checked' : '' }}>
-                            <span class="ml-2 text-sm text-slate-600">Publish immediately</span>
+                        <div>
+                            <x-input-label for="keywords" :value="__('Keywords')" class="text-xs font-bold uppercase text-slate-500" />
+                            <x-text-input id="keywords" name="keywords" type="text" class="mt-1 block w-full rounded-xl border-slate-200" placeholder="building, roads, india..." form="blog_form" />
                         </div>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-4 border-t border-slate-100 pt-6">
-                    <x-primary-button>{{ __('Save Blog Post') }}</x-primary-button>
+                <!-- Action -->
+                <div class="sticky bottom-8">
+                    <button type="submit" form="blog_form" class="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all active:scale-95 flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+                        Save Blog Post
+                    </button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 
     @push('scripts')
     <script>
+        // Image Preview
+        document.getElementById('featured_image').addEventListener('change', function(e) {
+            const preview = document.getElementById('image_preview');
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
         let blogEditor;
 
         // Initialize CKEditor

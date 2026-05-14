@@ -2,62 +2,81 @@
 
 @section('content')
 <!-- Hero Section -->
-<section class="relative py-20 bg-slate-900 overflow-hidden">
-    <div class="absolute inset-0 opacity-20">
-        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80" alt="Background" class="w-full h-full object-cover">
+<section class="relative py-32 bg-slate-900 overflow-hidden">
+    <div class="absolute inset-0">
+        <img src="https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80" alt="Background" class="w-full h-full object-cover opacity-20 scale-105 animate-pulse-slow">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-900/50 via-slate-900 to-slate-900"></div>
     </div>
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">Latest Insights & News</h1>
-        <p class="text-xl text-slate-300 max-w-3xl mx-auto">Stay updated with the latest trends in Indian construction, infrastructure development, and PWD project updates.</p>
+        <span class="inline-block px-4 py-1.5 bg-orange-construction/20 text-orange-construction text-sm font-bold rounded-full mb-6 border border-orange-construction/30 uppercase tracking-widest">Knowledge Hub</span>
+        <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-8 tracking-tight">
+            Building the <span class="text-orange-construction">Future</span>
+        </h1>
+        <p class="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            Expert insights into India's infrastructure evolution, construction technology, and sustainable development.
+        </p>
     </div>
 </section>
 
 <!-- Blog Grid -->
-<section class="py-20 bg-white">
+<section class="py-24 bg-slate-50 relative -mt-10 rounded-t-[3rem] z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             @forelse($posts as $post)
-                <article class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                    <div class="aspect-video relative overflow-hidden">
-                        <img src="{{ $post->featured_image ?? 'https://images.unsplash.com/photo-1503387762-592dea58ef23?auto=format&fit=crop&q=80' }}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute top-4 left-4">
+                <article class="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 flex flex-col">
+                    <div class="aspect-[16/10] relative overflow-hidden">
+                        <img src="{{ $post->featured_image ?? 'https://images.unsplash.com/photo-1503387762-592dea58ef23?auto=format&fit=crop&q=80' }}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        
+                        <div class="absolute top-4 left-4 flex gap-2">
                             @if($post->featured_video_url || $post->featured_video_file)
-                                <span class="px-3 py-1 bg-rose-600 text-white text-xs font-bold rounded-full uppercase tracking-wider flex items-center gap-1">
-                                    <i class="fas fa-play text-[10px]"></i> Video
+                                <span class="px-3 py-1 bg-white/90 backdrop-blur-md text-rose-600 text-[10px] font-black rounded-full uppercase tracking-tighter flex items-center gap-1.5 shadow-sm">
+                                    <span class="w-2 h-2 bg-rose-600 rounded-full animate-ping"></span> Video
                                 </span>
-                            @else
-                                <span class="px-3 py-1 bg-orange-construction text-white text-xs font-bold rounded-full uppercase tracking-wider">Construction</span>
                             @endif
+                            <span class="px-3 py-1 bg-orange-construction text-white text-[10px] font-black rounded-full uppercase tracking-tighter shadow-sm">Insight</span>
                         </div>
                     </div>
-                    <div class="p-6">
-                        <div class="flex items-center gap-4 text-sm text-gray-500 mb-3">
-                            <span><i class="far fa-calendar mr-2"></i>{{ $post->created_at->format('M d, Y') }}</span>
-                            <span><i class="far fa-user mr-2"></i>Admin</span>
+                    
+                    <div class="p-8 flex-1 flex flex-col">
+                        <div class="flex items-center gap-4 text-xs font-bold text-slate-400 mb-4 uppercase tracking-widest">
+                            <span class="flex items-center gap-1.5"><i class="far fa-calendar-alt text-orange-construction"></i> {{ $post->created_at->format('M d, Y') }}</span>
+                            <span class="w-1 h-1 bg-slate-300 rounded-full"></span>
+                            <span class="flex items-center gap-1.5"><i class="far fa-clock text-orange-construction"></i> 5 Min Read</span>
                         </div>
-                        <h2 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-orange-construction transition-colors">
+                        
+                        <h2 class="text-2xl font-bold text-slate-900 mb-4 group-hover:text-orange-construction transition-colors line-clamp-2 leading-tight">
                             <a href="{{ route('blogs.show', $post->slug) }}">{{ $post->title }}</a>
                         </h2>
-                        <p class="text-gray-600 line-clamp-3 mb-6">
+                        
+                        <p class="text-slate-500 text-sm leading-relaxed line-clamp-3 mb-8">
                             {{ Str::limit(strip_tags($post->content), 120) }}
                         </p>
-                        <a href="{{ route('blogs.show', $post->slug) }}" class="inline-flex items-center font-bold text-orange-construction hover:gap-3 transition-all">
-                            Read Full Article <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
+                        
+                        <div class="mt-auto pt-6 border-t border-slate-50">
+                            <a href="{{ route('blogs.show', $post->slug) }}" class="inline-flex items-center gap-2 text-sm font-black text-slate-900 hover:text-orange-construction transition-all group/link">
+                                READ FULL ARTICLE
+                                <svg class="w-4 h-4 transform group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                            </a>
+                        </div>
                     </div>
                 </article>
             @empty
-                <div class="col-span-full text-center py-20">
-                    <div class="text-6xl text-gray-200 mb-4"><i class="fas fa-newspaper"></i></div>
+                <div class="col-span-full text-center py-32 bg-white rounded-[3rem] border-2 border-dashed border-slate-200">
+                    <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300">
+                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2zM14 4v4h4"/></svg>
+                    </div>
                     <h3 class="text-2xl font-bold text-slate-900 mb-2">No Articles Found</h3>
-                    <p class="text-gray-600">We're currently working on some amazing content. Please check back soon!</p>
+                    <p class="text-slate-500">We're currently writing some amazing content. Check back soon!</p>
                 </div>
             @endforelse
         </div>
 
-        <div class="mt-12">
+        @if($posts->hasPages())
+        <div class="mt-20">
             {{ $posts->links() }}
         </div>
+        @endif
     </div>
 </section>
 
